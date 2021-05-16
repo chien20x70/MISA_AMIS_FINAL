@@ -1,0 +1,65 @@
+table{
+    border-collapse: collapse;
+    margin-left: 16px;
+    margin-top: 5px;
+}
+table tr{
+    border-bottom: 1px solid #bbb;
+    cursor: pointer;
+}
+table thead th{
+    position: sticky;
+    top: 0;
+    background: #eceef1;
+    text-align: left;
+    z-index: 1;
+    /* min-width: 120px; */
+
+}
+/* table thead th:last-child{
+    right: 0;
+}
+tbody tr td:last-child{
+    position: sticky;
+    right: 0;
+    border-left: 1px solid #bbb;
+} */
+th, td {
+    height: 34px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #c7c7c7;
+    border-right: 1px solid #c7c7c7;
+    /* min-width: 120px; */
+    background-color: white;
+}
+/* table thead th:first-child{
+    max-width: 34px;
+    min-width: 34px;
+    width: 34px;
+}
+tbody tr td:first-child{
+    max-width: 34px;
+    min-width: 34px;
+    width: 34px;
+} */
+/* tbody tr td:first-child{
+    position: sticky;
+    left: 0;
+    border-right: 1px solid #bbb;
+}  */
+
+tr:hover {
+    background-color: #eceaea;
+}
+
+.onColor {
+    background-color: #bbb;
+}
+body {
+    font-family: GoogleSans-Regular;
+    font-size: 13px;
+  }
+  @font-face {
+    font-family: "GoogleSans-Regular";
+    src: url("../../assets/font/GoogleSans-Regular.otf") format("opentype");
+  }
