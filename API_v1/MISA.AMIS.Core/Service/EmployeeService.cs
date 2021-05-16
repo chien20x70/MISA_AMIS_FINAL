@@ -25,17 +25,18 @@ namespace MISA.AMIS.Core.Service
         }
 
         /// <summary>
-        /// Export file excel
+        /// Export file excel xuất khẩu toàn bộ nhân viên
         /// </summary>
         /// <param name="pageSize">số nhân viên / trang</param>
         /// <param name="pageIndex">Trang số bao nhiêu</param>
         /// <param name="filter">lọc bằng chuỗi string</param>
         /// <returns>Stream</returns>
         /// CreatedBy: NXCHIEN 11/05/2021
-        public Stream ExportExcel(int pageSize, int pageIndex, string filter)
+        public Stream ExportExcel()
         {
-            var res = _employeeRepository.GetEmployees(pageSize, pageIndex, filter);
-            var list = res.Data.ToList();
+            // Lấy ra danh sách tất cả nhân viên
+            var res = _employeeRepository.GetAll();
+            var list = res.ToList();
             var stream = new MemoryStream();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage(stream);            
@@ -52,6 +53,7 @@ namespace MISA.AMIS.Core.Service
             workSheet.Column(8).Width = 15;
             workSheet.Column(9).Width = 30;
 
+            // Format hiển thị dòng A1
             using (var range = workSheet.Cells["A1:I1"])
             {
                 range.Merge = true;
@@ -72,6 +74,7 @@ namespace MISA.AMIS.Core.Service
             workSheet.Cells[3, 8].Value = Properties.ExcelResource.ExcelColumnSTK;
             workSheet.Cells[3, 9].Value = Properties.ExcelResource.ExcelColumnTNH;
 
+            //Format hiển thị row title
             using (var range = workSheet.Cells["A3:I3"])
             {
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -84,17 +87,17 @@ namespace MISA.AMIS.Core.Service
 
             int i = 0;
             // đổ dữ liệu từ list vào.
-            foreach (var e in list)
+            foreach (var item in list)
             {
                 workSheet.Cells[i + 4, 1].Value = i + 1;
-                workSheet.Cells[i + 4, 2].Value = e.EmployeeCode;
-                workSheet.Cells[i + 4, 3].Value = e.FullName;
-                workSheet.Cells[i + 4, 4].Value = e.GenderName;
-                workSheet.Cells[i + 4, 5].Value = e.DateOfBirth?.ToString(Properties.ExcelResource.ExcelFormatDate);
-                workSheet.Cells[i + 4, 6].Value = e.PositionName;
-                workSheet.Cells[i + 4, 7].Value = e.DepartmentName;
-                workSheet.Cells[i + 4, 8].Value = e.BankAccountNumber;
-                workSheet.Cells[i + 4, 9].Value = e.BankName;
+                workSheet.Cells[i + 4, 2].Value = item.EmployeeCode;
+                workSheet.Cells[i + 4, 3].Value = item.FullName;
+                workSheet.Cells[i + 4, 4].Value = item.GenderName;
+                workSheet.Cells[i + 4, 5].Value = item.DateOfBirth?.ToString(Properties.ExcelResource.ExcelFormatDate);
+                workSheet.Cells[i + 4, 6].Value = item.PositionName;
+                workSheet.Cells[i + 4, 7].Value = item.DepartmentName;
+                workSheet.Cells[i + 4, 8].Value = item.BankAccountNumber;
+                workSheet.Cells[i + 4, 9].Value = item.BankName;
 
                 using (var range = workSheet.Cells[i + 4, 1, i + 4, 9])
                 {
@@ -109,11 +112,11 @@ namespace MISA.AMIS.Core.Service
         }
 
         /// <summary>
-        /// Lấy ra nhân viên theo Id và mã nhân viên lớn nhất 
+        /// Lấy ra 1 nhân viên theo Id và gán mã code nhân viên là lớn nhất
         /// </summary>
-        /// <param name="id">id của nhân viên</param>
-        /// <returns>Nhân viên</returns>
-        /// CreatedBy: NXCHIEN 16/05/2021
+        /// <param name="id">Mã nhân viên</param>
+        /// <returns>Nhân viên được gán mã code lớn nhất</returns>
+        /// Created By: NXCHIEN 16/05/2021
         public Employee GetDuplicateEmployee(Guid id)
         {
             var employee = _employeeRepository.GetById(id);
@@ -206,7 +209,7 @@ namespace MISA.AMIS.Core.Service
             // Kiểm tra trùng hay không
             if (checkCodeExist)
             {
-                throw new EmployeeExceptions(Properties.Resources.Msg_Code_Exist);
+                throw new EmployeeExceptions(Properties.AttributeResource.Msg_EmployeeCode + $" <{employeeCode}>" + Properties.Resources.Msg_Code_Exist);
             }
 
             //NOTREQUIRED: Đề bài không cần đến( check trùng email, sđt, chứng minh thư)

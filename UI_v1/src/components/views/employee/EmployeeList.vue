@@ -123,7 +123,7 @@ import EmployeeDialog from "./EmployeeDialog.vue";
 import Dropdown from "./Dropdown.vue"
 import Popup from "./Popup.vue"
 import SelectCustom from "./SelectCustom.vue" 
-import axios from "axios";
+// import axios from "axios";
 export default {
   components: {
     EmployeeDialog,
@@ -156,30 +156,6 @@ export default {
   },
   methods: {
     /* 
-    hàm loadData lấy về 1 danh sách nhân viên từ API
-    CreatedBy: NXCHIEN 10/05/2021
-    */
-    loadData() {
-      // Bắt đầu load thì hiển thị icon Load
-      this.isBusy = true;
-      axios
-        .get("https://localhost:44314/api/v1/Employees")
-        .then((response) => {
-          console.log(response);
-          this.employees = response.data;
-          // Gán tổng số bản ghi bằng độ lớn của mảng trả về
-          this.totalRecord = this.employees.length
-        })
-        .catch((response) => {
-          console.log(response);
-        })
-        .then(() => {
-          // Load xong thì tắt icon load
-          this.isBusy = false;
-        });
-    },
-
-    /* 
     Click thêm mới 1 nhân viên 
     CreatedBy: NXCHIEN 10/05/2021 
     */
@@ -189,8 +165,8 @@ export default {
 
       // Gán giá trị là nút Thêm mới
       this.status = "add";
-      axios
-        .get("https://localhost:44314/api/v1/Employees/employeeCode")
+      this.axios
+        .get("/Employees/employeeCode")
         .then((response) => {
           console.log(response.data);
           //
@@ -271,8 +247,8 @@ export default {
       this.show = true;
       //Fill employee vào dialog
       
-      axios
-        .get("https://localhost:44314/api/v1/Employees/" + eId)
+      this.axios
+        .get("/Employees/" + eId)
         .then((response) => {
           console.log(response);
           this.selectedEmployee = response.data;
@@ -300,8 +276,8 @@ export default {
       this.show = true;
       //Fill employee vào dialog
       
-      axios
-        .get("https://localhost:44314/api/v1/Employees/EmployeeCopy?id=" + value)
+      this.axios
+        .get("/Employees/EmployeeCopy?id=" + value)
         .then((response) => {
           console.log(response);
           this.selectedEmployee = response.data;
@@ -344,8 +320,8 @@ export default {
     */
     filterData(){
       this.isBusy = true;
-      axios
-        .get(`https://localhost:44314/api/v1/Employees/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`)
+      this.axios
+        .get(`/Employees/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`)
         .then((response) => {
           console.log(response);
           this.employees = response.data.data;            
@@ -395,7 +371,7 @@ export default {
     CreatedBy: NXCHIEN 10/05/2021 
     */
     btnExportClick(){
-      window.open(`https://localhost:44314/api/v1/Employees/ExportingExcel?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`,"_blank");
+      window.open(`${this.baseURL}/Employees/ExportingExcel?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`,"_blank");
     },
    
     GetValueFromSelect(value){

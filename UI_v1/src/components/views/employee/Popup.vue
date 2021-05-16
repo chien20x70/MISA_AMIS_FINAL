@@ -4,10 +4,10 @@
         <div class="model"></div>
         <div class="popup-box">
           <div class="popup-content">
-            
-            <div v-if="employeeClickCode != null" class="popup-icon exclamation-warning-48"></div>           
+            <!-- || message.includes('đã tồn tại') && !message.includes('đã tồn tại') -->
+            <div v-if="employeeClickCode != null" class="icon icon-48 exclamation-warning-48"></div>           
             <div v-if="employeeClickCode != null" class="message">Bạn có thực sự muốn xóa Nhân viên &lt;{{employeeClickCode}}&gt; không?</div>
-            <div v-if="message != null" class="popup-icon mi-exclamation-error-48-2"></div>
+            <div v-if="message != null" class="icon icon-48 mi-exclamation-error-48-2"></div>
             <div v-if="message != null" class="message">{{ message }}</div>
           </div>
           <div class="btn-footer">
@@ -70,7 +70,7 @@ export default {
   height: 203px;
   position: absolute;
   top: 50%;
-  left: 43%;
+  left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
   box-shadow: 0 5px 20px 0 rgb(0 0 0 / 10%);
@@ -85,21 +85,14 @@ export default {
   border-bottom: 1px solid #bbb;
   margin-bottom: 20px;
 }
-.popup-icon {
-  background: url("../../../assets/Sprites.5f05e81f.svg") no-repeat;
-  cursor: pointer;
-  min-width: 48px;
-  min-height: 48px;
-  height: 48px;
-  width: 48px;
-}
+
 .exclamation-warning-48 {
     background-position: -592px -456px;
 }
 .message{
-  padding: 12px 0 0 16px;
+  padding: 0px 0 0 16px;
   display: block;
-  margin-bottom: 32px;
+  /* margin-bottom: 32px; */
 }
 .btn-footer{
   display: flex;

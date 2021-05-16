@@ -50,6 +50,7 @@ export default {
     padding: 0 14px 0 10px;
     text-align: left;
     line-height: 32px;
+    cursor: pointer;
 }
 .item:hover{
     color: #2ca01c;

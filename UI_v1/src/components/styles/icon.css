@@ -20,6 +20,12 @@
     height: 16px;
     width: 16px;
 }
+.icon-48{
+  min-width: 48px;
+  min-height: 48px;
+  height: 48px;
+  width: 48px;
+}
 .category {
     background-position: -568px -30px;
 }

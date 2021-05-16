@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import EmployeeList from './components/views/employee/EmployeeList.vue'
 import '../src/assets/font/fontawesome-5.15.1/css/all.min.css'
 import { ValidationProvider, extend } from 'vee-validate';
+import './axios-libs/axios.js'
 
 
 

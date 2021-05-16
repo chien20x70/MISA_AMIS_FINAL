@@ -71,15 +71,21 @@ namespace MISA.AMIS.API.Controllers
         ///     - Lỗi server: 500
         /// </returns>
         [HttpGet("ExportingExcel")]
-        public IActionResult ExportingExcel(int pageSize, int pageIndex, string filter)
+        public IActionResult ExportingExcel()
         {
-            var stream = _employeeService.ExportExcel(pageSize, pageIndex, filter);
+            var stream = _employeeService.ExportExcel();
             string excelName = $"Danh-sach-nhan-vien-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
             //return File(stream, "application/octet-stream", excelName);
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 
+        /// <summary>
+        /// Lấy ra 1 nhân viên theo Id và gán mã code nhân viên là lớn nhất
+        /// </summary>
+        /// <param name="id">Mã nhân viên</param>
+        /// <returns>Nhân viên được gán mã code lớn nhất</returns>
+        /// Created By: NXCHIEN 16/05/2021
         [HttpGet("EmployeeCopy")]
         public IActionResult GetEmployeeCopy(Guid id)
         {

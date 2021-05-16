@@ -126,6 +126,9 @@
   <data name="IdentifyNumber" xml:space="preserve">
     <value>IdentifyNumber</value>
   </data>
+  <data name="Msg_EmployeeCode" xml:space="preserve">
+    <value>Mã nhân viên</value>
+  </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>PhoneNumber</value>
   </data>

@@ -40,7 +40,7 @@
                       <div class="position">
                         <span class="text">Đơn vị<p style="color: red; display: inline;"> *</p></span>
                         <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }">
-                        <div class="department-box" :title="errors[0]" style="margin-top: 4px;" :class="errors[0] == null ? '' : 'input-error'">
+                        <div class="department-box" :title="errors[0]" style="margin-top: 4px;" :class="errors[0] == null ? '' : 'box-error'">
                           <div class="selected-option">                            
                               <input type="text" class="input-select" v-model="showValueDepartment">              
                             <div class="icon-selected">
@@ -122,8 +122,8 @@
                 </div>
                 <div class="name" style="margin-top: 17px; margin-left: 5px;">
                   <span class="text">Email</span><br>
-                  <input type="text" style="width: 203px; margin-top: 4px;" v-model="employee.email" @blur="handleBlurEmail($event.target.value)"><br>
-                  <span style="color: red">{{ messageEmail }}</span>
+                  <input type="text" style="width: 203px; margin-top: 4px;" v-model="employee.email"><br>
+                  <!-- <span style="color: red">{{ messageEmail }}</span> -->
                 </div>
               </div>
               <div class="row-1">                   
@@ -159,7 +159,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import Popup from './Popup.vue'
 
 export default {
@@ -175,7 +174,7 @@ export default {
   data() {
     return {
       infor: true,                // Giá trị hiển thị tab Liên hệ hay tài khoản ngân hàng              
-      messageEmail: null,         // Message lỗi
+      // messageEmail: null,         // Message lỗi
       departments: [],            // Mảng phòng ban
       message: null,              // message thông báo lỗi bind sang Popup
       valuePopup: false,          // Giá trị để hiển thị Popup
@@ -196,9 +195,9 @@ export default {
         } else if (this.saveValueDepartment == "17120d02-6ab5-3e43-18cb-66948daf6128") {
           return "Phòng Đào tạo";
         } else if(this.saveValueDepartment == "469b3ece-744a-45d5-957d-e8c757976496"){
-          return "Phòng Marketing"
+          return "Phòng Marketing";
         } else if(this.saveValueDepartment == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
-          return "Phòng Nghiên cứu"
+          return "Phòng Nghiên cứu";
         }else if (this.employee.departmentId == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
           return "Phòng Nhân sự";
         } else if (this.employee.departmentId == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
@@ -206,9 +205,9 @@ export default {
         } else if (this.employee.departmentId == "17120d02-6ab5-3e43-18cb-66948daf6128") {
           return "Phòng Đào tạo";
         } else if(this.employee.departmentId == "469b3ece-744a-45d5-957d-e8c757976496"){
-          return "Phòng Marketing"
+          return "Phòng Marketing";
         } else if(this.employee.departmentId == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
-          return "Phòng Nghiên cứu"
+          return "Phòng Nghiên cứu";
         }
         return ""
       },
@@ -279,7 +278,7 @@ export default {
       }
       else if(this.flag == "add"){   
           this.employee.gender = parseInt(this.employee.gender);   
-          axios.post('https://localhost:44314/api/v1/Employees', this.employee).then(res =>{
+          this.axios.post('/Employees', this.employee).then(res =>{
             console.log(res.data);
             console.log(this.message);
             console.log(this.employee);
@@ -300,7 +299,7 @@ export default {
         else if(this.flag == "edit"){
           // delete this.employee.genderName;
           this.employee.gender = parseInt(this.employee.gender);
-          axios.put('https://localhost:44314/api/v1/Employees/' + this.employee.employeeId, this.employee).then(res =>{
+          this.axios.put('/Employees/' + this.employee.employeeId, this.employee).then(res =>{
             console.log(res.data);         
             this.$emit('hideDialog');
             this.saveValueDepartment = null;
@@ -329,7 +328,7 @@ export default {
       }
       else if(this.flag == "add"){   
           this.employee.gender = parseInt(this.employee.gender);   
-          axios.post('https://localhost:44314/api/v1/Employees', this.employee).then(res =>{
+          this.axios.post('/Employees', this.employee).then(res =>{
             console.log(res.data);
             console.log(this.message);
             console.log(this.employee);
@@ -350,7 +349,7 @@ export default {
         else if(this.flag == "edit"){
           // delete this.employee.genderName;
           this.employee.gender = parseInt(this.employee.gender);
-          axios.put('https://localhost:44314/api/v1/Employees/' + this.employee.employeeId, this.employee).then(res =>{
+          this.axios.put('/Employees/' + this.employee.employeeId, this.employee).then(res =>{
             console.log(res.data);         
             this.$emit('saveAndAdd');
             this.saveValueDepartment = null;
@@ -372,15 +371,15 @@ export default {
     Xử lý blur khỏi Input Email
     CreatedBy: NXCHIEN 10/05/2021
     */
-    handleBlurEmail(ev) {
-      if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {        
-        this.messageEmail = "";
-      } else if (ev == "") {
-        this.messageEmail = "Bắt buộc nhập trường này!";
-      } else {
-        this.messageEmail = "Email Không đúng định dạng!";
-      }     
-    },
+    // handleBlurEmail(ev) {
+    //   if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {        
+    //     this.messageEmail = "";
+    //   } else if (ev == "") {
+    //     this.messageEmail = "Bắt buộc nhập trường này!";
+    //   } else {
+    //     this.messageEmail = "Email Không đúng định dạng!";
+    //   }     
+    // },
 
     btnDropdownClick(){
       this.showDepartment = !this.showDepartment;
@@ -400,7 +399,7 @@ export default {
     /* 
     Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
     */
-    axios.get("https://localhost:44314/api/v1/Departments").then(res =>{
+    this.axios.get("/Departments").then(res =>{
     this.departments = res.data;
     }).catch(res =>{
     console.log(res);
@@ -706,6 +705,9 @@ export default {
   transition: transform .15s linear;
 }
 .box-error{
+  border-color: red;
+}
+.box-error:hover{
   border-color: red;
 }
 .select-custom{

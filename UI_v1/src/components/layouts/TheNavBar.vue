@@ -288,7 +288,7 @@ export default {
 
 .position{
   position: fixed;
-  top: 8px;
+  top: 7px;
   left: 187px;
 }
 

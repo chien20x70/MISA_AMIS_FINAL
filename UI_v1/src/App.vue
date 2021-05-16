@@ -1,24 +1,24 @@
 <template>
   <div id="app">
-    <NavBar/>
+    <TheNavBar/>
     <div class="main">
-      <Header />
-      <Content/>
+      <TheHeader />
+      <TheContent/>
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from './components/layouts/NavBar.vue'
-import Header from './components/layouts/Header.vue'
-import Content from './components/layouts/Content.vue'
+import TheNavBar from './components/layouts/TheNavBar.vue'
+import TheHeader from './components/layouts/TheHeader.vue'
+import TheContent from './components/layouts/TheContent.vue'
 
 export default {
   name: 'App',
   components: {
-    NavBar,
-    Header,
-    Content
+    TheNavBar,
+    TheHeader,
+    TheContent
   }, 
   
 }

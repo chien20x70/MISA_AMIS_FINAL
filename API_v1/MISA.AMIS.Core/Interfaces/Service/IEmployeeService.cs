@@ -26,15 +26,21 @@ namespace MISA.AMIS.Core.Interfaces.Service
         public string GetEmployeeCodeMax();
 
         /// <summary>
-        /// Export file excel
+        /// Export file excel xuất khẩu toàn bộ nhân viên
         /// </summary>
         /// <param name="pageSize">số nhân viên / trang</param>
         /// <param name="pageIndex">Trang số bao nhiêu</param>
         /// <param name="filter">lọc bằng chuỗi string</param>
         /// <returns>Stream</returns>
         /// CreatedBy: NXCHIEN 11/05/2021
-        public Stream ExportExcel(int pageSize, int pageIndex, string filter);
+        public Stream ExportExcel();
 
+        /// <summary>
+        /// Lấy ra 1 nhân viên theo Id và gán mã code nhân viên là lớn nhất
+        /// </summary>
+        /// <param name="id">Mã nhân viên</param>
+        /// <returns>Nhân viên được gán mã code lớn nhất</returns>
+        /// Created By: NXCHIEN 16/05/2021
         public Employee GetDuplicateEmployee(Guid id);
     }
 }

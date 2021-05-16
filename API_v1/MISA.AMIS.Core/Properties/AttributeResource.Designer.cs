@@ -88,6 +88,15 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã nhân viên.
+        /// </summary>
+        internal static string Msg_EmployeeCode {
+            get {
+                return ResourceManager.GetString("Msg_EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PhoneNumber.
         /// </summary>
         internal static string PhoneNumber {
