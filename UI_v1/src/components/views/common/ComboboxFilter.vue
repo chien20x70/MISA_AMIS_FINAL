@@ -7,15 +7,16 @@
 <script>
 export default {
     props:{
-        selectState:{ type: Boolean, selector: false}               // Giá trị để hiển thị customSelect phần phân trang
+        selectState:{ type: Boolean, selector: false}               // Giá trị để hiển thị ComboboxFilter phần phân trang
     },
     methods:{
         /* 
         Khi chọn 1 dòng trong thẻ thì bind giá trị sang bên EmployeeList
         Lưu giá trị của dòng được click để bind class color vào.
-        CreatedBY: NXCHIEN 10/05/2021
+        CreatedBy: NXCHIEN 17/05/2021
         */
         btnSelectClick(value){
+            // Gọi đến EmployeeList
             this.$emit('passValueToSelect', value);
             this.saveValue = value;
         }

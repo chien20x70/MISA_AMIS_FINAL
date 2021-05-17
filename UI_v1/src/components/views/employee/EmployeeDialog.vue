@@ -168,7 +168,7 @@
   </div>
 </template>
 <script>
-import Popup from './Popup.vue'
+import Popup from '../common/Popup.vue'
 
 export default {
   components:{
@@ -183,19 +183,21 @@ export default {
   data() {
     return {
       infor: true,                // Giá trị hiển thị tab Liên hệ hay tài khoản ngân hàng              
-      // messageEmail: null,         // Message lỗi
       departments: [],            // Mảng phòng ban
       message: null,              // message thông báo lỗi bind sang Popup
       valuePopup: false,          // Giá trị để hiển thị Popup
       valueForcusInput: false,    // Giá trị để focus vào ô input
-      showDepartment: true,
-      DepartmentId: null,
-      saveValueDepartment: null,
-      dectectEmployee: {},
+      showDepartment: true,       // Hiển thị comboboxDepartment       
+      saveValueDepartment: null,  // Biến lưu lại giá trị DepartmentId
+      dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
     }
   },
 
   computed:{
+    /**
+     * Theo dõi giá trị departmentId
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     showValueDepartment:{     
       get(){
         if (this.saveValueDepartment == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
@@ -231,7 +233,7 @@ export default {
   updated(){
     /* 
     Giá trị valueForcusInput = true thì focus vào input rồi gán lại false. Mỗi lần bật Dialog lên thì gán true.
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     while(this.valueForcusInput == true){
       if (this.$refs.focusCode !== undefined) {
@@ -246,10 +248,9 @@ export default {
   methods: {
     /* 
     Click đóng Dialog
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     btnCloseClick(){
-      // this.messageEmail = null;
       this.$emit('hideDialogNotLoad');
       this.saveValueDepartment = null;
 
@@ -257,7 +258,7 @@ export default {
 
     /* 
     Click để hiển thị Tab Liên hệ hay tab tài khoản ngân hàng
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     btnInforClick(){
       this.infor = true;
@@ -265,7 +266,7 @@ export default {
 
     /* 
     Click để hiển thị Tab Liên hệ hay tab tài khoản ngân hàng
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     btnBankClick(){
       this.infor = false;
@@ -273,7 +274,7 @@ export default {
 
     /* 
     Click Save nhân viên
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     btnSaveClick(){
       // Kiểm tra nút Thêm hay Sửa
@@ -288,20 +289,15 @@ export default {
       else if(this.flag == "add"){   
           this.employee.gender = parseInt(this.employee.gender);   
           this.axios.post('/Employees', this.employee).then(res =>{
-            console.log(res.data);
-            console.log(this.message);
-            console.log(this.employee);
+            console.log(res);
             this.$emit('hideDialog');
             this.saveValueDepartment = null;
           }).catch(res =>{
             // Lấy ra message lỗi
-            console.log(res.response.data.devMsg);
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
 
-            console.log(this.message);
-            console.log(this.employee);
           })
         }
         // Kiểm tra nút Thêm hay Sửa
@@ -313,19 +309,18 @@ export default {
             this.$emit('hideDialog');
             this.saveValueDepartment = null;
           }).catch(res =>{
-            console.log(res);
-            console.log(this.employee)
-            console.log(this.employee.gender)
             // Lấy ra message lỗi
-            console.log(res.response.data.devMsg);
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
-            //this.$emit('hideDialog');
           })
         }     
     },
 
+    /**
+     * Click nút Cất và Thêm cho phép lưu dữ liệu và reset form để người dùng có thể thêm tiếp mà ko cần click nút Thêm mới.
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     btnSaveAndAddClick(){
       if(this.employee.fullName == ""){
         this.message = "Tên không được để trống."
@@ -338,20 +333,15 @@ export default {
       else if(this.flag == "add"){   
           this.employee.gender = parseInt(this.employee.gender);   
           this.axios.post('/Employees', this.employee).then(res =>{
-            console.log(res.data);
-            console.log(this.message);
-            console.log(this.employee);
+            console.log(res);
+            // Gọi sự kiện SaveAndAdd của EmployeeList
             this.$emit('saveAndAdd');
             this.saveValueDepartment = null;
           }).catch(res =>{
             // Lấy ra message lỗi
-            console.log(res.response.data.devMsg);
             this.message = res.response.data.devMsg;
             // show popup
-            this.valuePopup = true;
-
-            console.log(this.message);
-            console.log(this.employee);
+            this.valuePopup = true;      
           })
         }
         // Kiểm tra nút Thêm hay Sửa
@@ -359,26 +349,21 @@ export default {
           // delete this.employee.genderName;
           this.employee.gender = parseInt(this.employee.gender);
           this.axios.put('/Employees/' + this.employee.employeeId, this.employee).then(res =>{
-            console.log(res.data);         
+            console.log(res.data);
+            // Gọi sự kiện SaveAndAdd của EmployeeList    
             this.$emit('saveAndAdd');
             this.saveValueDepartment = null;
-          }).catch(res =>{
-            console.log(res);
-            console.log(this.employee)
-            console.log(this.employee.gender)
-            // Lấy ra message lỗi
-            console.log(res.response.data.devMsg);
+          }).catch(res =>{          
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
-            //this.$emit('hideDialog');
           })
         }   
     },
 
     /* 
     Xử lý blur khỏi Input Email
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     // handleBlurEmail(ev) {
     //   if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {        
@@ -390,24 +375,34 @@ export default {
     //   }     
     // },
 
+    /**
+     * Click nút dropdown để toggle Department phòng ban 
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     btnDropdownClick(){
       this.showDepartment = !this.showDepartment;
     },
 
+    /**
+     * Click chọn phòng ban để bind dữ liệu
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     btnDepartmentClick(departmentId){
-
+      // Lưu giá trị ID lấy được
       this.saveValueDepartment = departmentId;
+      // Gán ID phòng ban của employee = id lấy được để theo dõi giá trị và bind lên form
       this.employee.departmentId = departmentId;     
-
+      // Ẩn combobox Department phòng ban
       this.showDepartment = true;
     }
 
 
   },
   mounted(){
-    /* 
-    Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
-    */
+    /**
+     * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
+     *CreatedBy: NXCHIEN 17/05/2021
+     */
     this.axios.get("/Departments").then(res =>{
     this.departments = res.data;
     }).catch(res =>{

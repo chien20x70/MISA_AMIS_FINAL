@@ -4,7 +4,7 @@
       <div class="content-item">
         <div class="content-item-text">Nhân viên</div>
         <div class="component-btn">
-          <button class="btn-add" @click="btnAddClick">Thêm mới nhân viên</button>
+          <button class="btn-add" @click="onBtnAddClick">Thêm mới nhân viên</button>
         </div>
       </div>
     </div>
@@ -18,12 +18,12 @@
             :value="filter"
             @input="onChangeInputEmployeeFilter"
           />
-          <div class="icon icon-24 refresh" @click="btnRefreshClick"></div>
-          <div class="icon icon-24 excel__nav" @click="btnExportClick"></div>
+          <div class="icon icon-24 refresh" @click="onBtnRefreshClick"></div>
+          <div class="icon icon-24 excel__nav" @click="onBtnExportClick"></div>
         </div>
       </div>
       <div class="content-table-height">
-        <table class="tblListEmployee" border="0" width="98%" style="margin-left: 16px;">
+        <table class="tblListEmployee" border="0" width="100%" style="margin-left: 16px;">
           <thead>
             <tr>
               <th style="width: 40px; position: sticky; left: 0; top: 0; z-index: 3; border-left: none;">
@@ -39,14 +39,13 @@
               <th style="min-width: 150px;">SỐ TÀI KHOẢN</th>
               <th style="min-width: 250px;">TÊN NGÂN HÀNG</th>
               <th style="min-width: 250px;">CHI NHÁNH TK NGÂN HÀNG</th>
-              <!-- <th style="min-width: 120px;">CHỨC NĂNG</th> -->
             </tr>
           </thead>         
           <tbody v-if="employees != undefined">
             <tr              
               v-for="(employee, index) in employees"
               :key="index"
-              @dblclick="dblClickTable(employee.employeeId)"
+              @dblclick="onRowTableDblClick(employee.employeeId)"
             >
               <td style="width: 40px; position: sticky; left: 0; z-index: 2; border-left: none;">
                 <input type="checkbox" class="check-box"/>
@@ -61,16 +60,6 @@
               <td>{{ employee.bankAccountNumber }}</td>
               <td>{{ employee.bankName }}</td>
               <td>{{ employee.bankBranchName }}</td>
-              <!-- <td>                
-                <div class="btn-edit">
-                  <button class="btn-btn hover" @click="btnEditClick(employee.employeeId, employee.employeeCode)">
-                      <div class="flex btn-btn-text">
-                          <span class="pr-4" style="color: #0075c0; font-weight: 600">Sửa</span>
-                      </div>
-                  </button>                  
-                  <Dropdown @showPopup="showPopup(employee.employeeId, employee.employeeCode)" @showDialog="duplicateClick(employee.employeeId)"/>
-                </div>
-              </td> -->
             </tr>
           </tbody>
         </table>
@@ -85,12 +74,12 @@
               :key="index">
               <td style="min-width: 120px; border-left: 1px dotted #c7c7c7">
                 <div class="btn-edit">
-                  <button class="btn-btn hover" @click="btnEditClick(employee.employeeId, employee.employeeCode)">
+                  <button class="btn-btn hover" @click="onBtnEditClick(employee.employeeId, employee.employeeCode)">
                       <div class="flex btn-btn-text">
                           <span class="pr-4" style="color: #0075c0; font-weight: 600">Sửa</span>
                       </div>
                   </button>                  
-                  <Dropdown @showPopup="showPopup(employee.employeeId, employee.employeeCode)" @showDialog="duplicateClick(employee.employeeId)"/>
+                  <ComboboxDepartment @showPopup="showPopup(employee.employeeId, employee.employeeCode)" @showDialog="duplicateClick(employee.employeeId)"/>
                 </div>
               </td>
             </tr>
@@ -107,7 +96,7 @@
         <div class="content-navpage-text-left">Tổng số: <span style="font-weight: 700;">{{totalRecord}}</span> bản ghi</div>
         <div class="footer-complete">
           
-          <SelectCustom :selectState="valueSelect" @passValueToSelect="GetValueFromSelect"/>
+          <ComboboxFilter :selectState="valueSelect" @passValueToSelect="getValueFromComboboxFilter"/>
           <div class="autocomplete">
             <div class="selected-option">
               <input type="text" class="input-select" :value="msgSelected">
@@ -116,13 +105,13 @@
               </div>
             </div>
           </div>          
-          <button class="style margin" :class="{'disable': (pageIndex == 1)}" @click="onClickPag(pageIndex - 1)">Trước</button>
-          <button class="btn-filter margin" :class="{'active': (pageIndex == 1)}" @click="onClickPag(1)">1</button>
+          <button class="style margin" :class="{'disable': (pageIndex == 1)}" @click="onPageChange(pageIndex - 1)">Trước</button>
+          <button class="btn-filter margin" :class="{'active': (pageIndex == 1)}" @click="onPageChange(1)">1</button>
           <button v-if="pageIndex > 3" class="btn-filter style margin disable">...</button>
-          <button v-for="p in pageIndexs" :key="p" class="btn-filter margin" :class="{'active': pageIndex == p }" @click="onClickPag(p)">{{ p }}</button>
+          <button v-for="p in pageIndexs" :key="p" class="btn-filter margin" :class="{'active': pageIndex == p }" @click="onPageChange(p)">{{ p }}</button>
           <button v-if="pageIndex < totalPages - 3" class="btn-filter style margin disable">...</button>
-          <button class="btn-filter margin" :class="{'display': (totalPages == 1), 'active': pageIndex == totalPages}" @click="onClickPag(totalPages)">{{totalPages}}</button>
-          <button class="style margin" :class="{'disable': (pageIndex == totalPages)}" @click="onClickPag(pageIndex + 1)">Sau</button>
+          <button class="btn-filter margin" :class="{'display': (totalPages == 1), 'active': pageIndex == totalPages}" @click="onPageChange(totalPages)">{{totalPages}}</button>
+          <button class="style margin" :class="{'disable': (pageIndex == totalPages)}" @click="onPageChange(pageIndex + 1)">Sau</button>
         </div>        
       </div>
     </div>
@@ -132,9 +121,9 @@
       @hideDialogNotLoad="hideDialogNotLoad"
       :employee="selectedEmployee"
       :flag="status"
-      @saveAndAdd="btnAddClick"
+      @saveAndAdd="onBtnAddClick"
     />
-    <Popup :popState="valuePopup" @hidePopupNotLoad="hidePopupNotLoad" @hidePopup="hidePopup" :employeeClickCode="recordCode" :employeeClickId="recordId"/>
+    <Popup :popState="valuePopup" @hidePopupNotLoad="hidePopupNotLoad" @hidePopup="hidePopup" :employeeCode="recordCode" :employeeId="recordId"/>
     <div class="fa-3x" v-if="isBusy">
       <i class="fas fa-spinner fa-spin" style="color: green;"></i>
     </div>
@@ -142,16 +131,15 @@
 </template>
 <script>
 import EmployeeDialog from "./EmployeeDialog.vue";
-import Dropdown from "./Dropdown.vue"
-import Popup from "./Popup.vue"
-import SelectCustom from "./SelectCustom.vue" 
-// import axios from "axios";
+import ComboboxDepartment from "../common/ComboboxDepartment.vue"
+import Popup from "../common/Popup.vue"
+import ComboboxFilter from "../common/ComboboxFilter.vue" 
 export default {
   components: {
     EmployeeDialog,
-    Dropdown,
+    ComboboxDepartment,
     Popup,
-    SelectCustom
+    ComboboxFilter
   },
   data() {
     return {
@@ -168,21 +156,25 @@ export default {
       filter:  "",              // Giá trị truyền vào input để lọc
       pageIndex: 1,             // Trang hiện tại
       totalPages: 1,            // Tổng số trang
-      valueSelect: true,
-      msgSelect: " bản ghi trên 1 trang",
-      msgSelected: "20 bản ghi trên 1 trang",
+      valueSelect: true,        // Hiển thị combobox filter phân trang
+      msgSelect: " bản ghi trên 1 trang",             // message default
+      msgSelected: "20 bản ghi trên 1 trang",         // message hiển thị khi phân trang.
     };
   },
   created() {
+    /**
+     * Lọc dữ liệu hiển thì mặc định 20 bản ghi/ trang
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     this.filterData();
   },
   methods: {    
 
-    /* 
-    Click thêm mới 1 nhân viên 
-    CreatedBy: NXCHIEN 10/05/2021 
+    /**
+     * Click thêm mới 1 nhân viên 
+     * CreatedBy: NXCHIEN 17/05/2021 
     */
-    btnAddClick() {
+    onBtnAddClick() {
       // Hiển thị dialog
       this.show = true;
       // Gán giá trị là nút Thêm mới
@@ -197,8 +189,7 @@ export default {
           // increCode = increCode.substring(3);
           // Gán tất cả các ô data của dialog rỗng
           this.selectedEmployee = {};
-          // Gán code Max cho ô Mã nhân viên
-          // this.selectedEmployee.employeeCode = "NV-" + (Number(increCode) + 1);
+          // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
           this.selectedEmployee.employeeCode = response.data;
           this.selectedEmployee.fullName = "";
           this.selectedEmployee.departmentId = "";      
@@ -211,7 +202,7 @@ export default {
 
     /* 
     Đóng dialog mà không load lại dữ liệu
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     hideDialogNotLoad() {
       this.show = false;
@@ -219,7 +210,7 @@ export default {
 
     /* 
     Đóng dialog có load lại dữ liệu
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021 
     */
     hideDialog() {
       this.show = false;
@@ -228,7 +219,7 @@ export default {
 
     /* 
     Hiển thị Popup
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     showPopup(employeeId, employeeCode){
       this.valuePopup = false;
@@ -240,7 +231,7 @@ export default {
     
     /* 
     Đóng popup có load lại dữ liệu
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     hidePopup(){
       this.valuePopup = true;
@@ -249,7 +240,7 @@ export default {
 
     /* 
     Đóng popup mà không load lại dữ liệu
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     hidePopupNotLoad() {
       this.valuePopup = true;
@@ -258,9 +249,9 @@ export default {
     /* 
     dblClick vào 1 dòng trong table
     - Lấy ra 1 nhân viên được chọn
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
-    dblClickTable(eId) {
+    onRowTableDblClick(eId) {
       // gán cờ thành nút sửa
       this.status = "edit";
       //Lấy ra id của employee
@@ -320,17 +311,17 @@ export default {
     },
     /* 
     Click nút Sửa trong table
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
-    btnEditClick(employeeClickId){
-      this.dblClickTable(employeeClickId);
+    onBtnEditClick(employeeClickId){
+      this.onRowTableDblClick(employeeClickId);
     },
 
     /* 
     Load lại dữ liệu khi click vào nút refresh
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
-    btnRefreshClick(){
+    onBtnRefreshClick(){
       this.filterData();
       this.totalPages = 1;
       this.pageIndex = 1;
@@ -338,7 +329,7 @@ export default {
 
     /* 
     Lọc data bằng các tham số truyền vào
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     filterData(){
       this.isBusy = true;
@@ -346,8 +337,11 @@ export default {
         .get(`/Employees/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`)
         .then((response) => {
           console.log(response);
-          this.employees = response.data.data;            
+          // Gán mảng nhân viên ban đầu = data từ server trả về
+          this.employees = response.data.data;
+          // tổng số bản ghi = tổng số bản ghi từ server trả về          
           this.totalRecord = response.data.totalRecord;
+          // tổng số trang.
           this.totalPages = response.data.totalPages;
           if(response.data.totalRecord == undefined){
             this.totalRecord = 0;
@@ -364,15 +358,18 @@ export default {
 
     /* 
     Kiểm tra giá trị input thay đổi thì lọc mảng nhân viên bằng cách gọi tới API
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     onChangeInputEmployeeFilter(e){
       let val = e.target.value;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
+        // Lấy chuỗi cần lọc rồi gán vào biến filter
         this.filter = val;
+        // Gán trang về 1
         this.pageIndex = 1;
         console.log(this.filter)
+        // Gọi hàm lọc có delay 1s để không gửi quá nhiều request lên serve
         this.filterData();
       }, 1000);
     },
@@ -380,27 +377,39 @@ export default {
     /* 
     Kiểm tra click thay đổi phân trang
     - Lọc lại mảng nhân viên khi click.
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
-    onClickPag(page) {
+    onPageChange(page) {
+      // Thay đổi trang khi click button phần phân trang
       this.pageIndex = page;
+      // Lọc dữ liệu.
       this.filterData();
     },
 
     /* 
     Export data ra file excel
     - mở 1 cửa số mới call đến API
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021 
     */
-    btnExportClick(){
+    onBtnExportClick(){
+      // Mở 1 cửa số mới gọi API để tải về.
       window.open(`${this.baseURL}/Employees/ExportingExcel?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`,"_blank");
     },
-   
-    GetValueFromSelect(value){
+    
+    /**
+     * Lấy dữ liệu từ comboboxFilter để phân trang
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
+    getValueFromComboboxFilter(value){
+      // gán message thành message cần để hiển thị  "20 bản ghi trên 1 trang..."
       this.msgSelected = "";
       this.msgSelected = value + this.msgSelect;
+
+      // số nhân viên trên/ trang
       this.pageSize = value;
+      // trang số 1
       this.pageIndex = 1;
+      // Lọc nhân viên
       this.filterData();
       this.valueSelect = true;
       
@@ -411,11 +420,10 @@ export default {
     },
     /* 
     Format dữ liệu ngày tháng năm theo định dạng yyyy-mm-dd
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     dateFormatYYMMDD(date) {
       var newDate = new Date(date);
-      console.log(newDate);
       var day = newDate.getDate();
       var month = newDate.getMonth() + 1;
       var year = newDate.getFullYear();
@@ -427,7 +435,7 @@ export default {
   computed: {
     /* 
     Mảng chứa các phần tử ở giữa nút số 1 và trang cuối cùng trong phân trang
-    CreatedBy: NXCHIEN 10/05/2021 
+    CreatedBy: NXCHIEN 17/05/2021  
     */
     pageIndexs: function () {
       let ps = [];      // Khởi tạo mảng
@@ -533,7 +541,7 @@ export default {
   height: calc(100% - 35px);
   overflow-y: auto;
   overflow-x: auto;
-  width: calc(100% - 50px);
+  width: calc(100% - 25px);
   display: flex;
 }
 

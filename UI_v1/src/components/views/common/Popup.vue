@@ -5,42 +5,45 @@
         <div class="popup-box">
           <div class="popup-content">
             <!-- || message.includes('đã tồn tại') && !message.includes('đã tồn tại') -->
-            <div v-if="employeeClickCode != null" class="icon icon-48 exclamation-warning-48"></div>           
-            <div v-if="employeeClickCode != null" class="message">Bạn có thực sự muốn xóa Nhân viên &lt;{{employeeClickCode}}&gt; không?</div>
+            <div v-if="employeeCode != null" class="icon icon-48 exclamation-warning-48"></div>           
+            <div v-if="employeeCode != null" class="message">Bạn có thực sự muốn xóa Nhân viên &lt;{{employeeCode}}&gt; không?</div>
             <div v-if="message != null" class="icon icon-48 mi-exclamation-error-48-2"></div>
             <div v-if="message != null" class="message">{{ message }}</div>
           </div>
           <div class="btn-footer">
-            <button v-if="employeeClickCode != null" class="btn-No" @click="btnNoClick">Không</button>
-            <button v-if="employeeClickCode != null" class="btn-yes" @click="btnYesClick">Có</button>
-            <button v-if="message != null" class="btn-close" @click="btnNoClick" style="margin-left: 145px;">Đóng</button>
+            <button v-if="employeeCode != null" class="btn-No" @click="onBtnNoClick">Không</button>
+            <button v-if="employeeCode != null" class="btn-yes" @click="onBtnYesClick">Có</button>
+            <button v-if="message != null" class="btn-close" @click="onBtnNoClick" style="margin-left: 145px;">Đóng</button>
           </div>
         </div>
     </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
     props:{
       popState:{ type: Boolean, selector: false},             // Trạng thái popup hiển thị
-      employeeClickCode:{ type: String, selector: null},      // Giá trị EmployeeCode được bind từ EmployeeList
-      employeeClickId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
+      employeeCode:{ type: String, selector: null},           // Giá trị EmployeeCode được bind từ EmployeeList
+      employeeId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
       message: {type: String, selector: null}                 // message thông báo lỗi được bind từ Dialog
     },
     methods:{
       /* 
       Click button 'Không' thì đóng popup mà không load lại data
+      CreatedBy: NXCHIEN 17/05/2021
        */
-      btnNoClick(){
+      onBtnNoClick(){
+        // Gọi đến EmployeeList
         this.$emit("hidePopupNotLoad");
       },
 
       /* 
       Click button 'có' thì xóa nhân viên được chọn và đóng popup và có load lại data
+      CreatedBy: NXCHIEN 17/05/2021
        */
-      btnYesClick(){
-        axios.delete("https://localhost:44314/api/v1/Employees/"+ this.employeeClickId).then(res =>{
+      onBtnYesClick(){
+        this.axios.delete("/Employees/"+ this.employeeId).then(res =>{
           console.log(res);
+          // Gọi đến EmployeeList
           this.$emit("hidePopup");
         }).catch(res =>{
           console.log(res);

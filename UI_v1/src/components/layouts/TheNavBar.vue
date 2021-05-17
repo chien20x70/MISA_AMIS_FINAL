@@ -2,7 +2,7 @@
   <div id="navbar" :class="{collapse : toggle}">
     <div class="logo-container">
       <div class="flex">
-        <div class="mi mi-24 mi-logo-option"></div>
+        <div class="icon icon-24 mi-logo-option"></div>
         <div class="logo-img"></div>
       </div>    
     </div>
@@ -14,7 +14,7 @@
         v-on:click="selectItem(0)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-dashboard"></div>
+          <div class="icon icon-24 mi-sidebar-dashboard"></div>
         </div>
         <div class="menu-item-title">Tổng quan</div>
       </router-link>
@@ -24,7 +24,7 @@
         v-on:click="selectItem(1)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-cash"></div>
+          <div class="icon icon-24 mi-sidebar-cash"></div>
         </div>
         <div class="menu-item-title">Tiền mặt</div>
       </div>
@@ -34,7 +34,7 @@
         v-on:click="selectItem(2)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-bank"></div>
+          <div class="icon icon-24 mi-sidebar-bank"></div>
         </div>
         <div class="menu-item-title">Tiền gửi</div>
       </div>
@@ -44,7 +44,7 @@
         v-on:click="selectItem(3)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-pu"></div>
+          <div class="icon icon-24 mi-sidebar-pu"></div>
         </div>
         <div class="menu-item-title">Mua hàng</div>
       </div>
@@ -54,7 +54,7 @@
         v-on:click="selectItem(4)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-sale"></div>
+          <div class="icon icon-24 mi-sidebar-sale"></div>
         </div>
         <div class="menu-item-title">Bán hàng</div>
       </div>
@@ -64,7 +64,7 @@
         v-on:click="selectItem(5)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-invoice"></div>
+          <div class="icon icon-24 mi-sidebar-invoice"></div>
         </div>
         <div class="menu-item-title">Quản lí hoá đơn</div>
       </div>
@@ -74,7 +74,7 @@
         v-on:click="selectItem(6)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-stock"></div>
+          <div class="icon icon-24 mi-sidebar-stock"></div>
         </div>
         <div class="menu-item-title">Kho</div>
       </div>
@@ -84,7 +84,7 @@
         v-on:click="selectItem(7)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-tools"></div>
+          <div class="icon icon-24 mi-sidebar-tools"></div>
         </div>
         <div class="menu-item-title">Công cụ dụng cụ</div>
       </div>
@@ -94,7 +94,7 @@
         v-on:click="selectItem(8)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-fixed-assets"></div>
+          <div class="icon icon-24 mi-sidebar-fixed-assets"></div>
         </div>
         <div class="menu-item-title">Tài sản cố định</div>
       </div>
@@ -104,7 +104,7 @@
         v-on:click="selectItem(9)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-tax"></div>
+          <div class="icon icon-24 mi-sidebar-tax"></div>
         </div>
         <div class="menu-item-title">Thuế</div>
       </div>
@@ -114,7 +114,7 @@
         v-on:click="selectItem(10)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-price"></div>
+          <div class="icon icon-24 mi-sidebar-price"></div>
         </div>
         <div class="menu-item-title">Giá thành</div>
       </div>
@@ -124,7 +124,7 @@
         v-on:click="selectItem(11)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-general"></div>
+          <div class="icon icon-24 mi-sidebar-general"></div>
         </div>
         <div class="menu-item-title">Tổng hợp</div>
       </div>
@@ -134,7 +134,7 @@
         v-on:click="selectItem(12)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-budget"></div>
+          <div class="icon icon-24 mi-sidebar-budget"></div>
         </div>
         <div class="menu-item-title">Ngân sách</div>
       </div>
@@ -144,7 +144,7 @@
         v-on:click="selectItem(13)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-report"></div>
+          <div class="icon icon-24 mi-sidebar-report"></div>
         </div>
         <div class="menu-item-title">Báo cáo</div>
       </div>
@@ -154,7 +154,7 @@
         v-on:click="selectItem(14)"
       >
         <div class="menu-item-icon">
-          <div class="mi mi-24 mi-sidebar-finance"></div>
+          <div class="icon icon-24 mi-sidebar-finance"></div>
         </div>
         <div class="menu-item-title">Báo cáo tài chính</div>
       </div>
@@ -167,7 +167,6 @@
 
 <script>
 export default {
-  name: "MyNavbar",
   props:{
     
   },
@@ -178,9 +177,18 @@ export default {
     };
   },
   methods: {
+    /**
+     * Click toggle navbar
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     btnToggleClick(){
       this.toggle = !this.toggle;
     },
+
+    /**
+     * Click chọn item navbar
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     selectItem: function(item){
       this.selectedItem = item;
     },
@@ -261,27 +269,8 @@ export default {
   font-family: NotoSans-Regular;
   font-weight: 1000;
 }
-.mi-24 {
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  min-height: 24px;
-}
-.mi-14 {
-  width: 14px;
-  height: 14px;
-  min-width: 14px;
-  min-height: 14px;
-}
 
-.mi-16 {
-  width: 16px;
-  height: 16px;
-  min-width: 16px;
-  min-height: 16px;
-}
-
-.active .mi {
+.active .icon {
   background-position-y: -1585px;
 }
 

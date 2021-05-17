@@ -20,40 +20,45 @@ export default {
   data() {
     return {
       valueDrop: false,       // Giá trị hiển thị dropdown-content
-      left: 0,
-      top: 0,
+      left: 0,                // Căn trái dropdown-content
+      top: 0,                 // Căn phải dropdown-content
     };
   },
   methods: {
     /* 
-    Hiển thị dropdown
-    CreatedBy: NXCHIEN 10/05/2021
+    Hiển thị dropdown đồng thời hiển thị border
+    CreatedBy: NXCHIEN 17/05/2021
     */
     btnDropdownClick(event) {
       this.valueDrop = !this.valueDrop;
       this.left = event.clientX - 80;
-      this.top = event.clientY + 15;
-      
+      this.top = event.clientY + 15;    
     },
 
     /* 
     Hiển thị popup
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     btnDelete() {
       this.$emit("showPopup");
       this.valueDrop = false;
     },
 
+    /**
+     * Click button gọi đến sự kiện bên component cha EmployeeList
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
     btnDuplicateClick(){
-      this.$emit("showDialog", "duplicate");
+      // gọi sự kiện 
+      this.$emit("showDialog");
+      // bỏ bind border vào nút vừa click
       this.valueDrop = false;
     }
   },
   created() {
     /* 
     Phát hiện click chuột thì đóng dropdown
-    CreatedBy: NXCHIEN 10/05/2021
+    CreatedBy: NXCHIEN 17/05/2021
     */
     window.addEventListener("click", (e) => {
       if (!this.$el.contains(e.target)) {
