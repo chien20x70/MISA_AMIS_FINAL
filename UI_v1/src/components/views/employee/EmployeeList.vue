@@ -538,7 +538,7 @@ export default {
   justify-content: space-between;
 }
 .content-table .content-table-height {
-  height: calc(100% - 35px);
+  height: calc(100% - 22px);
   overflow-y: auto;
   overflow-x: auto;
   width: calc(100% - 25px);
@@ -550,7 +550,7 @@ export default {
 }
 .content-navpage {
   position: absolute;
-  bottom: 24px;
+  bottom: 10px;
   width: calc(100% - 228px);
   /* width: 100%; */
   height: 50px;
