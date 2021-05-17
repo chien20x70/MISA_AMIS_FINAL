@@ -23,23 +23,23 @@
         </div>
       </div>
       <div class="content-table-height">
-        <table class="tblListEmployee" border="0" width="98%">
+        <table class="tblListEmployee" border="0" width="98%" style="margin-left: 16px;">
           <thead>
             <tr>
-              <th style="width: 34px;">
+              <th style="width: 40px; position: sticky; left: 0; top: 0; z-index: 3; border-left: none;">
                 <input type="checkbox" class="check-box" />
               </th>
-              <th>MÃ NHÂN VIÊN</th>
-              <th>TÊN NHÂN VIÊN</th>
-              <th>GIỚI TÍNH</th>
-              <th>NGÀY SINH</th>             
-              <th>SỐ CMND</th>
-              <th>CHỨC DANH</th>
-              <th>TÊN ĐƠN VỊ</th>
-              <th>SỐ TÀI KHOẢN</th>
-              <th>TÊN NGÂN HÀNG</th>
-              <th>CHI NHÁNH TK NGÂN HÀNG</th>
-              <th>CHỨC NĂNG</th>
+              <th style="min-width: 150px;">MÃ NHÂN VIÊN</th>
+              <th style="min-width: 250px;">TÊN NHÂN VIÊN</th>
+              <th style="min-width: 120px;">GIỚI TÍNH</th>
+              <th style="min-width: 150px;">NGÀY SINH</th>             
+              <th style="min-width: 200px;">SỐ CMND</th>
+              <th style="min-width: 250px;">CHỨC DANH</th>
+              <th style="min-width: 250px;">TÊN ĐƠN VỊ</th>
+              <th style="min-width: 150px;">SỐ TÀI KHOẢN</th>
+              <th style="min-width: 250px;">TÊN NGÂN HÀNG</th>
+              <th style="min-width: 250px;">CHI NHÁNH TK NGÂN HÀNG</th>
+              <!-- <th style="min-width: 120px;">CHỨC NĂNG</th> -->
             </tr>
           </thead>         
           <tbody v-if="employees != undefined">
@@ -48,7 +48,7 @@
               :key="index"
               @dblclick="dblClickTable(employee.employeeId)"
             >
-              <td style="width: 34px;">
+              <td style="width: 40px; position: sticky; left: 0; z-index: 2; border-left: none;">
                 <input type="checkbox" class="check-box"/>
               </td>
               <td>{{ employee.employeeCode }}</td>
@@ -61,7 +61,29 @@
               <td>{{ employee.bankAccountNumber }}</td>
               <td>{{ employee.bankName }}</td>
               <td>{{ employee.bankBranchName }}</td>
-              <td>
+              <!-- <td>                
+                <div class="btn-edit">
+                  <button class="btn-btn hover" @click="btnEditClick(employee.employeeId, employee.employeeCode)">
+                      <div class="flex btn-btn-text">
+                          <span class="pr-4" style="color: #0075c0; font-weight: 600">Sửa</span>
+                      </div>
+                  </button>                  
+                  <Dropdown @showPopup="showPopup(employee.employeeId, employee.employeeCode)" @showDialog="duplicateClick(employee.employeeId)"/>
+                </div>
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+        <table style="position: sticky; right: 0; z-index: 2;">
+          <thead>
+            <tr>
+              <th style="min-width: 120px; border-left: 1px solid #c7c7c7">Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  v-for="(employee, index) in employees"
+              :key="index">
+              <td style="min-width: 120px; border-left: 1px dotted #c7c7c7">
                 <div class="btn-edit">
                   <button class="btn-btn hover" @click="btnEditClick(employee.employeeId, employee.employeeCode)">
                       <div class="flex btn-btn-text">
@@ -154,7 +176,8 @@ export default {
   created() {
     this.filterData();
   },
-  methods: {
+  methods: {    
+
     /* 
     Click thêm mới 1 nhân viên 
     CreatedBy: NXCHIEN 10/05/2021 
@@ -162,7 +185,6 @@ export default {
     btnAddClick() {
       // Hiển thị dialog
       this.show = true;
-
       // Gán giá trị là nút Thêm mới
       this.status = "add";
       this.axios
@@ -491,7 +513,7 @@ export default {
 .content .content-table {
   background-color: white !important;
   width: 100%;
-  height: calc(100% - 142px);
+  height: calc(100% - 68px);
 }
 .content-table .item {
   padding: 16px 16px 10px;
@@ -508,23 +530,30 @@ export default {
 .content-table .content-table-height {
   height: calc(100% - 35px);
   overflow-y: auto;
+  overflow-x: auto;
+  width: calc(100% - 50px);
+  display: flex;
 }
 
 .check-box {
   padding: 0;
 }
 .content-navpage {
-  width: 100%;
+  position: absolute;
+  bottom: 24px;
+  width: calc(100% - 228px);
+  /* width: 100%; */
   height: 50px;
   /* border-top: 1px solid #a29d9d; */
   background-color: white;
   align-items: center;
   display: flex;
   justify-content: space-between;
+  z-index: 102;
 }
 
 .content-navpage .content-navpage-text-left {
-  /* margin-left: 10px; */
+  margin-left: 18px;
 }
 .content-navpage .content-navpage-button {
   display: flex;

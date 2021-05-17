@@ -1,6 +1,5 @@
 table{
     border-collapse: collapse;
-    margin-left: 16px;
     margin-top: 5px;
 }
 table tr{
@@ -16,22 +15,39 @@ table thead th{
     /* min-width: 120px; */
 
 }
-/* table thead th:last-child{
-    right: 0;
-}
-tbody tr td:last-child{
+/* table thead tr th:first-child, table tbody tr td:first-child{
+    left: 0px;
     position: sticky;
-    right: 0;
-    border-left: 1px solid #bbb;
+    z-index: 100;
 } */
-th, td {
+
+table th, td {
     height: 34px;
     padding: 5px 10px;
     border-bottom: 1px solid #c7c7c7;
-    border-right: 1px solid #c7c7c7;
+    border-left: 1px solid #c7c7c7;
     /* min-width: 120px; */
     background-color: white;
+    
+    box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7;
+    
 }
+tbody tr td{
+    /* position: sticky;
+    right: 0; */
+    /* border: none; */
+    height: 47px;
+    border-left: 1px dotted #bbb;
+}
+/* table thead tr th:first-child{
+    position: sticky;
+    left: 0px;
+    border: none; 
+    top: 0;
+    border-left: none;
+     border-right: 1px solid #c7c7c7; 
+    z-index: 101;
+} */
 /* table thead th:first-child{
     max-width: 34px;
     min-width: 34px;
@@ -45,9 +61,24 @@ tbody tr td:first-child{
 /* tbody tr td:first-child{
     position: sticky;
     left: 0;
-    border-right: 1px solid #bbb;
+    border-left: none;
+    border-right: 1px solid #c7c7c7; 
 }  */
 
+/* tbody tr td:last-child{
+    position: sticky;
+    right: 0;
+    border: none;
+    border-left: 1px dotted #bbb;
+    z-index: 1;
+}
+thead tr th:last-child{
+    position: sticky;
+    right: 0;
+    border-right: none !important;
+    border-left: 1px solid #bbb;
+    z-index: 1;
+} */
 tr:hover {
     background-color: #eceaea;
 }

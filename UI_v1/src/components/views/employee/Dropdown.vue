@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="dropdown">
-      <button class="btn-btn hover padding" @click="btnDropdownClick">
+      <button class="btn-btn hover padding" @click="btnDropdownClick($event)">
         <div class="flex btn-btn-text">
           <div class="header-icon arrow-up--blue" :class="{'border': valueDrop}"></div>
         </div>
       </button>
-      <div class="dropdown-content" :class="{ display: !valueDrop }">
+      <div class="dropdown-content" :class="{ display: !valueDrop }" :style="{top: top + 'px', left: left + 'px'}">
         <div class="dropdown-row-1" @click="btnDuplicateClick">Nhân bản</div>
         <div class="dropdown-row-1" @click="btnDelete">Xóa</div>
         <div class="dropdown-row-1">Ngưng sử dụng</div>
@@ -20,6 +20,8 @@ export default {
   data() {
     return {
       valueDrop: false,       // Giá trị hiển thị dropdown-content
+      left: 0,
+      top: 0,
     };
   },
   methods: {
@@ -27,8 +29,11 @@ export default {
     Hiển thị dropdown
     CreatedBy: NXCHIEN 10/05/2021
     */
-    btnDropdownClick() {
+    btnDropdownClick(event) {
       this.valueDrop = !this.valueDrop;
+      this.left = event.clientX - 80;
+      this.top = event.clientY + 15;
+      
     },
 
     /* 
@@ -66,13 +71,13 @@ export default {
   position: relative;
 }
 .dropdown .dropdown-content {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 93px;
   width: 123px;
-  right: -25px;
-  top: 30px;
   background-color: white;
-  z-index: 10;
+  z-index: 100;
   border: 1px solid #bbb;
 }
 .display {

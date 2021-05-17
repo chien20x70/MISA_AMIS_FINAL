@@ -25,10 +25,12 @@ export default {
 </script>
 <style scoped>
 .header{
-    height: 48px;
+    height: 48px !important;
     display: flex !important;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
+    width: 100%;
 }
 .header-left{
     display: flex;

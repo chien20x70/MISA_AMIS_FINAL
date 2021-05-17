@@ -181,7 +181,8 @@ export default {
       valueForcusInput: false,    // Giá trị để focus vào ô input
       showDepartment: true,
       DepartmentId: null,
-      saveValueDepartment: null
+      saveValueDepartment: null,
+      dectectEmployee: {},
     }
   },
 
@@ -217,7 +218,6 @@ export default {
     }, 
     
   },
-
   // Focus Input
   updated(){
     /* 
@@ -235,15 +235,15 @@ export default {
     }
   },
   methods: {
-
     /* 
     Click đóng Dialog
     CreatedBy: NXCHIEN 10/05/2021
     */
     btnCloseClick(){
-      this.messageEmail = null;     
+      // this.messageEmail = null;
       this.$emit('hideDialogNotLoad');
       this.saveValueDepartment = null;
+
     },
 
     /* 

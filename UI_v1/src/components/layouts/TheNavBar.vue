@@ -159,7 +159,9 @@
         <div class="menu-item-title">Báo cáo tài chính</div>
       </div>
     </div>
-    <div class="position icon icon-24 three-stripes" @click="btnToggleClick"></div>
+    <div class="toggle-navbar">
+      <div class="position icon icon-24 three-stripes" @click="btnToggleClick"></div>
+    </div>
   </div>
 </template>
 
@@ -193,6 +195,7 @@ export default {
   height: 100vh;
   width: 178px;
   font-family: GoogleSans-Regular;
+  /* transition: 0.5s; */
 }
 .logo-container {
   width: 100%;
@@ -285,11 +288,20 @@ export default {
 .active .mi-sidebar-budget {
   background-position: -423px -1659px;
 }
+.toggle-navbar{
+  position: fixed;
+  top: 0px;
+  left: 187px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
 
 .position{
-  position: fixed;
+  /* position: fixed;
   top: 7px;
-  left: 187px;
+  left: 187px; */
+  
 }
 
 #navbar.collapse{
@@ -307,9 +319,9 @@ export default {
 #navbar.collapse .flex{
   display: none;
 }
-#navbar.collapse .position{
+#navbar.collapse .toggle-navbar{
   left: 10px;
-  top: 10px;
+  top: 5px;
 }
 #navbar.collapse .three-stripes{
   margin-left: 7px;

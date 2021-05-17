@@ -41,11 +41,13 @@ export default {
 .main{
   flex: 1;
   height: 100%;
+  width: calc(100% - 178px);
   display: flex;
   flex-direction: column;
 }
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
