@@ -50,9 +50,18 @@
                         </div>
                         </ValidationProvider>
                         <div class="select-custom" :class="{'invisible' : showDepartment}">
-                            <div class="item" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="btnDepartmentClick(department.departmentId)"
-                            :class="{'color': saveValueDepartment == department.departmentId}"
-                            >{{department.departmentName}}</div>
+                            <div class="header-select">
+                              <div class="text">Mã đơn vị</div>
+                              <div class="text" style="margin-left: 79px;">Tên đơn vị</div>
+                            </div>
+                            <div class="department-content" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="btnDepartmentClick(department.departmentId)"
+                              :class="{'color': saveValueDepartment == department.departmentId}">
+                              <div class="item">
+                                <div>{{department.departmentCode}}</div>
+                                <div style="margin-left: 100px;">{{department.departmentName}}</div>
+                              </div>
+                            </div>
+                            
                         </div>
                       </div>
                   </div>
@@ -520,6 +529,7 @@ export default {
 .text{
     font-weight: 700;
     color: #111111;
+    font-size: 12px;
 }
 .dateofbirth{
   width: 170px;
@@ -625,7 +635,7 @@ export default {
   height: 36px;
   color: white;
   background-color: #35bf22;
-  border-radius: 4px;
+  /* border-radius: 4px; */
   border: none;
   outline: none;
 }
@@ -665,14 +675,27 @@ export default {
   display: flex;
   min-height: 32px;
   border: 1px solid #babec5;
-  border-radius: 2px;
+  /* border-radius: 2px; */
   background-color: #fff;
   
   outline: none;
 }
-.department-box:hover{
-  border-color: #2ca01c;
+.department-content{
+  display: flex;
+  align-items: center;
+  background-color: white;
 }
+.department-content:hover{
+  color: #35bf22;
+  font-weight: 600;
+  background-color: #f4f5f8;
+}
+/* .item-left{
+
+} */
+/* .department-box:hover{
+  border-color: #2ca01c;
+} */
 
 .input-select{
     background-color: transparent;
@@ -713,11 +736,19 @@ export default {
 .select-custom{
     position: absolute;
     width: 392px;
-    height: 166px;
-    top: 190px;
+    /* height: 194px; */
+    top: 198px;
     min-width: 200px;
     background-color: white;
     border: 1px solid #bbb;
+}
+.header-select{
+  height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #f4f5f8;
+  padding: 0 14px 0 10px;
 }
 .select-custom .item{
     height: 32px;
@@ -725,6 +756,8 @@ export default {
     padding: 0 14px 0 10px;
     text-align: left;
     line-height: 32px;
+    display: flex;
+    align-items: center;
 }
 .item:hover{
     color: #2ca01c;

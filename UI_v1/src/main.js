@@ -3,9 +3,14 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import EmployeeList from './components/views/employee/EmployeeList.vue'
 import '../src/assets/font/fontawesome-5.15.1/css/all.min.css'
-import { ValidationProvider, extend } from 'vee-validate';
+import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
 import './axios-libs/axios.js'
-
+import "./components/styles/main.css";
+import "./components/styles/input.css";
+import "./components/styles/table.css";
+import "./components/styles/dropdown.css";
+import "./components/styles/button.css";
+import "./components/styles/icon.css";
 
 
 /* 
@@ -24,6 +29,7 @@ extend('required', {
 });
 
 Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 Vue.config.productionTip = false
 Vue.use(VueRouter);
 

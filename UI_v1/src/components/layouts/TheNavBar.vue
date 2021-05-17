@@ -174,13 +174,16 @@ export default {
   data: function () {
     return {
       selectedItem: 0,
-      toggle: false
+      toggle: false,
     };
   },
   methods: {
     btnToggleClick(){
       this.toggle = !this.toggle;
-    }
+    },
+    selectItem: function(item){
+      this.selectedItem = item;
+    },
   },
 };
 </script>
@@ -194,7 +197,7 @@ export default {
   background: #393a3d;
   height: 100vh;
   width: 178px;
-  font-family: GoogleSans-Regular;
+  font-family: NotoSans-Regular;
   /* transition: 0.5s; */
 }
 .logo-container {
@@ -240,7 +243,7 @@ export default {
   background: rgba(255, 255, 255, 0.2);
 }
 .menu-item.active::before {
-  display: block;
+  display: block; 
 }
 .menu-item .menu-item-icon {
   margin-right: 8px;
@@ -251,11 +254,12 @@ export default {
   color: white;
   font-size: 13px;
   font-weight: 500;
-  font-family: GoogleSans-Regular;
+  font-family: NotoSans-Regular;
   text-decoration: none;
 }
 .menu-item.active .menu-item-title {
-  font-family: GoogleSans-Regular;
+  font-family: NotoSans-Regular;
+  font-weight: 1000;
 }
 .mi-24 {
   width: 24px;
@@ -298,10 +302,7 @@ export default {
 }
 
 .position{
-  /* position: fixed;
-  top: 7px;
-  left: 187px; */
-  
+
 }
 
 #navbar.collapse{

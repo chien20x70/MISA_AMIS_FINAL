@@ -43,7 +43,7 @@ export default {
     display: flex;
     align-items: center ;
     cursor: pointer;
-    width: 240px;
+    width: 260px;
     justify-content: space-between;
     margin-right: 10px;
 }
@@ -60,6 +60,12 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 364px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.header-branch-name1{
+    font-weight: 600;
+    font-size: 14px;
 }
 .flex{
     display: flex !important;
@@ -89,6 +95,7 @@ export default {
     box-sizing: border-box;
     background: 0 0;
     overflow: visible;
+    /* margin-right: 10px; */
 }
 .button-text{
     font-weight: 600;
@@ -110,7 +117,7 @@ export default {
     border-radius: 50%;
 }
 .chevron-right {
-    background-position: -76px -357px;
+    background-position: -75px -357px;
     transform: rotate(90deg); 
 }
 .display{

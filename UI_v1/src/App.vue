@@ -25,12 +25,7 @@ export default {
 </script>
 
 <style>
-@import "./components/styles/main.css";
-@import "./components/styles/input.css";
-@import "./components/styles/table.css";
-@import "./components/styles/dropdown.css";
-@import "./components/styles/button.css";
-@import "./components/styles/icon.css";
+
 #app{
   color: #2c3e50;
   display: flex;

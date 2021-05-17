@@ -11,6 +11,6 @@ export default {
     height: calc(100% - 85px);
     width: 100%;
     background-color: #f4f5f6;
-    padding: 0px 30px 0px 20px;
+    padding: 0px 20px 0px 20px;
 }
 </style>

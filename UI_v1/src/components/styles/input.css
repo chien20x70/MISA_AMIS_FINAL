@@ -7,10 +7,9 @@ input[type = "text"], input[type = "date"]{
     /* padding-left: 16px;
     padding-right: 16px; */
     border: 1px solid #babec5;
-    font-family: GoogleSans-Regular;
+    font-family: NotoSans-Regular;
     outline: none;
 }
-
 .input-search{
     background-image: url('../../assets/icon/search.png');
     background-repeat: no-repeat;
@@ -22,7 +21,7 @@ input[type = "text"], input[type = "date"]{
     flex-shrink: 0;
 }
 input:hover{
-    border: 1px solid #2ca01c;
+    border: 1px solid #babec5;
 }
 input:focus{
     border-color: #2ca01c;
@@ -39,7 +38,10 @@ input:focus{
     width: 240px;
     flex-shrink: 0;
 }
-
+.input-search2::-webkit-input-placeholder{
+    font-family: NotoSans-Regular-italic;
+    font-size: 12px;
+}
 input[type="checkbox"]
 {
     flex-shrink: 0;

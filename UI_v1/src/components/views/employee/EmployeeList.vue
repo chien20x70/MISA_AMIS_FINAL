@@ -77,7 +77,7 @@
         <table style="position: sticky; right: 0; z-index: 2;">
           <thead>
             <tr>
-              <th style="min-width: 120px; border-left: 1px solid #c7c7c7">Chức năng</th>
+              <th style="min-width: 120px; border-left: 1px solid #c7c7c7">CHỨC NĂNG</th>
             </tr>
           </thead>
           <tbody>
@@ -400,8 +400,10 @@ export default {
       this.msgSelected = "";
       this.msgSelected = value + this.msgSelect;
       this.pageSize = value;
+      this.pageIndex = 1;
       this.filterData();
       this.valueSelect = true;
+      
     },
 
     showSelected(){
