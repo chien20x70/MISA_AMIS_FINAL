@@ -393,7 +393,7 @@ export default {
     */
     onBtnExportClick(){
       // Mở 1 cửa số mới gọi API để tải về.
-      window.open(`${this.baseURL}/Employees/ExportingExcel?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`,"_blank");
+      window.open(`https://localhost:44314/api/v1/Employees/ExportingExcel?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`,"_blank");
     },
     
     /**

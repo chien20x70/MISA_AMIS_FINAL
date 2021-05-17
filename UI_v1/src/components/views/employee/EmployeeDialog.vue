@@ -17,7 +17,7 @@
       </div>
       <div class="item-close">
         <div class="icon icon-24 help" style="margin-right: 6px"></div>
-        <div class="icon icon-24 close" @click="btnCloseClick"></div>
+        <div class="icon icon-24 close" @click="onBtnCloseClick"></div>
       </div>
       <div class="dialog-content">
           <div class="employee-inf">
@@ -44,7 +44,7 @@
                           <div class="selected-option">                            
                               <input type="text" class="input-select" v-model="showValueDepartment">              
                             <div class="icon-selected">
-                              <div class="icon icon-30 arrow-dropdown" @click="btnDropdownClick"></div>
+                              <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
                             </div>
                           </div>
                         </div>
@@ -54,7 +54,7 @@
                               <div class="text">Mã đơn vị</div>
                               <div class="text" style="margin-left: 79px;">Tên đơn vị</div>
                             </div>
-                            <div class="department-content" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="btnDepartmentClick(department.departmentId)"
+                            <div class="department-content" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="onBtnDepartmentClick(department.departmentId)"
                               :class="{'color': saveValueDepartment == department.departmentId}">
                               <div class="item">
                                 <div>{{department.departmentCode}}</div>
@@ -154,10 +154,10 @@
           <div class="footer">
             <div class="divide"></div>
             <div class="footer-btn">
-              <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="btnCloseClick">Hủy</button>
+              <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnCloseClick">Hủy</button>
               <div class="btn-right">
-                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="btnSaveClick">Cất</button>
-                <button class="add-line color" style="margin-left: 20px;" @click="btnSaveAndAddClick">Cất và Thêm</button>
+                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnSaveClick">Cất</button>
+                <button class="add-line color" style="margin-left: 20px;" @click="onBtnSaveAndAddClick">Cất và Thêm</button>
               </div>
             </div>
           </div>
@@ -190,6 +190,7 @@ export default {
       showDepartment: true,       // Hiển thị comboboxDepartment       
       saveValueDepartment: null,  // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
+                                  //TODO: Validate và input Date
     }
   },
 
@@ -250,7 +251,7 @@ export default {
     Click đóng Dialog
     CreatedBy: NXCHIEN 17/05/2021
     */
-    btnCloseClick(){
+    onBtnCloseClick(){
       this.$emit('hideDialogNotLoad');
       this.saveValueDepartment = null;
 
@@ -276,7 +277,7 @@ export default {
     Click Save nhân viên
     CreatedBy: NXCHIEN 17/05/2021
     */
-    btnSaveClick(){
+    onBtnSaveClick(){
       // Kiểm tra nút Thêm hay Sửa
       if(this.employee.fullName == ""){
         this.message = "Tên không được để trống."
@@ -321,7 +322,7 @@ export default {
      * Click nút Cất và Thêm cho phép lưu dữ liệu và reset form để người dùng có thể thêm tiếp mà ko cần click nút Thêm mới.
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    btnSaveAndAddClick(){
+    onBtnSaveAndAddClick(){
       if(this.employee.fullName == ""){
         this.message = "Tên không được để trống."
         this.valuePopup = true;
@@ -379,7 +380,7 @@ export default {
      * Click nút dropdown để toggle Department phòng ban 
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    btnDropdownClick(){
+    onBtnDropdownClick(){
       this.showDepartment = !this.showDepartment;
     },
 
@@ -387,7 +388,7 @@ export default {
      * Click chọn phòng ban để bind dữ liệu
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    btnDepartmentClick(departmentId){
+    onBtnDepartmentClick(departmentId){
       // Lưu giá trị ID lấy được
       this.saveValueDepartment = departmentId;
       // Gán ID phòng ban của employee = id lấy được để theo dõi giá trị và bind lên form
