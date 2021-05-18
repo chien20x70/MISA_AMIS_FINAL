@@ -63,9 +63,6 @@ namespace MISA.AMIS.API.Controllers
         /// <summary>
         /// Export file excel
         /// </summary>
-        /// <param name="pageSize">số nhân viên / trang</param>
-        /// <param name="pageIndex">Trang số bao nhiêu</param>
-        /// <param name="filter">lọc bằng chuỗi string</param>
         /// <returns>
         ///     - Thành công: 200
         ///     - Lỗi server: 500

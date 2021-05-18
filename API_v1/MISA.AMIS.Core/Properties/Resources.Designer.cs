@@ -61,6 +61,15 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NV-00001.
+        /// </summary>
+        internal static string Default_Value_EmployeeCode {
+            get {
+                return ResourceManager.GetString("Default_Value_EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  đã tồn tại trên hệ thống, vui lòng kiểm tra lại..
         /// </summary>
         internal static string Msg_Code_Exist {

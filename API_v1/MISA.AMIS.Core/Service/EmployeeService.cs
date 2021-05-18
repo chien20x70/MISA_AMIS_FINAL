@@ -139,7 +139,7 @@ namespace MISA.AMIS.Core.Service
 
             if (codeMax == null)
             {
-                return "NV-00001";
+                return Properties.Resources.Default_Value_EmployeeCode;
             }
 
             // Tách chữ và số ra hai mảng

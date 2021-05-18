@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Default_Value_EmployeeCode" xml:space="preserve">
+    <value>NV-00001</value>
+  </data>
   <data name="Msg_Code_Exist" xml:space="preserve">
     <value> đã tồn tại trên hệ thống, vui lòng kiểm tra lại.</value>
   </data>
