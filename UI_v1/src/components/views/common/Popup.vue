@@ -4,16 +4,18 @@
         <div class="model"></div>
         <div class="popup-box">
           <div class="popup-content">
-            <!-- || message.includes('đã tồn tại') && !message.includes('đã tồn tại') -->
-            <div v-if="employeeCode != null" class="icon icon-48 exclamation-warning-48"></div>           
+            <div v-if="employeeCode != null || message.includes('đã tồn tại')" class="icon icon-48 exclamation-warning-48"></div>           
             <div v-if="employeeCode != null" class="message">Bạn có thực sự muốn xóa Nhân viên &lt;{{employeeCode}}&gt; không?</div>
-            <div v-if="message != null" class="icon icon-48 mi-exclamation-error-48-2"></div>
+            <div v-if="message != null && !message.includes('đã tồn tại') && employeeCode == null" class="icon icon-48 mi-exclamation-error-48-2"></div>
             <div v-if="message != null" class="message">{{ message }}</div>
           </div>
           <div class="btn-footer">
             <button v-if="employeeCode != null" class="btn-No" @click="onBtnNoClick">Không</button>
+            <button v-if="message != null && message.includes('thay đổi')" class="btn-No" @click="onBtnNoClick">Hủy</button>
             <button v-if="employeeCode != null" class="btn-yes" @click="onBtnYesClick">Có</button>
-            <button v-if="message != null" class="btn-close" @click="onBtnNoClick" style="margin-left: 145px;">Đóng</button>
+            <button v-if="message.includes('thay đổi')" class="btn-No" @click="onBtnNoClickV2" style="margin-left: 130px;">Không</button>
+            <button v-if="message.includes('thay đổi')" class="btn-yes" @click="onBtnYesClickV2">Có</button>
+            <button v-if="message != null && !message.includes('thay đổi') && employeeCode == null" class="btn-close" @click="onBtnNoClick" style="margin-left: 145px;">Đóng</button>
           </div>
         </div>
     </div>
@@ -24,18 +26,20 @@ export default {
       popState:{ type: Boolean, selector: false},             // Trạng thái popup hiển thị
       employeeCode:{ type: String, selector: null},           // Giá trị EmployeeCode được bind từ EmployeeList
       employeeId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
-      message: {type: String, selector: null}                 // message thông báo lỗi được bind từ Dialog
+      message: {type: String, default: ''}                 // message thông báo lỗi được bind từ Dialog
     },
     methods:{
       /* 
-      Click button 'Không' thì đóng popup mà không load lại data
+      Click button 'Không' thì đóng popup mà giữ lại form dialog
       CreatedBy: NXCHIEN 17/05/2021
        */
       onBtnNoClick(){
         // Gọi đến EmployeeList
         this.$emit("hidePopupNotLoad");
       },
-
+      onBtnNoClickV2(){
+        this.$emit("hidePopupAndHideDialog");
+      },
       /* 
       Click button 'có' thì xóa nhân viên được chọn và đóng popup và có load lại data
       CreatedBy: NXCHIEN 17/05/2021
@@ -48,7 +52,11 @@ export default {
         }).catch(res =>{
           console.log(res);
         })
-      }
+      },
+      //Gọi qua Dialog lưu lại dữ liệu khi có sự thay đổi
+      onBtnYesClickV2(){
+        this.$emit("onClickYesWhenDataChange");
+      },
     }
     
 }

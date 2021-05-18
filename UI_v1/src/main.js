@@ -11,7 +11,10 @@ import "./components/styles/table.css";
 import "./components/styles/dropdown.css";
 import "./components/styles/button.css";
 import "./components/styles/icon.css";
+import VueHotkey from 'v-hotkey'
+import vuetify from './plugins/vuetify'
 
+Vue.use(VueHotkey)
 
 /* 
 Validate các trường để trống thì thông báo lỗi
@@ -58,5 +61,6 @@ Vue.filter('dateFormatDDMMYY', function (date) {
 
 new Vue({
   render: h => h(App),
+  vuetify,
   router
 }).$mount('#app')

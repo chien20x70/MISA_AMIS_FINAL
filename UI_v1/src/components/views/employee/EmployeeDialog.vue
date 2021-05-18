@@ -17,7 +17,7 @@
       </div>
       <div class="item-close">
         <div class="icon icon-24 help" style="margin-right: 6px"></div>
-        <div class="icon icon-24 close" @click="onBtnCloseClick"></div>
+        <div class="icon icon-24 close" v-hotkey="keymap" @click="onBtnCloseClick"></div>
       </div>
       <div class="dialog-content">
           <div class="employee-inf">
@@ -41,12 +41,13 @@
                         <span class="text">Đơn vị<p style="color: red; display: inline;"> *</p></span>
                         <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }">
                         <div class="department-box" :title="errors[0]" style="margin-top: 4px;" :class="errors[0] == null ? '' : 'box-error'">
-                          <div class="selected-option">                            
-                              <input type="text" class="input-select" v-model="showValueDepartment">              
+                          <div class="selected-option"> 
+                              <input type="text" class="input-select" v-model="showValueDepartment">           
+                              <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
                             <div class="icon-selected">
                               <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
-                            </div>
-                          </div>
+                            </div> 
+                          </div> 
                         </div>
                         </ValidationProvider>
                         <div class="select-custom" :class="{'invisible' : showDepartment}">
@@ -162,7 +163,7 @@
             </div>
           </div>
       </div>
-      <Popup v-if="valuePopup" @hidePopupNotLoad="valuePopup = false" :message="message"/>
+      <Popup v-if="valuePopup" @hidePopupNotLoad="valuePopup = false" :message="message" @onClickYesWhenDataChange="onBtnSaveClick" @hidePopupAndHideDialog="hidePopupAndHideDialog"/>
     </div>
     
   </div>
@@ -177,7 +178,7 @@ export default {
 
   props:{
     state:{ type: Boolean, selector: false},          // Trạng thái hiển thị Dialog
-    employee:{ type: Object, selector: null},         // Đối tượng nhân viên được truyền từ EmployeeList sang
+    employee:{ type: Object, default: null},         // Đối tượng nhân viên được truyền từ EmployeeList sang
     flag:{ type: String, selector: null},             // Cờ để check giá trị nút Thêm mới hay Sửa
   },
   data() {
@@ -190,7 +191,7 @@ export default {
       showDepartment: true,       // Hiển thị comboboxDepartment       
       saveValueDepartment: null,  // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
-                                  //TODO: Validate và input Date
+                           //TODO: Validate và input Date
     }
   },
 
@@ -201,52 +202,66 @@ export default {
      */
     showValueDepartment:{     
       get(){
-        this.departments.forEach(element => {
-          if(this.saveValueDepartment == element.departmentId){
-            return element.departmentName;
-          }else if(this.employee.employeeId == element.departmentId){
-            return element.departmentName;
-          }
-        });
-        // if (this.saveValueDepartment == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
-        //   return "Phòng Nhân sự";
-        // } else if (this.saveValueDepartment == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
-        //   return "Phòng Kế toán";
-        // } else if (this.saveValueDepartment == "17120d02-6ab5-3e43-18cb-66948daf6128") {
-        //   return "Phòng Đào tạo";
-        // } else if(this.saveValueDepartment == "469b3ece-744a-45d5-957d-e8c757976496"){
-        //   return "Phòng Marketing";
-        // } else if(this.saveValueDepartment == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
-        //   return "Phòng Nghiên cứu";
-        // }else if (this.employee.departmentId == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
-        //   return "Phòng Nhân sự";
-        // } else if (this.employee.departmentId == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
-        //   return "Phòng Kế toán";
-        // } else if (this.employee.departmentId == "17120d02-6ab5-3e43-18cb-66948daf6128") {
-        //   return "Phòng Đào tạo";
-        // } else if(this.employee.departmentId == "469b3ece-744a-45d5-957d-e8c757976496"){
-        //   return "Phòng Marketing";
-        // } else if(this.employee.departmentId == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
-        //   return "Phòng Nghiên cứu";
-        // }
+        for (let index = 0; index < this.departments.length; index++) {
+          if(this.saveValueDepartment == this.departments[index].departmentId){
+            return this.departments[index].departmentName;
+          }else if(this.employee.departmentId == this.departments[index].departmentId){
+            return this.departments[index].departmentName;
+          }         
+        }
         return ""
       },
       set(value){       
         this.employee.departmentId = value;
       }
-    }, 
+    },
+    keymap () {
+      return {
+        'esc': this.onBtnCloseClick,
+        // 'enter': {
+        //   keydown: this.hideD,
+        //   keyup: this.show
+        // }
+      }
+    }
     
   },
   
   methods: {
+    /**
+     * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList
+     * CreatedBy:NXCHIEN 17/05/2021
+     */
+    hidePopupAndHideDialog(){
+      this.$emit('hideDialogNotLoad');
+    },
+    
+    /**
+     * So sánh 2 object
+     * CreatedBy: NXCHIEn 17/05/2021
+     */
+    compareObjectEmployee(obj1, obj2){
+      for(let key in obj2){
+        if(obj2[key] !== obj1[key]){
+          return true
+        }
+      }
+      return false;
+    },
     /* 
     Click đóng Dialog
     CreatedBy: NXCHIEN 17/05/2021
     */
     onBtnCloseClick(){
-      this.$emit('hideDialogNotLoad');
-      this.saveValueDepartment = null;
-
+      console.log(this.dectectEmployee);
+      console.log(this.employee);
+      if(this.compareObjectEmployee(this.dectectEmployee, this.employee)){
+        this.message = "Dữ liệu đã bị thay đổi, Bạn có muốn cất không?"
+        this.valuePopup = true;
+      }else{
+        this.$emit('hideDialogNotLoad');
+        this.saveValueDepartment = null;
+      }
     },
 
     /* 
@@ -271,7 +286,8 @@ export default {
     */
     onBtnSaveClick(){
       // Kiểm tra nút Thêm hay Sửa
-      if(this.employee.fullName == ""){
+      this.employee.employeeCode = this.employee.employeeCode.trim();
+      if(this.employee.fullName.trim() == ""){
         this.message = "Tên không được để trống."
         this.valuePopup = true;
       }
@@ -315,6 +331,7 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnSaveAndAddClick(){
+      this.employee.employeeCode = this.employee.employeeCode.trim();
       if(this.employee.fullName == ""){
         this.message = "Tên không được để trống."
         this.valuePopup = true;
@@ -391,6 +408,12 @@ export default {
 
 
   },
+  created(){
+    this.dectectEmployee = {...this.employee};
+    console.log(this.dectectEmployee);
+    console.log(this.employee);
+  },
+  
   mounted(){
     /**
      * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
@@ -403,6 +426,17 @@ export default {
     }).catch(res =>{
     console.log(res);
     })
+    // this.axios.get('/Departments').then((res) => {
+    //   res.data.forEach((item) => {
+    //     this.departments.push({
+    //       value: item.departmentId,
+    //       text: item.departmentName
+    //     })
+    //   })
+    // })
+    this.dectectEmployee = {...this.employee};
+    console.log(this.employee);
+    console.log(this.dectectEmployee);
   }
 };
 </script>
@@ -664,12 +698,12 @@ export default {
   height: 32px;
   display: flex;
   min-height: 32px;
-  border: 1px solid #babec5;
-  /* border-radius: 2px; */
+  border: 1px solid #babec5; 
+  border-radius: 2px; 
   background-color: #fff;
-  
   outline: none;
 }
+
 .department-content{
   display: flex;
   align-items: center;
@@ -683,9 +717,9 @@ export default {
 /* .item-left{
 
 } */
-/* .department-box:hover{
+.department-box:focus{
   border-color: #2ca01c;
-} */
+}
 
 .input-select{
     background-color: transparent;

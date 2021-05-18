@@ -25,19 +25,15 @@
         </div>
       </div>
       <div class="content-table-height">
-        <table
-          class="tblListEmployee"
-          border="0"
-          width="100%"
-          style="margin-left: 16px"
-        >
+        <!-- <div class="table-left"></div> -->
+        <table class="tblListEmployee" border="0" width="100%">
           <thead>
             <tr>
               <th
                 style="
                   width: 40px;
                   position: sticky;
-                  left: 0;
+                  left: 0px;
                   top: 0;
                   z-index: 3;
                   border-left: none;
@@ -67,7 +63,7 @@
                 style="
                   width: 40px;
                   position: sticky;
-                  left: 0;
+                  left: 0px;
                   z-index: 2;
                   border-left: none;
                 "
@@ -113,7 +109,7 @@
                       >
                     </div>
                   </button>
-                  <ComboboxDepartment
+                  <DropdownDuplicateAndDelete
                     @showPopup="
                       showPopup(employee.employeeId, employee.employeeCode)
                     "
@@ -211,15 +207,15 @@
     </div>
     <!-- :state="show" -->
     <EmployeeDialog
-      v-if="show"    
+      v-if="show"
       @hideDialog="hideDialog"
       @hideDialogNotLoad="hideDialogNotLoad"
       :employee="selectedEmployee"
       :flag="status"
       @saveAndAdd="onBtnAddClick"
     />
-    <Popup
-      :popState="valuePopup"
+    <Popup     
+      v-if="valuePopup"
       @hidePopupNotLoad="hidePopupNotLoad"
       @hidePopup="hidePopup"
       :employeeCode="recordCode"
@@ -232,13 +228,13 @@
 </template>
 <script>
 import EmployeeDialog from "./EmployeeDialog.vue";
-import ComboboxDepartment from "../common/ComboboxDepartment.vue";
+import DropdownDuplicateAndDelete from "../common/DropdownDuplicateAndDelete.vue";
 import Popup from "../common/Popup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
 export default {
   components: {
     EmployeeDialog,
-    ComboboxDepartment,
+    DropdownDuplicateAndDelete,
     Popup,
     ComboboxFilter,
   },
@@ -250,7 +246,7 @@ export default {
       recordId: null, // Lưu giá trị của EmployeeId để truyền qua Popup
       status: null, // Trạng thái nút là Thêm mới hay Sửa
       isBusy: false, // Trạng thái của icon Loading
-      valuePopup: true, // Giá trị hiển thị Popup
+      valuePopup: false, // Giá trị hiển thị Popup
       recordCode: null, // Lưu giá trị Employeecode truyền qua Popup
       totalRecord: 0, // Tổng số bản ghi Empployee
       pageSize: 20, // Bao nhiêu nhân viên / trang
@@ -268,7 +264,6 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     this.filterData();
-    console.log("Day là created cua list!");
   },
   methods: {
     /**
@@ -276,18 +271,14 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnAddClick() {
-      // Hiển thị dialog
-      this.show = true;
-      // Gán giá trị là nút Thêm mới
-      this.status = "add";
       this.axios
         .get("/Employees/employeeCode")
         .then((response) => {
           console.log(response.data);
-          //
-          // var increCode = response.data;
-          // // Cắt chuỗi trả về
-          // increCode = increCode.substring(3);
+          // Hiển thị dialog
+          this.show = true;
+          // Gán giá trị là nút Thêm mới
+          this.status = "add";
           // Gán tất cả các ô data của dialog rỗng
           this.selectedEmployee = {};
           // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
@@ -302,7 +293,7 @@ export default {
     },
 
     /* 
-    Đóng dialog mà không load lại dữ liệu
+    Đóng dialog mà không load lại dữ liệu (được gọi từ Dialog)
     CreatedBy: NXCHIEN 17/05/2021  
     */
     hideDialogNotLoad() {
@@ -310,7 +301,7 @@ export default {
     },
 
     /* 
-    Đóng dialog có load lại dữ liệu
+    Đóng dialog có load lại dữ liệu (được gọi từ Dialog)
     CreatedBy: NXCHIEN 17/05/2021 
     */
     hideDialog() {
@@ -319,12 +310,12 @@ export default {
     },
 
     /* 
-    Hiển thị Popup
+    Hiển thị Popup được gọi từ (dropdownDuplicateAndDelete)
     CreatedBy: NXCHIEN 17/05/2021  
     */
     showPopup(employeeId, employeeCode) {
-      this.valuePopup = false;
 
+      this.valuePopup = true;
       // Lưu giá trị Id khi click vào nút sửa trên bảng.
       this.recordId = employeeId;
       this.recordCode = employeeCode;
@@ -335,7 +326,7 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021  
     */
     hidePopup() {
-      this.valuePopup = true;
+      this.valuePopup = false;
       this.filterData();
     },
 
@@ -344,9 +335,8 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021  
     */
     hidePopupNotLoad() {
-      this.valuePopup = true;
+      this.valuePopup = false;
     },
-
     /* 
     dblClick vào 1 dòng trong table
     - Lấy ra 1 nhân viên được chọn
@@ -386,17 +376,17 @@ export default {
     },
 
     duplicateClick(value) {
-      // gán cờ thành nút thêm mới
-      this.status = "add";
-      //Lấy ra id của employee
-
-      //show Dialog
-      this.show = true;
-      //Fill employee vào dialog
-
       this.axios
         .get("/Employees/EmployeeCopy?id=" + value)
         .then((response) => {
+          // gán cờ thành nút thêm mới
+          this.status = "add";
+          //Lấy ra id của employee
+
+          //show Dialog
+          this.show = true;
+          //Fill employee vào dialog
+
           console.log(response);
           this.selectedEmployee = response.data;
 
@@ -430,9 +420,12 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onBtnRefreshClick() {
-      this.filterData();
-      this.totalPages = 1;
-      this.pageIndex = 1;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() =>{
+        this.totalPages = 1;
+        this.pageIndex = 1;
+        this.filterData();
+      }, 500);
     },
 
     /* 
@@ -446,7 +439,6 @@ export default {
           `/Employees/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`
         )
         .then((response) => {
-          console.log(response);
           // Gán mảng nhân viên ban đầu = data từ server trả về
           this.employees = response.data.data;
           // tổng số bản ghi = tổng số bản ghi từ server trả về
@@ -456,7 +448,6 @@ export default {
           if (response.data.totalRecord == undefined) {
             this.totalRecord = 0;
           }
-          console.log(response.data.totalRecord);
         })
         .catch((response) => {
           console.log(response);
@@ -549,7 +540,7 @@ export default {
     Mảng chứa các phần tử ở giữa nút số 1 và trang cuối cùng trong phân trang
     CreatedBy: NXCHIEN 17/05/2021  
     */
-    pageIndexs: function () {
+    pageIndexs: function() {
       let ps = []; // Khởi tạo mảng
 
       // Nếu trang hiện tại > 3 thì bắt đầu từ nút trang hiện tại trừ 1 còn nếu <=3 thì nút bắt đầu là 2
@@ -652,11 +643,13 @@ export default {
   justify-content: space-between;
 }
 .content-table .content-table-height {
-  height: calc(100% - 22px);
+  height: calc(100% - 27px);
   overflow-y: auto;
   overflow-x: auto;
-  width: calc(100% - 25px);
+  width: calc(100% - 41px);
   display: flex;
+  margin-left: 16px;
+  margin-top: 5px;
 }
 
 .check-box {
