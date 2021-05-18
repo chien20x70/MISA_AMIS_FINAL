@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog" v-if="state">
+  <div class="dialog">
     <div class="model"></div>
     <div class="dialog-box">
       <div class="dialog-header">
@@ -201,27 +201,34 @@ export default {
      */
     showValueDepartment:{     
       get(){
-        if (this.saveValueDepartment == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
-          return "Phòng Nhân sự";
-        } else if (this.saveValueDepartment == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
-          return "Phòng Kế toán";
-        } else if (this.saveValueDepartment == "17120d02-6ab5-3e43-18cb-66948daf6128") {
-          return "Phòng Đào tạo";
-        } else if(this.saveValueDepartment == "469b3ece-744a-45d5-957d-e8c757976496"){
-          return "Phòng Marketing";
-        } else if(this.saveValueDepartment == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
-          return "Phòng Nghiên cứu";
-        }else if (this.employee.departmentId == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
-          return "Phòng Nhân sự";
-        } else if (this.employee.departmentId == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
-          return "Phòng Kế toán";
-        } else if (this.employee.departmentId == "17120d02-6ab5-3e43-18cb-66948daf6128") {
-          return "Phòng Đào tạo";
-        } else if(this.employee.departmentId == "469b3ece-744a-45d5-957d-e8c757976496"){
-          return "Phòng Marketing";
-        } else if(this.employee.departmentId == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
-          return "Phòng Nghiên cứu";
-        }
+        this.departments.forEach(element => {
+          if(this.saveValueDepartment == element.departmentId){
+            return element.departmentName;
+          }else if(this.employee.employeeId == element.departmentId){
+            return element.departmentName;
+          }
+        });
+        // if (this.saveValueDepartment == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
+        //   return "Phòng Nhân sự";
+        // } else if (this.saveValueDepartment == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
+        //   return "Phòng Kế toán";
+        // } else if (this.saveValueDepartment == "17120d02-6ab5-3e43-18cb-66948daf6128") {
+        //   return "Phòng Đào tạo";
+        // } else if(this.saveValueDepartment == "469b3ece-744a-45d5-957d-e8c757976496"){
+        //   return "Phòng Marketing";
+        // } else if(this.saveValueDepartment == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
+        //   return "Phòng Nghiên cứu";
+        // }else if (this.employee.departmentId == "11452b0c-768e-5ff7-0d63-eeb1d8ed8cef") {
+        //   return "Phòng Nhân sự";
+        // } else if (this.employee.departmentId == "142cb08f-7c31-21fa-8e90-67245e8b283e") {
+        //   return "Phòng Kế toán";
+        // } else if (this.employee.departmentId == "17120d02-6ab5-3e43-18cb-66948daf6128") {
+        //   return "Phòng Đào tạo";
+        // } else if(this.employee.departmentId == "469b3ece-744a-45d5-957d-e8c757976496"){
+        //   return "Phòng Marketing";
+        // } else if(this.employee.departmentId == "4e272fc4-7875-78d6-7d32-6a1673ffca7c"){
+        //   return "Phòng Nghiên cứu";
+        // }
         return ""
       },
       set(value){       
@@ -230,22 +237,7 @@ export default {
     }, 
     
   },
-  // Focus Input
-  updated(){
-    /* 
-    Giá trị valueForcusInput = true thì focus vào input rồi gán lại false. Mỗi lần bật Dialog lên thì gán true.
-    CreatedBy: NXCHIEN 17/05/2021
-    */
-    while(this.valueForcusInput == true){
-      if (this.$refs.focusCode !== undefined) {
-        this.$refs.focusCode.focus();
-      }
-      this.valueForcusInput = false;
-    }
-    if(this.state == false){
-      this.valueForcusInput = true;
-    }
-  },
+  
   methods: {
     /* 
     Click đóng Dialog
@@ -402,8 +394,10 @@ export default {
   mounted(){
     /**
      * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
+     * và focus vào ô Input
      *CreatedBy: NXCHIEN 17/05/2021
      */
+    this.$refs.focusCode.focus();
     this.axios.get("/Departments").then(res =>{
     this.departments = res.data;
     }).catch(res =>{
