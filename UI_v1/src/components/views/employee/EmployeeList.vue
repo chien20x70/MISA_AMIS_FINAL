@@ -493,9 +493,9 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021 
     */
     onBtnExportClick() {
-      // Mở 1 cửa số mới gọi API để tải về.
+      // Mở 1 cửa số mới gọi API để tải về.   ?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}
       window.open(
-        `https://localhost:44314/api/v1/Employees/ExportingExcel?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`,
+        `https://localhost:44314/api/v1/Employees/ExportingExcel`,
         "_blank"
       );
     },

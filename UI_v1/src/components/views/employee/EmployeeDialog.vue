@@ -449,6 +449,7 @@ export default {
 }
 .dialog {
   border: 1px solid #bbb;
+  animation: zoomIn 0.5s ;
 }
 
 .dialog .model {
@@ -797,4 +798,18 @@ export default {
 .input-error{
   border: 1px solid red;
 }
+
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.5,0.5);
+    }
+    100% {
+        transform: scale(1,1);
+    }
+}
+/* .zoomIn{
+  animation-name: zoomIn;
+  animation-duration: 0.5s;
+} */
+
 </style>
