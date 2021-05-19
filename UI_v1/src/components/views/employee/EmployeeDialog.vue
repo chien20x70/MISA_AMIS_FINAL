@@ -1,8 +1,8 @@
 <template>
   <div class="dialog">
     <div class="model"></div>
-    <ValidationObserver v-slot="{ handleSubmit }">
-      <form>
+    <!-- <ValidationObserver v-slot="{ handleSubmit }">
+      <form> -->
     <div class="dialog-box">
       <div class="dialog-header">
         <div class="title flex">
@@ -27,39 +27,39 @@
                   <div class="row-1">
                       <div class="code">
                         <span class="text">Mã<p style="color: red; display: inline;"> *</p></span>
-                        <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }">
-                          <input type="text" ref="focusCode" :title="errors[0]" style="width: 151px; margin-top: 4px;" v-model="employee.employeeCode" :class="errors[0] == null ? '' : 'input-error'">
-                        </ValidationProvider>
+                        <!-- <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }"> -->
+                          <input type="text" ref="focusCode" style="width: 151px; margin-top: 4px;" v-model="employee.employeeCode" @input="onChangeInputCode" :class="{'input-error': code == true}">
+                        <!-- </ValidationProvider> -->
                       </div>
                       <div class="name">
                         <span class="text">Tên<p style="color: red; display: inline;"> *</p></span>
-                        <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }">
-                          <input type="text" :title="errors[0]" style="width: 235px; margin-top: 4px;" v-model="employee.fullName" :class="errors[0] == null ? '' : 'input-error'">
-                        </ValidationProvider>
+                        <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
+                          <input type="text" style="width: 235px; margin-top: 4px;" v-model="employee.fullName" @input="onChangeInputName" :class="{'input-error': name == true}">
+                        <!-- </ValidationProvider> -->
                       </div>
                   </div>
                   <div class="row-1">                   
                       <div class="position">
                         <span class="text">Đơn vị<p style="color: red; display: inline;"> *</p></span>
-                        <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }">
-                        <div class="department-box" :title="errors[0]" style="margin-top: 4px;" :class="errors[0] == null ? '' : 'box-error'">
+                        <!-- <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }"> -->
+                        <div class="department-box" style="margin-top: 4px;" :class="{'input-error': department == true}">
                           <div class="selected-option"> 
                             <!-- @keyup="onBtnKeyUpClick($event)" -->
-                              <input type="text" class="input-select" v-model="showValueDepartment" >           
+                              <input type="text" class="input-select" :value="showValueDepartment" @input="onChangeInputDepartment">           
                               <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
                             <div class="icon-selected">
                               <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
                             </div> 
                           </div> 
                         </div>
-                        </ValidationProvider>
+                        <!-- </ValidationProvider> -->
                         <div class="select-custom" :class="{'invisible' : showDepartment}">
                             <div class="header-select">
                               <div class="text">Mã đơn vị</div>
                               <div class="text" style="margin-left: 79px;">Tên đơn vị</div>
                             </div>
-                            <div class="department-content" ref="positionDepartment" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="onBtnDepartmentClick(department.departmentId)"
-                              :class="{'color': saveValueDepartment == department.departmentId}">
+                            <div class="department-content" ref="positionDepartment" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="onBtnDepartmentClick(department, index)"
+                              :class="{'color': currentIndex == index}">
                               <div class="item">
                                 <div>{{department.departmentCode}}</div>
                                 <div style="margin-left: 100px;">{{department.departmentName}}</div>
@@ -164,16 +164,16 @@
             <div class="footer-btn">
               <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnCloseClick">Hủy</button>
               <div class="btn-right">
-                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="handleSubmit(onBtnSaveClick)">Cất</button>
-                <button class="add-line color" style="margin-left: 20px;" @click="handleSubmit(onBtnSaveAndAddClick)">Cất và Thêm</button>
+                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnSaveClick">Cất</button>
+                <button class="add-line color" style="margin-left: 20px;" @click="onBtnSaveAndAddClick">Cất và Thêm</button>
               </div>
             </div>
           </div>
       </div>
       <Popup v-if="valuePopup" @hidePopupNotLoad="valuePopup = false" :message="message" @onClickYesWhenDataChange="onBtnSaveClick" @hidePopupAndHideDialog="hidePopupAndHideDialog"/>
     </div>
-    </form>
-    </ValidationObserver>
+    <!-- </form>
+    </ValidationObserver> -->
   </div>
 </template>
 <script>
@@ -195,12 +195,16 @@ export default {
     return {
       infor: true,                // Giá trị hiển thị tab Liên hệ hay tài khoản ngân hàng              
       departments: [],            // Mảng phòng ban
-      message: null,              // message thông báo lỗi bind sang Popup
+      message: '',              // message thông báo lỗi bind sang Popup
       valuePopup: false,          // Giá trị để hiển thị Popup
       valueForcusInput: false,    // Giá trị để focus vào ô input
       showDepartment: true,       // Hiển thị comboboxDepartment       
       saveValueDepartment: null,  // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
+      name: false,
+      code: false,
+      department: false,
+      currentIndex: 0,
     }
   },
   //#endregion
@@ -214,7 +218,8 @@ export default {
         for (let index = 0; index < this.departments.length; index++) {
           if(this.saveValueDepartment == this.departments[index].departmentId){
             return this.departments[index].departmentName;
-          }else if(this.employee.departmentId == this.departments[index].departmentId){
+          }else 
+          if(this.employee.departmentId == this.departments[index].departmentId){
             return this.departments[index].departmentName;
           }         
         }
@@ -232,19 +237,53 @@ export default {
         //   keyup: this.show
         // }
       }
-    }
-    
+    },
   },
-  
   //#region METHODS
   methods: {
+    //#region Validate 
+    onChangeInputName(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if(val !== ''){
+          this.name = false;
+        }else if (val == '') {
+          this.name = true;
+        }
+      }, 200);
+    },
+    onChangeInputCode(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if(val !== ''){
+          this.code = false;
+        }else if (val == '') {
+          this.code = true;
+        }
+      }, 200);
+    },
+    onChangeInputDepartment(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if(val !== ''){
+          this.department = false;
+        }else if (val == '') {
+          this.department = true;
+        }
+      }, 500);
+    },
+    //#endregion
+    
     // onBtnKeyUpClick(event){
     //   switch(event.keyCode){
     //     case 40:
     //       if(this.showDepartment){
     //         this.showDepartment = false;
     //       }else{
-    //         this.
+            
     //       }
     //   }
     // },
@@ -273,8 +312,7 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021
     */
     onBtnCloseClick(){
-      console.log(this.dectectEmployee);
-      console.log(this.employee);
+
       if(this.compareObjectEmployee(this.dectectEmployee, this.employee)){
         this.message = "Dữ liệu đã bị thay đổi, Bạn có muốn cất không?"
         this.valuePopup = true;
@@ -300,18 +338,30 @@ export default {
       this.infor = false;
     },
 
+    checkEmptyAttribute(){
+      if(this.employee.employeeCode == ''){
+        this.code = true;
+      }
+      if(this.employee.fullName == ''){
+        this.name = true;
+      }
+      if(this.employee.departmentId == ''){
+        this.department = true;
+      }
+    },
     /* 
     Click Save nhân viên
     CreatedBy: NXCHIEN 17/05/2021
     */
     onBtnSaveClick(){
+      this.checkEmptyAttribute();
       // Kiểm tra nút Thêm hay Sửa
       this.employee.employeeCode = this.employee.employeeCode.trim();
       if(this.employee.fullName.trim() == ""){
         this.message = "Tên không được để trống."
         this.valuePopup = true;
       }
-      else if(this.employee.departmentId == ""){       
+      else if(this.employee.departmentId == ""){      
         this.message = "Vui lòng chọn Đơn vị!"
         this.valuePopup = true;
       }
@@ -350,6 +400,7 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnSaveAndAddClick(){
+      this.checkEmptyAttribute();
       this.employee.employeeCode = this.employee.employeeCode.trim();
       if(this.employee.fullName == ""){
         this.message = "Tên không được để trống."
@@ -421,13 +472,16 @@ export default {
      * Click chọn phòng ban để bind dữ liệu
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    onBtnDepartmentClick(departmentId){
+    onBtnDepartmentClick(department, index){
       // Lưu giá trị ID lấy được
-      this.saveValueDepartment = departmentId;
+      this.saveValueDepartment = department.departmentId;
       // Gán ID phòng ban của employee = id lấy được để theo dõi giá trị và bind lên form
-      this.employee.departmentId = departmentId;     
+      this.employee.departmentId = department.departmentId;     
       // Ẩn combobox Department phòng ban
       this.showDepartment = true;
+      // Ẩn border error
+      this.department = false;
+      this.currentIndex = index;
     }
 
 
@@ -817,6 +871,10 @@ export default {
 .input-error{
   border: 1px solid red;
 }
+.input-overide{
+  border: 1px solid #babec5;
+}
+
 
 /* @keyframes zoomIn {
     0% {

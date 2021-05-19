@@ -280,17 +280,14 @@ export default {
       this.axios
         .get("/Employees/employeeCode")
         .then((response) => {
-          console.log(response.data);
           // Hiển thị dialog
           this.show = true;
           // Gán giá trị là nút Thêm mới
           this.status = "add";
           // Gán tất cả các ô data của dialog rỗng
           this.selectedEmployee = {};
-          console.log(response.data);
           // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
           this.selectedEmployee.employeeCode = response.data;
-          console.log(this.selectedEmployee.employeeCode);
           this.selectedEmployee.fullName = "";
           this.selectedEmployee.departmentId = "";
           this.selectedEmployee.gender = 1;
@@ -351,17 +348,18 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onRowTableDblClick(eId) {
-      // gán cờ thành nút sửa
-      this.status = "edit";
-      //Lấy ra id của employee
-
-      //show Dialog
-      this.show = true;
-      //Fill employee vào dialog
-
+    
       this.axios
         .get("/Employees/" + eId)
         .then((response) => {
+
+          // gán cờ thành nút sửa
+          this.status = "edit";
+          //Lấy ra id của employee
+
+          //show Dialog
+          this.show = true;
+          //Fill employee vào dialog
           this.selectedEmployee = response.data;
           // format lại dữ liệu hiển thị
           if (this.selectedEmployee.dateOfBirth !== null) {
@@ -469,6 +467,7 @@ export default {
     */
     onChangeInputEmployeeFilter(e) {
       let val = e.target.value;
+      console.log(val);
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         // Lấy chuỗi cần lọc rồi gán vào biến filter
