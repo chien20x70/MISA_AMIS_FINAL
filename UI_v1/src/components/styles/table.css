@@ -29,7 +29,12 @@ tbody tr td{
     height: 47px;
     border-left: 1px dotted #bbb;
 }
-
+thead tr th:nth-child(5){
+    text-align: center;
+}
+tbody tr td:nth-child(5){
+    text-align: center;
+}
 tr:hover {
     background-color: #eceaea;
 }

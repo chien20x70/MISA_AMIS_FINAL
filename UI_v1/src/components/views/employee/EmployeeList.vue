@@ -83,17 +83,17 @@
             </tr>
           </tbody>
         </table>
-        <table style="position: sticky; right: 0; z-index: 2">
+        <table style="position: sticky; right: 0; z-index: 2;">
           <thead>
             <tr>
-              <th style="min-width: 120px; border-left: 1px solid #c7c7c7">
+              <th style="min-width: 120px; border-left: 1px solid #c7c7c7; text-align: center;">
                 CHỨC NĂNG
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(employee, index) in employees" :key="index">
-              <td style="min-width: 120px; border-left: 1px dotted #c7c7c7">
+            <tr v-for="(employee, index) in employees" :key="index" >
+              <td style="min-width: 120px; border-left: 1px dotted #c7c7c7; text-align: center;">
                 <div class="btn-edit">
                   <button
                     class="btn-btn hover"
@@ -227,11 +227,14 @@
   </div>
 </template>
 <script>
+//#region Import
 import EmployeeDialog from "./EmployeeDialog.vue";
 import DropdownDuplicateAndDelete from "../common/DropdownDuplicateAndDelete.vue";
 import Popup from "../common/Popup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
+//#endregion
 export default {
+  //#region Khai báo
   components: {
     EmployeeDialog,
     DropdownDuplicateAndDelete,
@@ -258,6 +261,8 @@ export default {
       msgSelected: "20 bản ghi trên 1 trang", // message hiển thị khi phân trang.
     };
   },
+  //#endregion
+  
   created() {
     /**
      * Lọc dữ liệu hiển thì mặc định 20 bản ghi/ trang
@@ -265,6 +270,8 @@ export default {
      */
     this.filterData();
   },
+
+  //#region METHODS
   methods: {
     /**
      * Click thêm mới 1 nhân viên
@@ -281,8 +288,10 @@ export default {
           this.status = "add";
           // Gán tất cả các ô data của dialog rỗng
           this.selectedEmployee = {};
+          console.log(response.data);
           // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
           this.selectedEmployee.employeeCode = response.data;
+          console.log(this.selectedEmployee.employeeCode);
           this.selectedEmployee.fullName = "";
           this.selectedEmployee.departmentId = "";
           this.selectedEmployee.gender = 1;
@@ -354,9 +363,7 @@ export default {
       this.axios
         .get("/Employees/" + eId)
         .then((response) => {
-          console.log(response);
           this.selectedEmployee = response.data;
-          console.log(this.selectedEmployee.gender);
           // format lại dữ liệu hiển thị
           if (this.selectedEmployee.dateOfBirth !== null) {
             this.selectedEmployee.dateOfBirth = this.dateFormatYYMMDD(
@@ -535,6 +542,8 @@ export default {
       return `${year}-${month}-${day}`;
     },
   },
+  //#endregion
+  
   computed: {
     /* 
     Mảng chứa các phần tử ở giữa nút số 1 và trang cuối cùng trong phân trang

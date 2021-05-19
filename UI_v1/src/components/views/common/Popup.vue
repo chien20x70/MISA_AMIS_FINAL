@@ -6,7 +6,8 @@
           <div class="popup-content">
             <div v-if="employeeCode != null || message.includes('đã tồn tại')" class="icon icon-48 exclamation-warning-48"></div>           
             <div v-if="employeeCode != null" class="message">Bạn có thực sự muốn xóa Nhân viên &lt;{{employeeCode}}&gt; không?</div>
-            <div v-if="message != null && !message.includes('đã tồn tại') && employeeCode == null" class="icon icon-48 mi-exclamation-error-48-2"></div>
+            <div v-if="message != null && !message.includes('đã tồn tại') && employeeCode == null && !message.includes('đã bị thay đổi')" class="icon icon-48 mi-exclamation-error-48-2"></div>
+            <div v-if="message != null && message.includes('đã bị thay đổi') && employeeCode == null" class="icon icon-48 mi-exclamation-question-48"></div>
             <div v-if="message != null" class="message">{{ message }}</div>
           </div>
           <div class="btn-footer">
@@ -22,12 +23,16 @@
 </template>
 <script>
 export default {
+  //#region Khai báo Props
     props:{
       popState:{ type: Boolean, selector: false},             // Trạng thái popup hiển thị
       employeeCode:{ type: String, selector: null},           // Giá trị EmployeeCode được bind từ EmployeeList
       employeeId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
       message: {type: String, default: ''}                 // message thông báo lỗi được bind từ Dialog
     },
+  //#endregion
+    
+  //#region METHODS
     methods:{
       /* 
       Click button 'Không' thì đóng popup mà giữ lại form dialog
@@ -58,7 +63,7 @@ export default {
         this.$emit("onClickYesWhenDataChange");
       },
     }
-    
+  //#endregion
 }
 </script>
 <style scoped>

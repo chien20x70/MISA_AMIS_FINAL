@@ -1,15 +1,29 @@
 <template>
     <div class="select-custom" :class="{'invisible': selectState}">
-        <div class="item" v-for="(item, index) in lists" :key="index" :value="item.value" @click="btnSelectClick(item.value)" :class="{'color': item.value == saveValue}">{{item.content}}</div>
-        
+        <div class="item" v-for="(item, index) in lists" :key="index" :value="item.value" @click="btnSelectClick(item.value)" :class="{'color': item.value == saveValue}">{{item.content}}</div>      
     </div>
 </template>
 
 <script>
 export default {
+    //#region Khai báo
     props:{
         selectState:{ type: Boolean, selector: false}               // Giá trị để hiển thị ComboboxFilter phần phân trang
     },
+    data(){
+        return{
+            lists: [{ content: '10 bản ghi trên 1 trang', value: 10},
+                   { content: '20 bản ghi trên 1 trang', value: 20},   
+                   { content: '30 bản ghi trên 1 trang', value: 30},
+                   { content: '50 bản ghi trên 1 trang', value: 50},
+                   { content: '100 bản ghi trên 1 trang', value: 100}
+                ],
+            saveValue: null,        // Giá trị của thẻ div được click
+        }
+    },
+    //#endregion
+
+    //#region METHODS
     methods:{
         /* 
         Khi chọn 1 dòng trong thẻ thì bind giá trị sang bên EmployeeList
@@ -24,17 +38,7 @@ export default {
         },
         
     },
-    data(){
-        return{
-            lists: [{ content: '10 bản ghi trên 1 trang', value: 10},
-                   { content: '20 bản ghi trên 1 trang', value: 20},   
-                   { content: '30 bản ghi trên 1 trang', value: 30},
-                   { content: '50 bản ghi trên 1 trang', value: 50},
-                   { content: '100 bản ghi trên 1 trang', value: 100}
-                ],
-            saveValue: null,        // Giá trị của thẻ div được click
-        }
-    }
+    //#endregion
     
 }
 </script>

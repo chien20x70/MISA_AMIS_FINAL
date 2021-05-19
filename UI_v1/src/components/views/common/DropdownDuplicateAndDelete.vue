@@ -16,7 +16,7 @@
 </template>
 <script>
 export default {
-  components: {},
+  //#region Khai báo
   data() {
     return {
       valueDrop: false,       // Giá trị hiển thị dropdown-content
@@ -24,6 +24,9 @@ export default {
       top: 0,                 // Căn phải dropdown-content
     };
   },
+  //#endregion
+
+  //#region METHODS
   methods: {
     /* 
     Hiển thị dropdown đồng thời hiển thị border
@@ -55,6 +58,8 @@ export default {
       this.valueDrop = false;
     }
   },
+  //#endregion
+
   created() {
     /* 
     Phát hiện click chuột thì đóng dropdown

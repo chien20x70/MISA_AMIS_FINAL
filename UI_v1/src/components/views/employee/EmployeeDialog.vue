@@ -2,7 +2,7 @@
   <div class="dialog">
     <div class="model"></div>
     <ValidationObserver v-slot="{ handleSubmit }">
-      <form @submit.prevent="handleSubmit(onBtnSaveClick)">
+      <form>
     <div class="dialog-box">
       <div class="dialog-header">
         <div class="title flex">
@@ -163,8 +163,8 @@
             <div class="footer-btn">
               <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnCloseClick">Hủy</button>
               <div class="btn-right">
-                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnSaveClick">Cất</button>
-                <button class="add-line color" style="margin-left: 20px;" @click="onBtnSaveAndAddClick">Cất và Thêm</button>
+                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="handleSubmit(onBtnSaveClick)">Cất</button>
+                <button class="add-line color" style="margin-left: 20px;" @click="handleSubmit(onBtnSaveAndAddClick)">Cất và Thêm</button>
               </div>
             </div>
           </div>
@@ -176,13 +176,15 @@
   </div>
 </template>
 <script>
+//#region Import
 import Popup from '../common/Popup.vue'
+//#endregion
 export default {
+
+  //#region Khai báo
   components:{
     Popup,
-
   },
-
   props:{
     state:{ type: Boolean, selector: false},          // Trạng thái hiển thị Dialog
     employee:{ type: Object, default: null},         // Đối tượng nhân viên được truyền từ EmployeeList sang
@@ -200,7 +202,7 @@ export default {
       dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
     }
   },
-
+  //#endregion
   computed:{
     /**
      * Theo dõi giá trị departmentId
@@ -233,6 +235,7 @@ export default {
     
   },
   
+  //#region METHODS
   methods: {
     /**
      * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList
@@ -312,7 +315,6 @@ export default {
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
-
           })
         }
         // Kiểm tra nút Thêm hay Sửa
@@ -346,12 +348,14 @@ export default {
         this.message = "Vui lòng chọn Đơn vị!"
         this.valuePopup = true;
       }
-      else if(this.flag == "add"){   
+      else if(this.flag == "add"){  
+          this.self = this;
           this.employee.gender = parseInt(this.employee.gender);   
           this.axios.post('/Employees', this.employee).then(res =>{
             console.log(res);
             // Gọi sự kiện SaveAndAdd của EmployeeList
             this.$emit('saveAndAdd');
+            console.log(this.employee.employeeCode);
             this.saveValueDepartment = null;
           }).catch(res =>{
             // Lấy ra message lỗi
@@ -374,7 +378,10 @@ export default {
             // show popup
             this.valuePopup = true;
           })
-        }   
+        }
+
+        this.$refs.focusCode.focus();
+
     },
 
     /* 
@@ -414,11 +421,12 @@ export default {
 
 
   },
+  //#endregion
+
   created(){
     this.dectectEmployee = {...this.employee};
-    console.log(this.dectectEmployee);
-    console.log(this.employee);
   },
+  
   mounted(){
     /**
      * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
@@ -431,17 +439,7 @@ export default {
     }).catch(res =>{
     console.log(res);
     })
-    // this.axios.get('/Departments').then((res) => {
-    //   res.data.forEach((item) => {
-    //     this.departments.push({
-    //       value: item.departmentId,
-    //       text: item.departmentName
-    //     })
-    //   })
-    // })
     this.dectectEmployee = {...this.employee};
-    console.log(this.employee);
-    console.log(this.dectectEmployee);
   }
 };
 </script>
@@ -454,7 +452,7 @@ export default {
 }
 .dialog {
   border: 1px solid #bbb;
-  animation: zoomIn 0.5s ;
+  /* animation: zoomIn 0.5s ; */
 }
 
 .dialog .model {
@@ -809,14 +807,14 @@ export default {
   border: 1px solid red;
 }
 
-@keyframes zoomIn {
+/* @keyframes zoomIn {
     0% {
         transform: scale(0.5,0.5);
     }
     100% {
         transform: scale(1,1);
     }
-}
+} */
 /* .zoomIn{
   animation-name: zoomIn;
   animation-duration: 0.5s;
