@@ -25,7 +25,6 @@
         </div>
       </div>
       <div class="content-table-height">
-        <!-- <div class="table-left"></div> -->
         <table class="tblListEmployee" border="0" width="100%">
           <thead>
             <tr>
@@ -120,7 +119,8 @@
             </tr>
           </tbody>
         </table>
-        <div class="message" v-if="employees == undefined">
+      </div>
+      <div class="message" v-if="employees == undefined">
           <div class="img-report">
             <img
               src="https://actappg2.misacdn.net/img/bg_report_nodata.76e50bd8.svg"
@@ -130,7 +130,6 @@
           </div>
           <div class="img-report">Không có dữ liệu</div>
         </div>
-      </div>
       <div class="content-navpage">
         <div class="content-navpage-text-left">
           Tổng số: <span style="font-weight: 700">{{ totalRecord }}</span> bản
@@ -751,6 +750,10 @@ export default {
   height: 191px;
   width: 100% !important;
   display: block;
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .img-report {
   display: flex;

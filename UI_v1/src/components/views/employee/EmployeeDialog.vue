@@ -44,7 +44,8 @@
                         <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }">
                         <div class="department-box" :title="errors[0]" style="margin-top: 4px;" :class="errors[0] == null ? '' : 'box-error'">
                           <div class="selected-option"> 
-                              <input type="text" class="input-select" v-model="showValueDepartment">           
+                            <!-- @keyup="onBtnKeyUpClick($event)" -->
+                              <input type="text" class="input-select" v-model="showValueDepartment" >           
                               <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
                             <div class="icon-selected">
                               <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
@@ -237,6 +238,16 @@ export default {
   
   //#region METHODS
   methods: {
+    // onBtnKeyUpClick(event){
+    //   switch(event.keyCode){
+    //     case 40:
+    //       if(this.showDepartment){
+    //         this.showDepartment = false;
+    //       }else{
+    //         this.
+    //       }
+    //   }
+    // },
     /**
      * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList
      * CreatedBy:NXCHIEN 17/05/2021
