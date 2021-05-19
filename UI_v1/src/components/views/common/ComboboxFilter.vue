@@ -1,6 +1,7 @@
 <template>
     <div class="select-custom" :class="{'invisible': selectState}">
         <div class="item" v-for="(item, index) in lists" :key="index" :value="item.value" @click="btnSelectClick(item.value)" :class="{'color': item.value == saveValue}">{{item.content}}</div>
+        
     </div>
 </template>
 
@@ -17,9 +18,11 @@ export default {
         */
         btnSelectClick(value){
             // Gọi đến EmployeeList
+            // this.valueInput = this.lists[1].content;
             this.$emit('passValueToSelect', value);
             this.saveValue = value;
-        }
+        },
+        
     },
     data(){
         return{

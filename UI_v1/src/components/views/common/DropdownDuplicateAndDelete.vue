@@ -6,7 +6,7 @@
           <div class="header-icon arrow-up--blue" :class="{'border': valueDrop}"></div>
         </div>
       </button>
-      <div class="dropdown-content" :class="{ display: !valueDrop }" :style="{top: top + 'px', left: left + 'px'}">
+      <div class="dropdown-content" :class="{ 'display': !valueDrop}" :style="{top: top + 'px', left: left + 'px'}" >
         <div class="dropdown-row-1" @click="btnDuplicateClick">Nhân bản</div>
         <div class="dropdown-row-1" @click="btnDelete">Xóa</div>
         <div class="dropdown-row-1">Ngưng sử dụng</div>
@@ -32,7 +32,7 @@ export default {
     btnDropdownClick(event) {
       this.valueDrop = !this.valueDrop;
       this.left = event.clientX - 80;
-      this.top = event.clientY + 15;    
+      this.top = event.clientY + 15;      
     },
 
     /* 
@@ -79,11 +79,14 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  height: 93px;
+  height: 91px;
   width: 123px;
   background-color: white;
   z-index: 100;
   border: 1px solid #bbb;
+  border-radius: 2px;
+  padding-left: 1px;
+  padding-top: 1px;
 }
 .display {
   display: none;
@@ -142,10 +145,14 @@ export default {
   box-sizing: border-box;
 }
 .dropdown-row-1:hover {
-  color: #019160;
+  color: #2ca01c;
   background-color: rgb(224, 224, 224);
 }
 .border{
   border: 1px solid rgb(58, 58, 253);
+}
+.reserve{
+  top: auto;
+  bottom: 100%;
 }
 </style>

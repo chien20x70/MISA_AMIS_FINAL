@@ -1,6 +1,8 @@
 <template>
   <div class="dialog">
     <div class="model"></div>
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <form @submit.prevent="handleSubmit(onBtnSaveClick)">
     <div class="dialog-box">
       <div class="dialog-header">
         <div class="title flex">
@@ -55,14 +57,13 @@
                               <div class="text">Mã đơn vị</div>
                               <div class="text" style="margin-left: 79px;">Tên đơn vị</div>
                             </div>
-                            <div class="department-content" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="onBtnDepartmentClick(department.departmentId)"
+                            <div class="department-content" ref="positionDepartment" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="onBtnDepartmentClick(department.departmentId)"
                               :class="{'color': saveValueDepartment == department.departmentId}">
                               <div class="item">
                                 <div>{{department.departmentCode}}</div>
                                 <div style="margin-left: 100px;">{{department.departmentName}}</div>
                               </div>
-                            </div>
-                            
+                            </div>                         
                         </div>
                       </div>
                   </div>
@@ -127,9 +128,9 @@
               <div class="row-1">                   
                 <div class="phone" style="margin-top: 17px;">
                   <span class="text">ĐT di động</span>
-                  <ValidationProvider name="Số điện thoại" rules="required" v-slot="{ errors }">
-                    <input type="text" :title="errors[0]" style="width: 197px; margin-top: 4px;" v-model="employee.phoneNumber" :class="errors[0] == null ? '' : 'input-error'">
-                  </ValidationProvider>
+                  <!-- <ValidationProvider name="Số điện thoại" rules="required" v-slot="{ errors }"> -->
+                    <input type="text" style="width: 197px; margin-top: 4px;" v-model="employee.phoneNumber">
+                  <!-- </ValidationProvider> -->
                 </div>
                 <div class="phone" style="margin-top: 17px; margin-left: 5px;">
                   <span class="text">ĐT cố định</span>
@@ -170,18 +171,16 @@
       </div>
       <Popup v-if="valuePopup" @hidePopupNotLoad="valuePopup = false" :message="message" @onClickYesWhenDataChange="onBtnSaveClick" @hidePopupAndHideDialog="hidePopupAndHideDialog"/>
     </div>
-    
+    </form>
+    </ValidationObserver>
   </div>
 </template>
 <script>
 import Popup from '../common/Popup.vue'
-// import DatePick from 'vue-date-pick';
-// import 'vue-date-pick/dist/vueDatePick.css';
 
 export default {
   components:{
     Popup,
-    // DatePick
   },
 
   props:{
@@ -199,7 +198,6 @@ export default {
       showDepartment: true,       // Hiển thị comboboxDepartment       
       saveValueDepartment: null,  // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
-                           //TODO: Validate và input Date
     }
   },
 
@@ -481,7 +479,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  box-shadow: 0 5px 20px 0 rgb(0 0 0 / 10%);
+  /* box-shadow: 0 5px 20px 0 rgb(0 0 0 / 10%); */
 }
 
 .dialog-box .dialog-header {
@@ -578,6 +576,9 @@ export default {
 }
 .input-radio{ 
   margin-right: 10px;
+  border: none;
+  outline: none;
+  border: 1px solid #babec5;
 }
 
 .select-tab{
