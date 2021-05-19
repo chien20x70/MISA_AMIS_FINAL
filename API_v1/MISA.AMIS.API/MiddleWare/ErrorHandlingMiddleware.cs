@@ -9,14 +9,24 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.API.MiddleWare
 {
+
+    #region ErrorHandlingMiddleware
     public class ErrorHandlingMiddleware
     {
+        #region PROPERTIES
         private readonly RequestDelegate _next;
+        #endregion
+
+
+        #region CONSTRUCTOR
         public ErrorHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
         }
+        #endregion
 
+
+        #region METHODS
         public async Task Invoke(HttpContext context)
         {
             try
@@ -64,6 +74,8 @@ namespace MISA.AMIS.API.MiddleWare
             var result = JsonSerializer.Serialize(response);
             context.Response.ContentType = "application/json";
             return context.Response.WriteAsync(result);
-        }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }

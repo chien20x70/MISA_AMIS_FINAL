@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.Core.Interfaces.Repository
 {
-    public interface IBaseRepository<MISAEntity> where MISAEntity: class
+    public interface IBaseRepository<MISAEntity> where MISAEntity : class
     {
         /// <summary>
         /// Lấy danh sách tất cả các đối tượng.
@@ -55,5 +55,5 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         /// <returns>Mảng danh sách đối tượng</returns>
         /// CreatedBy: NXChien (07/05/2021)
         public IEnumerable<MISAEntity> GetMISAEntities(int pageSize, int pageIndex);
-    }
+    } 
 }

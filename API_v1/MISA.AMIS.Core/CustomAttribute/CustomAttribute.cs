@@ -16,6 +16,7 @@ namespace MISA.AMIS.Core.CustomAttribute
         }
     }
 
+    #region ATTRIBUTE_NOTREQUIRED
     [AttributeUsage(AttributeTargets.Property)]
     public class MISAMaxLength : Attribute
     {
@@ -59,5 +60,6 @@ namespace MISA.AMIS.Core.CustomAttribute
         {
             MsgErrorPhone = msgErrorPhone;
         }
-    }
+    } 
+    #endregion
 }

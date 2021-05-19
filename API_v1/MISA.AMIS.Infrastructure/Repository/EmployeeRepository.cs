@@ -15,11 +15,14 @@ namespace MISA.AMIS.Infrastructure.Repository
 {
     public class EmployeeRepository: BaseRepository<Employee>, IEmployeeRepository
     {
-        public EmployeeRepository(IConfiguration configuration): base(configuration)
+        #region CONSTRUCTOR
+        public EmployeeRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
+        #endregion
 
+        #region METHODS
         /// <summary>
         /// Kiểm tra trùng attribute của đối tượng nhân viên
         /// </summary>
@@ -34,12 +37,12 @@ namespace MISA.AMIS.Infrastructure.Repository
             using (dbConnection = new MySqlConnection(connectionDb))
             {
                 DynamicParameters parameters = new DynamicParameters();
-                if(http == HTTPType.POST)
+                if (http == HTTPType.POST)
                 {
                     parameters.Add($"@{attribute}", attributeValue);
                     parameters.Add("@employeeId", null);
                 }
-                else if(http == HTTPType.PUT)
+                else if (http == HTTPType.PUT)
                 {
                     parameters.Add($"@{attribute}", attributeValue);
                     parameters.Add("@employeeId", employeeId);
@@ -58,7 +61,7 @@ namespace MISA.AMIS.Infrastructure.Repository
         public string GetEmployeeCodeMax()
         {
             using (dbConnection = new MySqlConnection(connectionDb))
-            {               
+            {
                 var sqlCommand = $"Proc_GetEmployeeCodeMax";
                 var employeeCode = dbConnection.QueryFirstOrDefault<string>(sqlCommand, commandType: CommandType.StoredProcedure);
                 return employeeCode;
@@ -99,7 +102,8 @@ namespace MISA.AMIS.Infrastructure.Repository
                 var employees = dbConnection.Query<Employee>("Proc_GetEmployeeFilter", dynamicParameters, commandType: CommandType.StoredProcedure);
                 res.Data = employees;
                 return res;
-            }   
-        }
+            }
+        } 
+        #endregion
     }
 }

@@ -10,7 +10,6 @@ namespace MISA.AMIS.Core.CustomExceptions
     {
         public EmployeeExceptions(string msg): base(msg)
         {
-
         }
     }
 }

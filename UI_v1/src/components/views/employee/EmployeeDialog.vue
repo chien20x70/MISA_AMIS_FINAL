@@ -76,8 +76,13 @@
               <div class="inf-left">
                   <div class="row-1">
                       <div class="dateofbirth">
-                        <span class="text">Ngày sinh</span>
+                        <span class="text" style="margin-bottom: 4px; display:inline-block;">Ngày sinh</span>
                         <input type="date" style="width: 167px; margin-top: 4px;" v-model="employee.dateOfBirth">
+                        <!-- <date-pick
+                            v-model="employee.dateOfBirth"
+                            :displayFormat="'DD/MM/YYYY'"
+                            :inputAttributes="{style: 'font-size: 13px;border: none;border-radius: 2px;height: 32px;color: #000000;padding: 6px 10px;border: 1px solid #babec5;font-family: NotoSans-Regular;outline: none;'}"
+                        ></date-pick> -->
                       </div>
                       <div class="gender">
                         <span class="text">Giới tính</span>
@@ -170,10 +175,13 @@
 </template>
 <script>
 import Popup from '../common/Popup.vue'
+// import DatePick from 'vue-date-pick';
+// import 'vue-date-pick/dist/vueDatePick.css';
 
 export default {
   components:{
     Popup,
+    // DatePick
   },
 
   props:{
@@ -413,7 +421,6 @@ export default {
     console.log(this.dectectEmployee);
     console.log(this.employee);
   },
-  
   mounted(){
     /**
      * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
@@ -709,6 +716,7 @@ export default {
   display: flex;
   align-items: center;
   background-color: white;
+  cursor: pointer;
 }
 .department-content:hover{
   color: #35bf22;
@@ -774,6 +782,7 @@ export default {
   align-items: center;
   background-color: #f4f5f8;
   padding: 0 14px 0 10px;
+  
 }
 .select-custom .item{
     height: 32px;

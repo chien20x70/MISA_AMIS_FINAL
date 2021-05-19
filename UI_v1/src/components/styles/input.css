@@ -9,6 +9,7 @@ input[type = "text"], input[type = "date"]{
     border: 1px solid #babec5;
     font-family: NotoSans-Regular;
     outline: none;
+
 }
 .input-search{
     background-image: url('../../assets/icon/search.png');

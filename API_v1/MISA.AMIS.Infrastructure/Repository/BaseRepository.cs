@@ -11,18 +11,27 @@ using MySqlConnector;
 
 namespace MISA.AMIS.Infrastructure.Repository
 {
+    #region BaseRepository
     public class BaseRepository<MISAEntity> : IBaseRepository<MISAEntity> where MISAEntity : class
     {
+        #region PROPERTIES
         protected string tableName = typeof(MISAEntity).Name;
         protected IConfiguration _configuration;
         protected string connectionDb;
         protected IDbConnection dbConnection;
+        #endregion
+
+
+        #region CONSTRUCTOR
         public BaseRepository(IConfiguration configuration)
         {
             _configuration = configuration;
             connectionDb = _configuration.GetConnectionString("connectionDB");
         }
+        #endregion
 
+
+        #region METHODS
         /// <summary>
         /// Xóa 1 đối tượng.
         /// </summary>
@@ -124,6 +133,8 @@ namespace MISA.AMIS.Infrastructure.Repository
                 var rowEffects = dbConnection.Execute(sql, entity, commandType: CommandType.StoredProcedure);
                 return rowEffects;
             }
-        }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }

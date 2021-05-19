@@ -6,12 +6,30 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.Core.Entities
 {
+    #region Department
     public class Department
     {
+        #region PROPERTIES
+        /// <summary>
+        /// Mã ID phòng ban
+        /// </summary>
         public Guid DepartmentId { get; set; }
+
+        /// <summary>
+        /// Mã code phòng ban
+        /// </summary>
         public string DepartmentCode { get; set; }
+
+        /// <summary>
+        /// Tên phòng ban
+        /// </summary>
         public string DepartmentName { get; set; }
+
+        /// <summary>
+        /// Mô tả
+        /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         /// Ngày tạo.
         /// </summary>
@@ -30,7 +48,9 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Ai là người chỉnh sửa.
         /// </summary>
-        public string ModifiedBy { get; set; }
+        public string ModifiedBy { get; set; } 
+        #endregion
 
-    }
+    } 
+    #endregion
 }

@@ -16,14 +16,23 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.Core.Service
 {
-    public class EmployeeService: BaseService<Employee>, IEmployeeService
+    #region EmployeeService
+    public class EmployeeService : BaseService<Employee>, IEmployeeService
     {
+        #region PROPERTIES
         IEmployeeRepository _employeeRepository;
-        public EmployeeService(IEmployeeRepository employeeRepository):base(employeeRepository)
+        #endregion
+
+
+        #region CONSTRUCTOR
+        public EmployeeService(IEmployeeRepository employeeRepository) : base(employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
+        #endregion
 
+
+        #region METHODS
         /// <summary>
         /// Export file excel xuất khẩu toàn bộ nhân viên
         /// </summary>
@@ -39,7 +48,7 @@ namespace MISA.AMIS.Core.Service
             var list = res.ToList();
             var stream = new MemoryStream();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using var package = new ExcelPackage(stream);            
+            using var package = new ExcelPackage(stream);
             var workSheet = package.Workbook.Worksheets.Add(Properties.ExcelResource.ExcelName);
 
             // set độ rộng col
@@ -162,7 +171,7 @@ namespace MISA.AMIS.Core.Service
 
             int l = numberChar.Length - valueCode.ToString().Length;
             var result = keyChar;
-            if(l > 0)
+            if (l > 0)
             {
                 for (int i = 0; i < l; i++)
                 {
@@ -242,6 +251,8 @@ namespace MISA.AMIS.Core.Service
             //    throw new EmployeeExceptions(Properties.Resources.Msg_Email_Exist);
             //} 
             #endregion
-        }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }

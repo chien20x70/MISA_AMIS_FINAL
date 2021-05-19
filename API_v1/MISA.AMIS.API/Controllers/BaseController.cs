@@ -11,18 +11,27 @@ namespace MISA.AMIS.API.Controllers
 {
     [Route("api/v1/[controller]s")]
     [ApiController]
-    public class BaseController<MISAEntity> : ControllerBase where MISAEntity: class
+    #region BaseController
+    public class BaseController<MISAEntity> : ControllerBase where MISAEntity : class
     {
+        #region PROPERTIES
         IBaseRepository<MISAEntity> _baseRepository;
         IBaseService<MISAEntity> _baseService;
         static string tableName = typeof(MISAEntity).Name;
+        #endregion
+
+
+        #region CONSTRUCTOR
         public BaseController(IBaseRepository<MISAEntity> baseRepository,
         IBaseService<MISAEntity> baseService)
         {
             _baseRepository = baseRepository;
             _baseService = baseService;
         }
+        #endregion
 
+
+        #region METHODS
         /// <summary>
         /// Lấy ra danh sách của đối tượng
         /// </summary>
@@ -139,6 +148,7 @@ namespace MISA.AMIS.API.Controllers
             }
         }
 
+        #region METHODS NOTREQUIRED
         /// <summary>
         /// Phân trang đối tượng
         /// </summary>
@@ -173,7 +183,8 @@ namespace MISA.AMIS.API.Controllers
             {
                 return NoContent();
             }
-        }
+        } 
+        #endregion
 
         /// <summary>
         /// Gán id cho 1 đối tượng
@@ -194,6 +205,8 @@ namespace MISA.AMIS.API.Controllers
                     item.SetValue(entity, id);
                 }
             }
-        }       
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }

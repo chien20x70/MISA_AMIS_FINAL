@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.Core.Entities
 {
-    public class Paging<MISAEntity> where MISAEntity: class
+    #region Paging
+    public class Paging<MISAEntity> where MISAEntity : class
     {
+        #region PROPERTIES
         /// <summary>
         /// Tổng số bản ghi
         /// </summary>
@@ -37,6 +39,8 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Dữ liệu
         /// </summary>
-        public IEnumerable<MISAEntity>? Data { get; set; }
-    }
+        public IEnumerable<MISAEntity>? Data { get; set; } 
+        #endregion
+    } 
+    #endregion
 }

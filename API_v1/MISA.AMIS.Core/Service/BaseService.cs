@@ -12,14 +12,22 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.Core.Service
 {
+    #region BaseService
     public class BaseService<MISAEntity> : IBaseService<MISAEntity> where MISAEntity : class
     {
+
+        #region PROPERTIES
         IBaseRepository<MISAEntity> _baseRepository;
+        #endregion
+
+        #region CONSTRUCTOR
         public BaseService(IBaseRepository<MISAEntity> baseRepository)
         {
             _baseRepository = baseRepository;
         }
+        #endregion
 
+        #region METHODS
         /// <summary>
         /// Xóa 1 đối tượng.
         /// </summary>
@@ -37,7 +45,7 @@ namespace MISA.AMIS.Core.Service
         /// <returns>Mảng danh sách đối tượng</returns>
         /// CreatedBy: NXChien (07/05/2021)
         public IEnumerable<MISAEntity> GetAll()
-        {             
+        {
             return _baseRepository.GetAll();
         }
 
@@ -96,19 +104,19 @@ namespace MISA.AMIS.Core.Service
         /// Created By: NXCHIEN 07/05/2021
         private void Validate(MISAEntity entity, HTTPType http)
         {
-            
+
             // Lấy ra tất cả property của đối tượng
             var properties = typeof(MISAEntity).GetProperties();
             foreach (var property in properties)
             {
 
                 //Loại tất cả dấu cách của 1 object --- Tránh trường hợp khi thêm mã có dấu cách mà trùng với mà hiện tại vẫn thêm được.
-                if(property.Name == typeof(MISAEntity).Name + "Code")
+                if (property.Name == typeof(MISAEntity).Name + "Code")
                 {
                     string propertyValue = (string)property.GetValue(entity);
                     property.SetValue(entity, propertyValue.Trim());
                 }
-                
+
                 #region Attribute không được phép để trống
                 // Lấy ra attribute của đối tượng
                 var requiredAttribute = property.GetCustomAttributes(typeof(MISARequired), true);
@@ -185,7 +193,9 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">đối tượng cần validate</param>
         /// <param name="http">Phương thức POST hay PUT</param>
         /// Created By: NXCHIEN 07/05/2021
-        protected virtual void CustomValidate(MISAEntity entity, HTTPType http) { }
+        protected virtual void CustomValidate(MISAEntity entity, HTTPType http) { } 
+        #endregion
 
-    }
+    } 
+    #endregion
 }

@@ -14,6 +14,7 @@
     "vee-validate": "^3.4.5",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.4",
+    "vue-date-pick": "^1.4.1",
     "vue-router": "^3.5.1",
     "vue-search-select": "^2.9.3",
     "vuetify": "^2.4.0"

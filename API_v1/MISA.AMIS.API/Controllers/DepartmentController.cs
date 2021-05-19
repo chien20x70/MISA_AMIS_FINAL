@@ -12,11 +12,15 @@ namespace MISA.AMIS.API.Controllers
 {
     [Route("api/v1/[controller]s")]
     [ApiController]
+    #region DepartmentController
     public class DepartmentController : BaseController<Department>
     {
-        public DepartmentController(IDepartmentRepository departmentRepository, IDepartmentService departmentService): base(departmentRepository, departmentService)
+        #region CONSTRUCTOR
+        public DepartmentController(IDepartmentRepository departmentRepository, IDepartmentService departmentService) : base(departmentRepository, departmentService)
         {
 
-        }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }

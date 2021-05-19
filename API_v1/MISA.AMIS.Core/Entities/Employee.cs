@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.Core.Entities
 {
+    #region Employee
     public class Employee
     {
+        #region PROPERTIES
         /// <summary>
         /// Mã ID nhân viên
         /// </summary>
@@ -37,7 +39,8 @@ namespace MISA.AMIS.Core.Entities
         /// </summary>
         public GenderType Gender { get; set; }
 
-        public string GenderName {
+        public string GenderName
+        {
             get
             {
                 switch (Gender)
@@ -148,6 +151,8 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Ai là người chỉnh sửa.
         /// </summary>
-        public string ModifiedBy { get; set; }
-    }
+        public string ModifiedBy { get; set; } 
+        #endregion
+    } 
+    #endregion
 }

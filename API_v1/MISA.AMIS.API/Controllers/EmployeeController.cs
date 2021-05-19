@@ -15,16 +15,25 @@ namespace MISA.AMIS.API.Controllers
 {
     [Route("api/v1/[controller]s")]
     [ApiController]
+    #region EmployeeController
     public class EmployeeController : BaseController<Employee>
     {
+        #region PROPERTIES
         IEmployeeService _employeeService;
         IEmployeeRepository _employeeRepository;
+        #endregion
+
+
+        #region CONSTRUCTOR
         public EmployeeController(IEmployeeService employeeService, IEmployeeRepository employeeRepository) : base(employeeRepository, employeeService)
         {
             _employeeRepository = employeeRepository;
             _employeeService = employeeService;
         }
+        #endregion
 
+
+        #region METHODS
         /// <summary>
         /// Lấy ra EmployeeCode lớn nhất trong DB
         /// </summary>
@@ -92,6 +101,8 @@ namespace MISA.AMIS.API.Controllers
                 return Ok(employee);
             }
             return NoContent();
-        }
-    }
+        } 
+        #endregion
+    } 
+    #endregion
 }
