@@ -45,7 +45,7 @@ namespace MISA.AMIS.API.MiddleWare
         /// <param name="context">.</param>
         /// <param name="exception">các exception.</param>
         /// <returns>response chứa các thông tin lỗi.</returns>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             // Kiểm tra xem có phải là EmployeeExceptions

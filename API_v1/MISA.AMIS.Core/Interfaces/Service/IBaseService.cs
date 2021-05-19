@@ -12,7 +12,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// Lấy danh sách tất cả các đối tượng.
         /// </summary>
         /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public IEnumerable<MISAEntity> GetAll();
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// </summary>
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>1 đối tượng có mã ID là entityId</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public MISAEntity GetById(Guid entityId);
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// </summary>
         /// <param name="entity">Đối tượng cần thêm mới.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public int Insert(MISAEntity entity);
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// </summary>
         /// <param name="entity">Đối tượng cần sửa.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public int Update(MISAEntity entity);
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// </summary>
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public int Delete(Guid entityId);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="pageSize">số đối tượng trên 1 trang.</param>
         /// <param name="pageIndex">Trang số bao nhiêu.</param>
         /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public IEnumerable<MISAEntity> GetMISAEntities(int pageSize, int pageIndex);
     }
 }

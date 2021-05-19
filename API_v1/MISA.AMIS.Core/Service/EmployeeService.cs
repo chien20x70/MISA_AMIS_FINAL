@@ -40,7 +40,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="pageIndex">Trang số bao nhiêu</param>
         /// <param name="filter">lọc bằng chuỗi string</param>
         /// <returns>Stream</returns>
-        /// CreatedBy: NXCHIEN 11/05/2021
+        /// CreatedBy: NXCHIEN 17/05/2021
         public Stream ExportExcel()
         {
             // Lấy ra danh sách tất cả nhân viên
@@ -125,7 +125,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="id">Mã nhân viên</param>
         /// <returns>Nhân viên được gán mã code lớn nhất</returns>
-        /// Created By: NXCHIEN 16/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         public Employee GetDuplicateEmployee(Guid id)
         {
             var employee = _employeeRepository.GetById(id);
@@ -139,7 +139,7 @@ namespace MISA.AMIS.Core.Service
         /// Lấy ra EmployeeCode lớn nhất trong DB
         /// </summary>
         /// <returns>EmployeeCode</returns>
-        /// Created By: NXCHIEN 16/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         public string GetEmployeeCodeMax()
         {
             string codeMax = _employeeRepository.GetEmployeeCodeMax();
@@ -191,7 +191,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="pageIndex">trang số bao nhiêu</param>
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
-        /// CreatedBy: NXCHIEN (16/05/2021)
+        /// CreatedBy: NXCHIEN (17/05/2021)
         public Paging<Employee> GetEmployees(int pageSize, int pageIndex, string filter)
         {
             if (pageIndex <= 0 || pageSize <= 0)
@@ -206,7 +206,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entity">đối tượng cần validate</param>
         /// <param name="http">Phương thức POST hay PUT</param>
-        /// Created By: NXCHIEN 16/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         protected override void CustomValidate(Employee entity, HTTPType http)
         {
 

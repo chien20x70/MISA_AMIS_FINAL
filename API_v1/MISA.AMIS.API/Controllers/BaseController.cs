@@ -39,7 +39,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 200 - Danh sách đối tượng
         ///     - NoContent: 204
         /// </returns>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpGet]
         public IActionResult Get()
         {
@@ -62,6 +62,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 200 - Đối tượng có mã ID như trên
         ///     - NoContent: 204
         /// </returns>
+        /// CreatedBy: NXCHIEN 17/05/2021
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
@@ -85,7 +86,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 201 - số dòng trong bảng trong DB bị ảnh hưởng
         ///     - NoContent: 204
         /// </returns>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpPost]
         public IActionResult Post([FromBody] MISAEntity entity)
         {
@@ -109,7 +110,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 200 - Đối tượng vừa được sửa
         ///     - NoContent: 204
         /// </returns>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] MISAEntity entity)
         {
@@ -133,7 +134,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 200 - Message thông báo xóa thành công.
         ///     - NoContent: 204
         /// </returns>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
@@ -158,7 +159,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 200 - Danh sách đối tượng
         ///     - NoContent: 204
         /// </returns>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpGet("Paging")]
         public IActionResult Filters(int pageSize, int pageIndex)
         {
@@ -191,7 +192,7 @@ namespace MISA.AMIS.API.Controllers
         /// </summary>
         /// <param name="id">Mã ID cần gán</param>
         /// <param name="entity">Đối tượng cần gán</param>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         public static void AssignEntityIdInEntity(Guid id, MISAEntity entity)
         {
             // lấy tất cả property của đối tượng;

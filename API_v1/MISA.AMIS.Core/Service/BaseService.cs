@@ -33,7 +33,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public int Delete(Guid entityId)
         {
             return _baseRepository.Delete(entityId);
@@ -43,7 +43,7 @@ namespace MISA.AMIS.Core.Service
         /// Lấy danh sách tất cả các đối tượng.
         /// </summary>
         /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public IEnumerable<MISAEntity> GetAll()
         {
             return _baseRepository.GetAll();
@@ -54,7 +54,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>1 đối tượng có mã ID là entityId</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public MISAEntity GetById(Guid entityId)
         {
             return _baseRepository.GetById(entityId);
@@ -65,7 +65,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entity">Đối tượng cần thêm mới.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public int Insert(MISAEntity entity)
         {
             Validate(entity, HTTPType.POST);
@@ -77,7 +77,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entity">Đối tượng cần sửa.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public int Update(MISAEntity entity)
         {
             Validate(entity, HTTPType.PUT);
@@ -90,7 +90,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="pageSize">số đối tượng trên 1 trang.</param>
         /// <param name="pageIndex">Trang số bao nhiêu.</param>
         /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
+        /// CreatedBy: NXChien (17/05/2021)
         public IEnumerable<MISAEntity> GetMISAEntities(int pageSize, int pageIndex)
         {
             return _baseRepository.GetMISAEntities(pageSize, pageIndex);
@@ -101,7 +101,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entity">đối tượng truyền vào</param>
         /// <param name="http">Phương thức PUT hay POST</param>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         private void Validate(MISAEntity entity, HTTPType http)
         {
 
@@ -192,7 +192,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <param name="entity">đối tượng cần validate</param>
         /// <param name="http">Phương thức POST hay PUT</param>
-        /// Created By: NXCHIEN 07/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         protected virtual void CustomValidate(MISAEntity entity, HTTPType http) { } 
         #endregion
 

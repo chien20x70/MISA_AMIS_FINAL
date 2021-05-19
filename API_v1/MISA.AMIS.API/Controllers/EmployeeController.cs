@@ -38,7 +38,7 @@ namespace MISA.AMIS.API.Controllers
         /// Lấy ra EmployeeCode lớn nhất trong DB
         /// </summary>
         /// <returns>EmployeeCode</returns>
-        /// Created By: NXCHIEN 09/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpGet("employeeCode")]
         public IActionResult GetCode()
         {
@@ -57,7 +57,7 @@ namespace MISA.AMIS.API.Controllers
         /// <param name="pageIndex">trang số bao nhiêu</param>
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
-        /// CreatedBy: NXCHIEN (09/05/2021)
+        /// CreatedBy: NXCHIEN (17/05/2021)
         [HttpGet("Filter")]
         public IActionResult GetEmployees([FromQuery] int pageSize, int pageIndex, string filter)
         {
@@ -76,6 +76,7 @@ namespace MISA.AMIS.API.Controllers
         ///     - Thành công: 200
         ///     - Lỗi server: 500
         /// </returns>
+        /// CreatedBy: NXCHIEN (17/05/2021)
         [HttpGet("ExportingExcel")]
         public IActionResult ExportingExcel()
         {
@@ -91,7 +92,7 @@ namespace MISA.AMIS.API.Controllers
         /// </summary>
         /// <param name="id">Mã nhân viên</param>
         /// <returns>Nhân viên được gán mã code lớn nhất</returns>
-        /// Created By: NXCHIEN 16/05/2021
+        /// Created By: NXCHIEN 17/05/2021
         [HttpGet("EmployeeCopy")]
         public IActionResult GetEmployeeCopy(Guid id)
         {
