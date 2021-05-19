@@ -77,7 +77,7 @@
               <div class="inf-left">
                   <div class="row-1">
                       <div class="dateofbirth">
-                        <span class="text" style="margin-bottom: 4px; display:inline-block;">Ngày sinh</span>
+                        <span class="text">Ngày sinh</span>
                         <input type="date" style="width: 167px; margin-top: 4px;" v-model="employee.dateOfBirth">
                         <!-- <date-pick
                             v-model="employee.dateOfBirth"
@@ -177,10 +177,10 @@
 </template>
 <script>
 import Popup from '../common/Popup.vue'
-
 export default {
   components:{
     Popup,
+
   },
 
   props:{

@@ -4,23 +4,11 @@ input[type = "text"], input[type = "date"]{
     height: 32px;
     color: #000000;
     padding: 6px 10px;
-    /* padding-left: 16px;
-    padding-right: 16px; */
     border: 1px solid #babec5;
     font-family: NotoSans-Regular;
     outline: none;
+}
 
-}
-.input-search{
-    background-image: url('../../assets/icon/search.png');
-    background-repeat: no-repeat;
-    background-position-y: center;
-    background-position-x: 175px;
-    background-size: 16px;
-    padding-right: 40px;
-    width: 200px;
-    flex-shrink: 0;
-}
 input:hover{
     border: 1px solid #babec5;
 }
@@ -29,7 +17,7 @@ input:focus{
     color: black;
     font-size: 13px;
 }
-.input-search2{
+.input-search{
     background-image: url('../../assets/icon/search.png');
     background-repeat: no-repeat;
     background-position-y: center;
@@ -39,7 +27,7 @@ input:focus{
     width: 240px;
     flex-shrink: 0;
 }
-.input-search2::-webkit-input-placeholder{
+.input-search::-webkit-input-placeholder{
     font-family: NotoSans-Regular-italic;
     font-size: 12px;
 }

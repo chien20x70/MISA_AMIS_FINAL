@@ -37,7 +37,7 @@ export default {
     align-items: center;
     justify-content: space-around;
     width: 456px;
-    margin-left: 22px;
+    margin-left: 30px;
 }
 .header .header-branch{
     display: flex;
@@ -51,7 +51,7 @@ export default {
     display: flex;
     align-items: center ;
     cursor: pointer;
-    width: 395px;
+    width: 435px;
     justify-content: space-around;
     
 }
@@ -59,7 +59,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 364px;
+    width: 400px;
     font-weight: 600;
     font-size: 14px;
 }

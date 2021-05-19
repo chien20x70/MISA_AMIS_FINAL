@@ -16,7 +16,7 @@
           <input
             type="text"
             placeholder="Tìm theo mã, tên nhân viên"
-            class="input-search2"
+            class="input-search"
             :value="filter"
             @input="onChangeInputEmployeeFilter"
           />
