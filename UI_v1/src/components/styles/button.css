@@ -8,6 +8,7 @@ button{
     background-color: white;
     font-family: NotoSans-Regular;
     cursor: pointer;
+    line-height: 32px;
 }
 
 .btn-add{

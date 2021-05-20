@@ -328,6 +328,14 @@
 <script>
 //#region Import
 import Popup from "../common/Popup.vue";
+import {
+  STR_EMPTY_CODE,
+  STR_EMPTY_NAME,
+  STR_EMPTY_DEPARTMENT,
+  STR_DATA_CHANGE,
+  MES_ADD_SUCCESS,
+  MES_EDIT_SUCCESS,
+} from "../../../lang/validation.js";
 //#endregion
 export default {
   //#region Khai báo
@@ -349,10 +357,10 @@ export default {
       showDepartment: true, // Hiển thị comboboxDepartment
       saveValueDepartment: null, // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {}, //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
-      name: false,
-      code: false,
-      department: false,
-      currentIndex: 0,
+      name: false, // border-error employeeCode
+      code: false, // border-code employeeCode
+      department: false, // border-department employeeCode
+      currentIndex: 0, // Vị trí nút bấm up down
     };
   },
   //#endregion
@@ -392,10 +400,18 @@ export default {
   },
   //#region METHODS
   methods: {
-    focusInputKey(){
+    // SHow thông báo thêm, sửa thành công
+    showNotification(message) {
+      this.$notification["success"]({
+        message,
+        duration: 1,
+      });
+    },
+    focusInputKey() {
       this.showDepartment = false;
     },
     //#region Validate
+    //Kiểm tra thay đổi Giá trị input
     onChangeInputName(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
@@ -407,6 +423,7 @@ export default {
         }
       }, 200);
     },
+    //Kiểm tra thay đổi Giá trị input
     onChangeInputCode(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
@@ -418,6 +435,7 @@ export default {
         }
       }, 200);
     },
+    //Kiểm tra thay đổi Giá trị input
     onChangeInputDepartment(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
@@ -433,7 +451,7 @@ export default {
       if (this.currentIndex > 0) this.currentIndex--;
     },
     down() {
-      if(this.showDepartment){
+      if (this.showDepartment) {
         this.showDepartment = false;
       }
       if (this.currentIndex < this.departments.length - 1) this.currentIndex++;
@@ -447,18 +465,23 @@ export default {
       ].departmentId;
       this.showDepartment = true;
     },
+    isCheckValidate() {
+      if (this.employee.employeeCode.trim() == "") {
+        this.message = STR_EMPTY_CODE;
+        return true;
+      }
+      if (this.employee.fullName.trim() == "") {
+        this.message = STR_EMPTY_NAME;
+        return true;
+      }
+      if (this.employee.departmentId == "") {
+        this.message = STR_EMPTY_DEPARTMENT;
+        return true;
+      }
+      return false;
+    },
     //#endregion
 
-    // onBtnKeyUpClick(event){
-    //   switch(event.keyCode){
-    //     case 40:
-    //       if(this.showDepartment){
-    //         this.showDepartment = false;
-    //       }else{
-
-    //       }
-    //   }
-    // },
     /**
      * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList
      * CreatedBy:NXCHIEN 17/05/2021
@@ -485,7 +508,7 @@ export default {
     */
     onBtnCloseClick() {
       if (this.compareObjectEmployee(this.dectectEmployee, this.employee)) {
-        this.message = "Dữ liệu đã bị thay đổi, Bạn có muốn cất không?";
+        this.message = STR_DATA_CHANGE;
         this.valuePopup = true;
       } else {
         this.$emit("hideDialogNotLoad");
@@ -493,22 +516,10 @@ export default {
       }
     },
 
-    /* 
-    Click để hiển thị Tab Liên hệ hay tab tài khoản ngân hàng
-    CreatedBy: NXCHIEN 17/05/2021
-    */
-    btnInforClick() {
-      this.infor = true;
-    },
-
-    /* 
-    Click để hiển thị Tab Liên hệ hay tab tài khoản ngân hàng
-    CreatedBy: NXCHIEN 17/05/2021
-    */
-    btnBankClick() {
-      this.infor = false;
-    },
-
+    /**
+     * Kiểm tra empty các trường code, name, departmentId
+     * CreatedBy:NXCHIEN 19/05/2021
+     */
     checkEmptyAttribute() {
       if (this.employee.employeeCode == "") {
         this.code = true;
@@ -520,54 +531,62 @@ export default {
         this.department = true;
       }
     },
-    /* 
-    Click Save nhân viên
-    CreatedBy: NXCHIEN 17/05/2021
-    */
-    onBtnSaveClick() {
+
+    validAndSave() {
       this.checkEmptyAttribute();
       // Kiểm tra nút Thêm hay Sửa
-      this.employee.employeeCode = this.employee.employeeCode.trim();
-      if (this.employee.fullName.trim() == "") {
-        this.message = "Tên không được để trống.";
-        this.valuePopup = true;
-      } else if (this.employee.departmentId == "") {
-        this.message = "Vui lòng chọn Đơn vị!";
-        this.valuePopup = true;
-      } else if (this.flag == "add") {
+      this.valuePopup = this.isCheckValidate();
+      if(!this.valuePopup)
+      if (this.flag == "add") {
         this.employee.gender = parseInt(this.employee.gender);
-        this.axios
+        return this.axios
           .post("/Employees", this.employee)
-          .then((res) => {
-            console.log(res);
-            this.$emit("hideDialog");
+          .then(() => {
             this.saveValueDepartment = null;
+            return Promise.resolve();
           })
           .catch((res) => {
             // Lấy ra message lỗi
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
+            return Promise.reject();
           });
       }
       // Kiểm tra nút Thêm hay Sửa
       else if (this.flag == "edit") {
         // delete this.employee.genderName;
         this.employee.gender = parseInt(this.employee.gender);
-        this.axios
+        return this.axios
           .put("/Employees/" + this.employee.employeeId, this.employee)
-          .then((res) => {
-            console.log(res.data);
-            this.$emit("hideDialog");
+          .then(() => {
             this.saveValueDepartment = null;
+            return Promise.resolve();
           })
           .catch((res) => {
             // Lấy ra message lỗi
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
+            return Promise.reject();
           });
       }
+      return Promise.reject();
+    },
+
+    /* 
+    Click Save nhân viên
+    CreatedBy: NXCHIEN 17/05/2021
+    */
+    onBtnSaveClick() {
+      this.validAndSave().then(() => {
+        if (this.flag == "add") {
+          this.showNotification(MES_ADD_SUCCESS);
+        } else {
+          this.showNotification(MES_EDIT_SUCCESS);
+        }
+        this.$emit("hideDialog");
+      });
     },
 
     /**
@@ -575,51 +594,14 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnSaveAndAddClick() {
-      this.checkEmptyAttribute();
-      this.employee.employeeCode = this.employee.employeeCode.trim();
-      if (this.employee.fullName == "") {
-        this.message = "Tên không được để trống.";
-        this.valuePopup = true;
-      } else if (this.employee.departmentId == "") {
-        this.message = "Vui lòng chọn Đơn vị!";
-        this.valuePopup = true;
-      } else if (this.flag == "add") {
-        this.self = this;
-        this.employee.gender = parseInt(this.employee.gender);
-        this.axios
-          .post("/Employees", this.employee)
-          .then((res) => {
-            console.log(res);
-            // Gọi sự kiện SaveAndAdd của EmployeeList
-            this.$emit("saveAndAdd");
-            console.log(this.employee.employeeCode);
-            this.saveValueDepartment = null;
-          })
-          .catch((res) => {
-            // Lấy ra message lỗi
-            this.message = res.response.data.devMsg;
-            // show popup
-            this.valuePopup = true;
-          });
-      }
-      // Kiểm tra nút Thêm hay Sửa
-      else if (this.flag == "edit") {
-        // delete this.employee.genderName;
-        this.employee.gender = parseInt(this.employee.gender);
-        this.axios
-          .put("/Employees/" + this.employee.employeeId, this.employee)
-          .then((res) => {
-            console.log(res.data);
-            // Gọi sự kiện SaveAndAdd của EmployeeList
-            this.$emit("saveAndAdd");
-            this.saveValueDepartment = null;
-          })
-          .catch((res) => {
-            this.message = res.response.data.devMsg;
-            // show popup
-            this.valuePopup = true;
-          });
-      }
+      this.validAndSave().then(() => {
+        if (this.flag == "add") {
+          this.showNotification(MES_ADD_SUCCESS);
+        } else {
+          this.showNotification(MES_EDIT_SUCCESS);
+        }
+        this.$emit("saveAndAdd");
+      });
 
       this.$refs.focusCode.focus();
     },

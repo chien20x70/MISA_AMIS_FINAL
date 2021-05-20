@@ -1,5 +1,4 @@
 input[type = "text"], input[type = "date"]{
-    border: none;
     border-radius: 2px;
     height: 32px;
     color: #000000;
@@ -7,6 +6,8 @@ input[type = "text"], input[type = "date"]{
     border: 1px solid #babec5;
     font-family: NotoSans-Regular;
     outline: none;
+    outline-color: none;
+    flex-shrink: 0;
 }
 
 input:hover{

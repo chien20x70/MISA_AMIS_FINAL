@@ -124,6 +124,7 @@ export default {
   background-color: white;
   border-radius: 4px;
   font-weight: 700;
+  line-height: 18px;
 }
 .btn-No:hover{
   background-color: rgb(202, 202, 202);

@@ -665,7 +665,7 @@ export default {
 }
 .content-navpage {
   position: absolute;
-  bottom: 10px;
+  bottom: 7px;
   width: calc(100% - 228px);
   /* width: 100%; */
   height: 50px;

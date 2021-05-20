@@ -13,9 +13,10 @@ import "./components/styles/button.css";
 import "./components/styles/icon.css";
 import VueHotkey from 'v-hotkey'
 import vuetify from './plugins/vuetify'
-
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 Vue.use(VueHotkey)
-
+Vue.use(Antd);
 /* 
 Validate các trường để trống thì thông báo lỗi
 CreatedBy: NXCHIEN 10/05/2021
