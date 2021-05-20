@@ -8,6 +8,7 @@ input[type = "text"], input[type = "date"]{
     outline: none;
     outline-color: none;
     flex-shrink: 0;
+    font-size: 13px;
 }
 
 input:hover{

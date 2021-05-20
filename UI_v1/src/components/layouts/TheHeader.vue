@@ -31,6 +31,7 @@ export default {
     justify-content: space-between;
     flex-shrink: 0;
     width: 100%;
+    background: white;
 }
 .header-left{
     display: flex;

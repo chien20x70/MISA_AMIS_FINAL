@@ -997,7 +997,7 @@ export default {
   position: absolute;
   width: 392px;
   /* height: 194px; */
-  top: 198px;
+  top: 205px;
   min-width: 200px;
   background-color: white;
   border: 1px solid #bbb;

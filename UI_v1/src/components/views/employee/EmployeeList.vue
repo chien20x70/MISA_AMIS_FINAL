@@ -36,11 +36,15 @@
                   top: 0;
                   z-index: 3;
                   border-left: none;
+                  border-bottom: none;
+                  display: flex;
+                  border-right: 1px solid #c7c7c7;
+                  align-items: center;
                 "
               >
                 <input type="checkbox" class="check-box" />
               </th>
-              <th style="min-width: 150px">MÃ NHÂN VIÊN</th>
+              <th style="min-width: 150px; border-left: none;">MÃ NHÂN VIÊN</th>
               <th style="min-width: 250px">TÊN NHÂN VIÊN</th>
               <th style="min-width: 120px">GIỚI TÍNH</th>
               <th style="min-width: 150px">NGÀY SINH</th>
@@ -65,11 +69,15 @@
                   left: 0px;
                   z-index: 2;
                   border-left: none;
+                  border-bottom: none;
+                  display: flex;
+                  border-right: 1px dotted #c7c7c7;
+                  align-items: center;
                 "
               >
                 <input type="checkbox" class="check-box" />
               </td>
-              <td>{{ employee.employeeCode }}</td>
+              <td style="border-left: none;">{{ employee.employeeCode }}</td>
               <td>{{ employee.fullName }}</td>
               <td>{{ employee.genderName }}</td>
               <td>{{ employee.dateOfBirth | dateFormatDDMMYY }}</td>
@@ -636,7 +644,7 @@ export default {
 .content .content-table {
   background-color: white !important;
   width: 100%;
-  height: calc(100% - 68px);
+  height: calc(100% - 81px);
 }
 .content-table .item {
   padding: 16px 16px 10px;
@@ -651,7 +659,7 @@ export default {
   justify-content: space-between;
 }
 .content-table .content-table-height {
-  height: calc(100% - 27px);
+  height: calc(100% - 52px);
   overflow-y: auto;
   overflow-x: auto;
   width: calc(100% - 41px);
@@ -665,8 +673,8 @@ export default {
 }
 .content-navpage {
   position: absolute;
-  bottom: 7px;
-  width: calc(100% - 228px);
+  bottom: 10px;
+  width: calc(100% - 247px);
   /* width: 100%; */
   height: 50px;
   /* border-top: 1px solid #a29d9d; */

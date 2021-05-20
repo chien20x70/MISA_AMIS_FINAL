@@ -36,7 +36,7 @@ export default {
 .main{
   flex: 1;
   height: 100%;
-  width: calc(100% - 178px);
+  width: calc(100% - 172px);
   display: flex;
   flex-direction: column;
 }
