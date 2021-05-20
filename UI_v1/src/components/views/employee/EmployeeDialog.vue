@@ -36,6 +36,7 @@
                 >
                 <!-- <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
+                  :title="(code == true) ? 'Mã nhân viên không được để trống!' : '' "
                   type="text"
                   ref="focusCode"
                   style="width: 151px; margin-top: 4px;"
@@ -52,6 +53,7 @@
                 >
                 <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
+                  :title="(name == true) ? 'Tên không được để trống!' : '' "
                   type="text"
                   style="width: 235px; margin-top: 4px;"
                   v-model="employee.fullName"
@@ -69,6 +71,7 @@
                 >
                 <!-- <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }"> -->
                 <div
+                  :title="(department == true) ? 'Đơn vị không được để trống!' : '' "
                   class="department-box"
                   style="margin-top: 4px;"
                   :class="{ 'input-error': department == true }"
