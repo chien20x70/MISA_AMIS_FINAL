@@ -78,7 +78,7 @@ export default {
   height: 100%;
   z-index: 98;
   transition: all 0.25s ease;
- opacity: 1; 
+  opacity: .5; 
 }
 .popup .popup-box{
   border-radius: 4px;

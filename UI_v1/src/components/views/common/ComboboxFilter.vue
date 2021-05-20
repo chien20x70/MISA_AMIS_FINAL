@@ -22,7 +22,6 @@ export default {
         }
     },
     //#endregion
-
     //#region METHODS
     methods:{
         /* 

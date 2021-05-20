@@ -19,158 +19,307 @@
       </div>
       <div class="item-close">
         <div class="icon icon-24 help" style="margin-right: 6px"></div>
-        <div class="icon icon-24 close" v-hotkey="keymap" @click="onBtnCloseClick"></div>
+        <div
+          class="icon icon-24 close"
+          v-hotkey="keymap"
+          @click="onBtnCloseClick"
+        ></div>
       </div>
       <div class="dialog-content">
-          <div class="employee-inf">
-              <div class="inf-left">
-                  <div class="row-1">
-                      <div class="code">
-                        <span class="text">Mã<p style="color: red; display: inline;"> *</p></span>
-                        <!-- <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }"> -->
-                          <input type="text" ref="focusCode" style="width: 151px; margin-top: 4px;" v-model="employee.employeeCode" @input="onChangeInputCode" :class="{'input-error': code == true}">
-                        <!-- </ValidationProvider> -->
-                      </div>
-                      <div class="name">
-                        <span class="text">Tên<p style="color: red; display: inline;"> *</p></span>
-                        <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
-                          <input type="text" style="width: 235px; margin-top: 4px;" v-model="employee.fullName" @input="onChangeInputName" :class="{'input-error': name == true}">
-                        <!-- </ValidationProvider> -->
-                      </div>
-                  </div>
-                  <div class="row-1">                   
-                      <div class="position">
-                        <span class="text">Đơn vị<p style="color: red; display: inline;"> *</p></span>
-                        <!-- <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }"> -->
-                        <div class="department-box" style="margin-top: 4px;" :class="{'input-error': department == true}">
-                          <div class="selected-option"> 
-                            <!-- @keyup="onBtnKeyUpClick($event)" -->
-                              <input type="text" class="input-select" :value="showValueDepartment" @input="onChangeInputDepartment">           
-                              <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
-                            <div class="icon-selected">
-                              <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
-                            </div> 
-                          </div> 
-                        </div>
-                        <!-- </ValidationProvider> -->
-                        <div class="select-custom" :class="{'invisible' : showDepartment}">
-                            <div class="header-select">
-                              <div class="text">Mã đơn vị</div>
-                              <div class="text" style="margin-left: 79px;">Tên đơn vị</div>
-                            </div>
-                            <div class="department-content" ref="positionDepartment" v-for="(department, index) in departments" :key="index" :value="department.departmentId" @click="onBtnDepartmentClick(department, index)"
-                              :class="{'color': currentIndex == index}">
-                              <div class="item">
-                                <div>{{department.departmentCode}}</div>
-                                <div style="margin-left: 100px;">{{department.departmentName}}</div>
-                              </div>
-                            </div>                         
-                        </div>
-                      </div>
-                  </div>
-                  <div class="row-1">                   
-                      <div class="position">
-                        <span class="text">Chức danh</span>
-                        <input type="text" style="width: 392px; margin-top: 4px;" v-model="employee.positionName">
-                      </div>
-                  </div>
+        <div class="employee-inf">
+          <div class="inf-left">
+            <div class="row-1">
+              <div class="code">
+                <span class="text"
+                  >Mã
+                  <p style="color: red; display: inline;">*</p></span
+                >
+                <!-- <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }"> -->
+                <input
+                  type="text"
+                  ref="focusCode"
+                  style="width: 151px; margin-top: 4px;"
+                  v-model="employee.employeeCode"
+                  @input="onChangeInputCode"
+                  :class="{ 'input-error': code == true }"
+                />
+                <!-- </ValidationProvider> -->
               </div>
-              <div class="inf-left">
-                  <div class="row-1">
-                      <div class="dateofbirth">
-                        <span class="text">Ngày sinh</span>
-                        <input type="date" style="width: 167px; margin-top: 4px;" v-model="employee.dateOfBirth">
-                        <!-- <date-pick
+              <div class="name">
+                <span class="text"
+                  >Tên
+                  <p style="color: red; display: inline;">*</p></span
+                >
+                <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
+                <input
+                  type="text"
+                  style="width: 235px; margin-top: 4px;"
+                  v-model="employee.fullName"
+                  @input="onChangeInputName"
+                  :class="{ 'input-error': name == true }"
+                />
+                <!-- </ValidationProvider> -->
+              </div>
+            </div>
+            <div class="row-1">
+              <div class="position">
+                <span class="text"
+                  >Đơn vị
+                  <p style="color: red; display: inline;">*</p></span
+                >
+                <!-- <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }"> -->
+                <div
+                  class="department-box"
+                  style="margin-top: 4px;"
+                  :class="{ 'input-error': department == true }"
+                >
+                  <div class="selected-option">
+                    <input
+                      type="text"
+                      ref="focusDepartment"
+                      class="input-select"
+                      :value="showValueDepartment"
+                      @input="onChangeInputDepartment"
+                      @keydown.up="up"
+                      @keydown.down="down"
+                      @keydown.enter="enter"
+                      @focus="focusInputKey"
+                    />
+                    <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
+                    <div class="icon-selected">
+                      <div
+                        class="icon icon-30 arrow-dropdown"
+                        @click="onBtnDropdownClick"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- </ValidationProvider> -->
+                <div
+                  class="select-custom"
+                  :class="{ invisible: showDepartment }"
+                >
+                  <div class="header-select">
+                    <div class="text">Mã đơn vị</div>
+                    <div class="text" style="margin-left: 79px;">
+                      Tên đơn vị
+                    </div>
+                  </div>
+                  <div
+                    class="department-content"
+                    ref="positionDepartment"
+                    v-for="(department, index) in departments"
+                    :key="index"
+                    :value="department.departmentId"
+                    @click="onBtnDepartmentClick(department, index)"
+                    :class="{ color: currentIndex == index }"
+                  >
+                    <div class="item">
+                      <div>{{ department.departmentCode }}</div>
+                      <div style="margin-left: 100px;">
+                        {{ department.departmentName }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row-1">
+              <div class="position">
+                <span class="text">Chức danh</span>
+                <input
+                  type="text"
+                  style="width: 392px; margin-top: 4px;"
+                  v-model="employee.positionName"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="inf-left">
+            <div class="row-1">
+              <div class="dateofbirth">
+                <span class="text">Ngày sinh</span>
+                <input
+                  type="date"
+                  style="width: 167px; margin-top: 4px;"
+                  v-model="employee.dateOfBirth"
+                />
+                <!-- <date-pick
                             v-model="employee.dateOfBirth"
                             :displayFormat="'DD/MM/YYYY'"
                             :inputAttributes="{style: 'font-size: 13px;border: none;border-radius: 2px;height: 32px;color: #000000;padding: 6px 10px;border: 1px solid #babec5;font-family: NotoSans-Regular;outline: none;'}"
                         ></date-pick> -->
-                      </div>
-                      <div class="gender">
-                        <span class="text">Giới tính</span>
-                        <div class="radio" style="width: 251px; margin-top: 13px;">
-                          <input id="male" type="radio" name="gender" class="input-radio" value="1" v-model="employee.gender">
-                          <label for="male" style="margin-right: 20px;">Nam</label>
-                          
-                          <input id="female" type="radio" name="gender" class="input-radio" value="0" v-model="employee.gender">
-                          <label for="" style="margin-right: 20px;">Nữ</label>
-                          
-                          <input id="orther" type="radio" name="gender" class="input-radio" value="2" v-model="employee.gender">
-                          <label for="">Khác</label>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="row-1">
-                      <div class="id">
-                        <span class="text">Số CMND</span>
-                        <input type="text" style="width: 245px; margin-top: 4px;" v-model="employee.identifyNumber">
-                      </div>
-                      <div class="dateofbirth" style="padding-left: 5px;">
-                        <span class="text">Ngày cấp</span>
-                        <input type="date" style="width: 167px; margin-top: 4px;" v-model="employee.dateOfIN">
-                      </div>
-                  </div>
-                  <div class="row-1">                   
-                      <div class="place">
-                        <span class="text">Nơi cấp</span>
-                        <input type="text" style="width: 418px; margin-top: 4px;" v-model="employee.placeOfIN">
-                      </div>
-                  </div>
               </div>
-          </div>
-          <div class="select-tab">
-            <div class="tab-inf">
-              <div class="row-1">                   
-                  <div class="position" style="margin-top: 10px;">
-                    <span class="text">Địa chỉ</span>
-                    <input type="text" style="width: 836px; margin-top: 4px;" v-model="employee.address">
-                  </div>
-              </div>
-              <div class="row-1">                   
-                <div class="phone" style="margin-top: 17px;">
-                  <span class="text">ĐT di động</span>
-                  <!-- <ValidationProvider name="Số điện thoại" rules="required" v-slot="{ errors }"> -->
-                    <input type="text" style="width: 197px; margin-top: 4px;" v-model="employee.phoneNumber">
-                  <!-- </ValidationProvider> -->
-                </div>
-                <div class="phone" style="margin-top: 17px; margin-left: 5px;">
-                  <span class="text">ĐT cố định</span>
-                  <input type="text" style="width: 197px; margin-top: 4px;" v-model="employee.telephoneNumber">
-                </div>
-                <div class="name" style="margin-top: 17px; margin-left: 5px;">
-                  <span class="text">Email</span><br>
-                  <input type="text" style="width: 203px; margin-top: 4px;" v-model="employee.email"><br>
-                  <!-- <span style="color: red">{{ messageEmail }}</span> -->
-                </div>
-              </div>
-              <div class="row-1">                   
-                <div class="phone" style="margin-top: 17px;">
-                  <span class="text">Tài khoản ngân hàng</span>
-                    <input type="text" style="width: 197px; margin-top: 4px;" v-model="employee.bankAccountNumber">
-                </div>
-                <div class="phone" style="margin-top: 17px; margin-left: 5px;">
-                  <span class="text">Tên ngân hàng</span>
-                  <input type="text" style="width: 197px; margin-top: 4px;" v-model="employee.bankName">
-                </div>
-                <div class="name" style="margin-top: 17px; margin-left: 5px;">
-                  <span class="text">Chi nhánh</span><br>
-                  <input type="text" style="width: 203px; margin-top: 4px;" v-model="employee.bankBranchName"><br>
+              <div class="gender">
+                <span class="text">Giới tính</span>
+                <div class="radio" style="width: 251px; margin-top: 13px;">
+                  <input
+                    id="male"
+                    type="radio"
+                    name="gender"
+                    class="input-radio"
+                    value="1"
+                    v-model="employee.gender"
+                  />
+                  <label for="male" style="margin-right: 20px;">Nam</label>
+
+                  <input
+                    id="female"
+                    type="radio"
+                    name="gender"
+                    class="input-radio"
+                    value="0"
+                    v-model="employee.gender"
+                  />
+                  <label for="" style="margin-right: 20px;">Nữ</label>
+
+                  <input
+                    id="orther"
+                    type="radio"
+                    name="gender"
+                    class="input-radio"
+                    value="2"
+                    v-model="employee.gender"
+                  />
+                  <label for="">Khác</label>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="footer">
-            <div class="divide"></div>
-            <div class="footer-btn">
-              <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnCloseClick">Hủy</button>
-              <div class="btn-right">
-                <button class="add-line" style="width: 67px; height: 36px; boder-radius: 4px;" @click="onBtnSaveClick">Cất</button>
-                <button class="add-line color" style="margin-left: 20px;" @click="onBtnSaveAndAddClick">Cất và Thêm</button>
+            <div class="row-1">
+              <div class="id">
+                <span class="text">Số CMND</span>
+                <input
+                  type="text"
+                  style="width: 245px; margin-top: 4px;"
+                  v-model="employee.identifyNumber"
+                />
+              </div>
+              <div class="dateofbirth" style="padding-left: 5px;">
+                <span class="text">Ngày cấp</span>
+                <input
+                  type="date"
+                  style="width: 167px; margin-top: 4px;"
+                  v-model="employee.dateOfIN"
+                />
+              </div>
+            </div>
+            <div class="row-1">
+              <div class="place">
+                <span class="text">Nơi cấp</span>
+                <input
+                  type="text"
+                  style="width: 418px; margin-top: 4px;"
+                  v-model="employee.placeOfIN"
+                />
               </div>
             </div>
           </div>
+        </div>
+        <div class="select-tab">
+          <div class="tab-inf">
+            <div class="row-1">
+              <div class="position" style="margin-top: 10px;">
+                <span class="text">Địa chỉ</span>
+                <input
+                  type="text"
+                  style="width: 836px; margin-top: 4px;"
+                  v-model="employee.address"
+                />
+              </div>
+            </div>
+            <div class="row-1">
+              <div class="phone" style="margin-top: 17px;">
+                <span class="text">ĐT di động</span>
+                <!-- <ValidationProvider name="Số điện thoại" rules="required" v-slot="{ errors }"> -->
+                <input
+                  type="text"
+                  style="width: 197px; margin-top: 4px;"
+                  v-model="employee.phoneNumber"
+                />
+                <!-- </ValidationProvider> -->
+              </div>
+              <div class="phone" style="margin-top: 17px; margin-left: 5px;">
+                <span class="text">ĐT cố định</span>
+                <input
+                  type="text"
+                  style="width: 197px; margin-top: 4px;"
+                  v-model="employee.telephoneNumber"
+                />
+              </div>
+              <div class="name" style="margin-top: 17px; margin-left: 5px;">
+                <span class="text">Email</span><br />
+                <input
+                  type="text"
+                  style="width: 203px; margin-top: 4px;"
+                  v-model="employee.email"
+                /><br />
+                <!-- <span style="color: red">{{ messageEmail }}</span> -->
+              </div>
+            </div>
+            <div class="row-1">
+              <div class="phone" style="margin-top: 17px;">
+                <span class="text">Tài khoản ngân hàng</span>
+                <input
+                  type="text"
+                  style="width: 197px; margin-top: 4px;"
+                  v-model="employee.bankAccountNumber"
+                />
+              </div>
+              <div class="phone" style="margin-top: 17px; margin-left: 5px;">
+                <span class="text">Tên ngân hàng</span>
+                <input
+                  type="text"
+                  style="width: 197px; margin-top: 4px;"
+                  v-model="employee.bankName"
+                />
+              </div>
+              <div class="name" style="margin-top: 17px; margin-left: 5px;">
+                <span class="text">Chi nhánh</span><br />
+                <input
+                  type="text"
+                  style="width: 203px; margin-top: 4px;"
+                  v-model="employee.bankBranchName"
+                /><br />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="divide"></div>
+          <div class="footer-btn">
+            <button
+              class="add-line"
+              style="width: 67px; height: 36px; boder-radius: 4px;"
+              @click="onBtnCloseClick"
+            >
+              Hủy
+            </button>
+            <div class="btn-right">
+              <button
+                class="add-line"
+                style="width: 67px; height: 36px; boder-radius: 4px;"
+                @click="onBtnSaveClick"
+              >
+                Cất
+              </button>
+              <button
+                class="add-line color"
+                style="margin-left: 20px;"
+                @click="onBtnSaveAndAddClick"
+              >
+                Cất và Thêm
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <Popup v-if="valuePopup" @hidePopupNotLoad="valuePopup = false" :message="message" @onClickYesWhenDataChange="onBtnSaveClick" @hidePopupAndHideDialog="hidePopupAndHideDialog"/>
+      <Popup
+        v-if="valuePopup"
+        @hidePopupNotLoad="valuePopup = false"
+        :message="message"
+        @onClickYesWhenDataChange="onBtnSaveClick"
+        @hidePopupAndHideDialog="hidePopupAndHideDialog"
+      />
     </div>
     <!-- </form>
     </ValidationObserver> -->
@@ -178,112 +327,135 @@
 </template>
 <script>
 //#region Import
-import Popup from '../common/Popup.vue'
+import Popup from "../common/Popup.vue";
 //#endregion
 export default {
-
   //#region Khai báo
-  components:{
+  components: {
     Popup,
   },
-  props:{
-    state:{ type: Boolean, selector: false},          // Trạng thái hiển thị Dialog
-    employee:{ type: Object, default: null},         // Đối tượng nhân viên được truyền từ EmployeeList sang
-    flag:{ type: String, selector: null},             // Cờ để check giá trị nút Thêm mới hay Sửa
+  props: {
+    state: { type: Boolean, selector: false }, // Trạng thái hiển thị Dialog
+    employee: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
+    flag: { type: String, selector: null }, // Cờ để check giá trị nút Thêm mới hay Sửa
   },
   data() {
     return {
-      infor: true,                // Giá trị hiển thị tab Liên hệ hay tài khoản ngân hàng              
-      departments: [],            // Mảng phòng ban
-      message: '',              // message thông báo lỗi bind sang Popup
-      valuePopup: false,          // Giá trị để hiển thị Popup
-      valueForcusInput: false,    // Giá trị để focus vào ô input
-      showDepartment: true,       // Hiển thị comboboxDepartment       
-      saveValueDepartment: null,  // Biến lưu lại giá trị DepartmentId
-      dectectEmployee: {},        //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
+      infor: true, // Giá trị hiển thị tab Liên hệ hay tài khoản ngân hàng
+      departments: [], // Mảng phòng ban
+      message: "", // message thông báo lỗi bind sang Popup
+      valuePopup: false, // Giá trị để hiển thị Popup
+      valueForcusInput: false, // Giá trị để focus vào ô input
+      showDepartment: true, // Hiển thị comboboxDepartment
+      saveValueDepartment: null, // Biến lưu lại giá trị DepartmentId
+      dectectEmployee: {}, //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
       name: false,
       code: false,
       department: false,
       currentIndex: 0,
-    }
+    };
   },
   //#endregion
-  computed:{
+  computed: {
     /**
      * Theo dõi giá trị departmentId
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    showValueDepartment:{     
-      get(){
+    showValueDepartment: {
+      get() {
         for (let index = 0; index < this.departments.length; index++) {
-          if(this.saveValueDepartment == this.departments[index].departmentId){
+          if (
+            this.saveValueDepartment == this.departments[index].departmentId
+          ) {
             return this.departments[index].departmentName;
-          }else 
-          if(this.employee.departmentId == this.departments[index].departmentId){
+          } else if (
+            this.employee.departmentId == this.departments[index].departmentId
+          ) {
             return this.departments[index].departmentName;
-          }         
+          }
         }
-        return ""
+        return "";
       },
-      set(value){       
+      set(value) {
         this.employee.departmentId = value;
-      }
+      },
     },
-    keymap () {
+    keymap() {
       return {
-        'esc': this.onBtnCloseClick,
+        esc: this.onBtnCloseClick,
         // 'enter': {
         //   keydown: this.hideD,
         //   keyup: this.show
         // }
-      }
+      };
     },
   },
   //#region METHODS
   methods: {
-    //#region Validate 
-    onChangeInputName(e){
+    focusInputKey(){
+      this.showDepartment = false;
+    },
+    //#region Validate
+    onChangeInputName(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
-        if(val !== ''){
+        if (val !== "") {
           this.name = false;
-        }else if (val == '') {
+        } else if (val == "") {
           this.name = true;
         }
       }, 200);
     },
-    onChangeInputCode(e){
+    onChangeInputCode(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
-        if(val !== ''){
+        if (val !== "") {
           this.code = false;
-        }else if (val == '') {
+        } else if (val == "") {
           this.code = true;
         }
       }, 200);
     },
-    onChangeInputDepartment(e){
+    onChangeInputDepartment(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
-        if(val !== ''){
+        if (val !== "") {
           this.department = false;
-        }else if (val == '') {
+        } else if (val == "") {
           this.department = true;
         }
       }, 500);
     },
+    up() {
+      if (this.currentIndex > 0) this.currentIndex--;
+    },
+    down() {
+      if(this.showDepartment){
+        this.showDepartment = false;
+      }
+      if (this.currentIndex < this.departments.length - 1) this.currentIndex++;
+    },
+    enter() {
+      this.saveValueDepartment = this.departments[
+        this.currentIndex
+      ].departmentId;
+      this.employee.departmentId = this.departments[
+        this.currentIndex
+      ].departmentId;
+      this.showDepartment = true;
+    },
     //#endregion
-    
+
     // onBtnKeyUpClick(event){
     //   switch(event.keyCode){
     //     case 40:
     //       if(this.showDepartment){
     //         this.showDepartment = false;
     //       }else{
-            
+
     //       }
     //   }
     // },
@@ -291,18 +463,18 @@ export default {
      * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList
      * CreatedBy:NXCHIEN 17/05/2021
      */
-    hidePopupAndHideDialog(){
-      this.$emit('hideDialogNotLoad');
+    hidePopupAndHideDialog() {
+      this.$emit("hideDialogNotLoad");
     },
-    
+
     /**
      * So sánh 2 object
      * CreatedBy: NXCHIEn 17/05/2021
      */
-    compareObjectEmployee(obj1, obj2){
-      for(let key in obj2){
-        if(obj2[key] !== obj1[key]){
-          return true
+    compareObjectEmployee(obj1, obj2) {
+      for (let key in obj2) {
+        if (obj2[key] !== obj1[key]) {
+          return true;
         }
       }
       return false;
@@ -311,13 +483,12 @@ export default {
     Click đóng Dialog
     CreatedBy: NXCHIEN 17/05/2021
     */
-    onBtnCloseClick(){
-
-      if(this.compareObjectEmployee(this.dectectEmployee, this.employee)){
-        this.message = "Dữ liệu đã bị thay đổi, Bạn có muốn cất không?"
+    onBtnCloseClick() {
+      if (this.compareObjectEmployee(this.dectectEmployee, this.employee)) {
+        this.message = "Dữ liệu đã bị thay đổi, Bạn có muốn cất không?";
         this.valuePopup = true;
-      }else{
-        this.$emit('hideDialogNotLoad');
+      } else {
+        this.$emit("hideDialogNotLoad");
         this.saveValueDepartment = null;
       }
     },
@@ -326,7 +497,7 @@ export default {
     Click để hiển thị Tab Liên hệ hay tab tài khoản ngân hàng
     CreatedBy: NXCHIEN 17/05/2021
     */
-    btnInforClick(){
+    btnInforClick() {
       this.infor = true;
     },
 
@@ -334,18 +505,18 @@ export default {
     Click để hiển thị Tab Liên hệ hay tab tài khoản ngân hàng
     CreatedBy: NXCHIEN 17/05/2021
     */
-    btnBankClick(){
+    btnBankClick() {
       this.infor = false;
     },
 
-    checkEmptyAttribute(){
-      if(this.employee.employeeCode == ''){
+    checkEmptyAttribute() {
+      if (this.employee.employeeCode == "") {
         this.code = true;
       }
-      if(this.employee.fullName == ''){
+      if (this.employee.fullName == "") {
         this.name = true;
       }
-      if(this.employee.departmentId == ''){
+      if (this.employee.departmentId == "") {
         this.department = true;
       }
     },
@@ -353,97 +524,104 @@ export default {
     Click Save nhân viên
     CreatedBy: NXCHIEN 17/05/2021
     */
-    onBtnSaveClick(){
+    onBtnSaveClick() {
       this.checkEmptyAttribute();
       // Kiểm tra nút Thêm hay Sửa
       this.employee.employeeCode = this.employee.employeeCode.trim();
-      if(this.employee.fullName.trim() == ""){
-        this.message = "Tên không được để trống."
+      if (this.employee.fullName.trim() == "") {
+        this.message = "Tên không được để trống.";
         this.valuePopup = true;
-      }
-      else if(this.employee.departmentId == ""){      
-        this.message = "Vui lòng chọn Đơn vị!"
+      } else if (this.employee.departmentId == "") {
+        this.message = "Vui lòng chọn Đơn vị!";
         this.valuePopup = true;
-      }
-      else if(this.flag == "add"){   
-          this.employee.gender = parseInt(this.employee.gender);   
-          this.axios.post('/Employees', this.employee).then(res =>{
+      } else if (this.flag == "add") {
+        this.employee.gender = parseInt(this.employee.gender);
+        this.axios
+          .post("/Employees", this.employee)
+          .then((res) => {
             console.log(res);
-            this.$emit('hideDialog');
+            this.$emit("hideDialog");
             this.saveValueDepartment = null;
-          }).catch(res =>{
+          })
+          .catch((res) => {
             // Lấy ra message lỗi
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
-          })
-        }
-        // Kiểm tra nút Thêm hay Sửa
-        else if(this.flag == "edit"){
-          // delete this.employee.genderName;
-          this.employee.gender = parseInt(this.employee.gender);
-          this.axios.put('/Employees/' + this.employee.employeeId, this.employee).then(res =>{
-            console.log(res.data);         
-            this.$emit('hideDialog');
+          });
+      }
+      // Kiểm tra nút Thêm hay Sửa
+      else if (this.flag == "edit") {
+        // delete this.employee.genderName;
+        this.employee.gender = parseInt(this.employee.gender);
+        this.axios
+          .put("/Employees/" + this.employee.employeeId, this.employee)
+          .then((res) => {
+            console.log(res.data);
+            this.$emit("hideDialog");
             this.saveValueDepartment = null;
-          }).catch(res =>{
+          })
+          .catch((res) => {
             // Lấy ra message lỗi
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
-          })
-        }     
+          });
+      }
     },
 
     /**
      * Click nút Cất và Thêm cho phép lưu dữ liệu và reset form để người dùng có thể thêm tiếp mà ko cần click nút Thêm mới.
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    onBtnSaveAndAddClick(){
+    onBtnSaveAndAddClick() {
       this.checkEmptyAttribute();
       this.employee.employeeCode = this.employee.employeeCode.trim();
-      if(this.employee.fullName == ""){
-        this.message = "Tên không được để trống."
+      if (this.employee.fullName == "") {
+        this.message = "Tên không được để trống.";
         this.valuePopup = true;
-      }
-      else if(this.employee.departmentId == ""){       
-        this.message = "Vui lòng chọn Đơn vị!"
+      } else if (this.employee.departmentId == "") {
+        this.message = "Vui lòng chọn Đơn vị!";
         this.valuePopup = true;
-      }
-      else if(this.flag == "add"){  
-          this.self = this;
-          this.employee.gender = parseInt(this.employee.gender);   
-          this.axios.post('/Employees', this.employee).then(res =>{
+      } else if (this.flag == "add") {
+        this.self = this;
+        this.employee.gender = parseInt(this.employee.gender);
+        this.axios
+          .post("/Employees", this.employee)
+          .then((res) => {
             console.log(res);
             // Gọi sự kiện SaveAndAdd của EmployeeList
-            this.$emit('saveAndAdd');
+            this.$emit("saveAndAdd");
             console.log(this.employee.employeeCode);
             this.saveValueDepartment = null;
-          }).catch(res =>{
+          })
+          .catch((res) => {
             // Lấy ra message lỗi
             this.message = res.response.data.devMsg;
             // show popup
-            this.valuePopup = true;      
-          })
-        }
-        // Kiểm tra nút Thêm hay Sửa
-        else if(this.flag == "edit"){
-          // delete this.employee.genderName;
-          this.employee.gender = parseInt(this.employee.gender);
-          this.axios.put('/Employees/' + this.employee.employeeId, this.employee).then(res =>{
+            this.valuePopup = true;
+          });
+      }
+      // Kiểm tra nút Thêm hay Sửa
+      else if (this.flag == "edit") {
+        // delete this.employee.genderName;
+        this.employee.gender = parseInt(this.employee.gender);
+        this.axios
+          .put("/Employees/" + this.employee.employeeId, this.employee)
+          .then((res) => {
             console.log(res.data);
-            // Gọi sự kiện SaveAndAdd của EmployeeList    
-            this.$emit('saveAndAdd');
+            // Gọi sự kiện SaveAndAdd của EmployeeList
+            this.$emit("saveAndAdd");
             this.saveValueDepartment = null;
-          }).catch(res =>{          
+          })
+          .catch((res) => {
             this.message = res.response.data.devMsg;
             // show popup
             this.valuePopup = true;
-          })
-        }
+          });
+      }
 
-        this.$refs.focusCode.focus();
-
+      this.$refs.focusCode.focus();
     },
 
     /* 
@@ -451,61 +629,65 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021
     */
     // handleBlurEmail(ev) {
-    //   if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {        
+    //   if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {
     //     this.messageEmail = "";
     //   } else if (ev == "") {
     //     this.messageEmail = "Bắt buộc nhập trường này!";
     //   } else {
     //     this.messageEmail = "Email Không đúng định dạng!";
-    //   }     
+    //   }
     // },
 
     /**
-     * Click nút dropdown để toggle Department phòng ban 
+     * Click nút dropdown để toggle Department phòng ban
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    onBtnDropdownClick(){
+    onBtnDropdownClick() {
       this.showDepartment = !this.showDepartment;
+      if (!this.showDepartment) {
+        this.$refs.focusDepartment.focus();
+      }
     },
 
     /**
      * Click chọn phòng ban để bind dữ liệu
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    onBtnDepartmentClick(department, index){
+    onBtnDepartmentClick(department, index) {
       // Lưu giá trị ID lấy được
       this.saveValueDepartment = department.departmentId;
       // Gán ID phòng ban của employee = id lấy được để theo dõi giá trị và bind lên form
-      this.employee.departmentId = department.departmentId;     
+      this.employee.departmentId = department.departmentId;
       // Ẩn combobox Department phòng ban
       this.showDepartment = true;
       // Ẩn border error
       this.department = false;
       this.currentIndex = index;
-    }
-
-
+    },
   },
   //#endregion
 
-  created(){
-    this.dectectEmployee = {...this.employee};
+  created() {
+    this.dectectEmployee = { ...this.employee };
   },
-  
-  mounted(){
+
+  mounted() {
     /**
      * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
      * và focus vào ô Input
      *CreatedBy: NXCHIEN 17/05/2021
      */
     this.$refs.focusCode.focus();
-    this.axios.get("/Departments").then(res =>{
-    this.departments = res.data;
-    }).catch(res =>{
-    console.log(res);
-    })
-    this.dectectEmployee = {...this.employee};
-  }
+    this.axios
+      .get("/Departments")
+      .then((res) => {
+        this.departments = res.data;
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    this.dectectEmployee = { ...this.employee };
+  },
 };
 </script>
 <style scoped>
@@ -574,90 +756,90 @@ export default {
   padding: 12px;
 }
 
-.dialog-content{
-    transition: all .23s ease .1s;
-    flex-direction: column;
-    display: flex;
-    overflow: auto;
-    overflow-y: visible;
-    padding: 0 32px 20px;
+.dialog-content {
+  transition: all 0.23s ease 0.1s;
+  flex-direction: column;
+  display: flex;
+  overflow: auto;
+  overflow-y: visible;
+  padding: 0 32px 20px;
 }
-.employee-inf{
-    width: 100%;
-    height: 213px;
-    display: flex;
-    align-items: center;
+.employee-inf {
+  width: 100%;
+  height: 213px;
+  display: flex;
+  align-items: center;
 }
-.inf-left{
-    padding-bottom: 12px;
-    width: 50%;
-    height: 100%;
-    padding: 0 26px 0 0;
+.inf-left {
+  padding-bottom: 12px;
+  width: 50%;
+  height: 100%;
+  padding: 0 26px 0 0;
 }
-.row-1{
-    width: 100%;
-    height: 70px;
-    display: flex;
+.row-1 {
+  width: 100%;
+  height: 70px;
+  display: flex;
 }
-.code{
-    width: 160px;
-    height: 70px;
+.code {
+  width: 160px;
+  height: 70px;
 }
-.name{
-    width: 235px;
-    height: 70px;
+.name {
+  width: 235px;
+  height: 70px;
 }
-.phone{
-    width: 197px;
-    height: 70px;
+.phone {
+  width: 197px;
+  height: 70px;
 }
-.position{
-    width: 392px;
-    height: 70px;
+.position {
+  width: 392px;
+  height: 70px;
 }
-.place{
-    width: 418px;
-    height: 70px;
+.place {
+  width: 418px;
+  height: 70px;
 }
-.text{
-    font-weight: 700;
-    color: #111111;
-    font-size: 12px;
+.text {
+  font-weight: 700;
+  color: #111111;
+  font-size: 12px;
 }
-.dateofbirth{
+.dateofbirth {
   width: 170px;
   height: 70px;
 }
-.gender{
+.gender {
   padding-left: 10px;
   width: 251px;
   height: 70px;
 }
-.radio{
+.radio {
   display: flex;
   align-items: center;
 }
-.input-radio{ 
+.input-radio {
   margin-right: 10px;
   border: none;
   outline: none;
   border: 1px solid #babec5;
 }
 
-.select-tab{
+.select-tab {
   height: 226px;
   width: 100%;
 }
-.tab{
+.tab {
   height: 32px;
   width: 100%;
   display: flex;
 }
-.tab-inf{
+.tab-inf {
   height: 192px;
   width: 834px;
 }
-.inf{
+.inf {
   width: 64px;
   height: 100%;
   padding: 0 8px;
@@ -671,13 +853,13 @@ export default {
   background-color: white;
   font-family: GoogleSans-Regular;
 }
-.inf:hover{
+.inf:hover {
   color: #019160;
 }
-.inf:focus{
+.inf:focus {
   background-color: rgb(205, 240, 236);
 }
-.bank{
+.bank {
   padding: 0 8px;
   height: 100%;
   width: 148px;
@@ -690,20 +872,20 @@ export default {
   background-color: white;
   font-family: GoogleSans-Regular;
 }
-.bank:hover{
+.bank:hover {
   color: #019160;
 }
-.bank:focus{
+.bank:focus {
   background-color: rgb(205, 240, 236);
 }
-.content-tblEmployee{
+.content-tblEmployee {
   height: 145px;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 .delete {
-    background-position: -464px -312px;
+  background-position: -464px -312px;
 }
-.add-line{
+.add-line {
   border: 1px solid #c9ccd2;
   width: 109px;
   height: 24px;
@@ -712,22 +894,22 @@ export default {
   cursor: pointer;
 }
 
-.footer{
+.footer {
   height: 89px;
   width: 836px;
 }
-.divide{
+.divide {
   width: 100%;
-    border-top: 1px solid #e0e0e0;
-    margin: 32px 0 20px;
-    position: relative;
+  border-top: 1px solid #e0e0e0;
+  margin: 32px 0 20px;
+  position: relative;
 }
-.footer-btn{
+.footer-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.color{
+.color {
   height: 36px;
   color: white;
   background-color: #35bf22;
@@ -735,18 +917,18 @@ export default {
   border: none;
   outline: none;
 }
-.color:hover{
+.color:hover {
   background-color: #3ff128;
 }
 
-.label-input{
+.label-input {
   height: 21px;
   width: 21px;
   border-radius: 50%;
   border: 1px solid #3ff128;
   background-color: white;
 }
-.label-input:checked{
+.label-input:checked {
   /* content: ""; */
   height: 13px;
   width: 13px;
@@ -757,7 +939,7 @@ export default {
   margin-left: 3px;
   margin-top: 3px;
 }
-.absolute{
+.absolute {
   position: absolute;
   top: 91px;
   right: 22px;
@@ -765,24 +947,24 @@ export default {
   width: 251px;
   height: 32px;
 }
-.department-box{
+.department-box {
   width: 392px;
   height: 32px;
   display: flex;
   min-height: 32px;
-  border: 1px solid #babec5; 
-  border-radius: 2px; 
+  border: 1px solid #babec5;
+  border-radius: 2px;
   background-color: #fff;
   outline: none;
 }
 
-.department-content{
+.department-content {
   display: flex;
   align-items: center;
   background-color: white;
   cursor: pointer;
 }
-.department-content:hover{
+.department-content:hover {
   color: #35bf22;
   font-weight: 600;
   background-color: #f4f5f8;
@@ -790,91 +972,88 @@ export default {
 /* .item-left{
 
 } */
-.department-box:focus{
+.department-box:focus {
   border-color: #2ca01c;
 }
 
-.input-select{
-    background-color: transparent;
-    display: flex;
-    padding: 5px 0 5px 10px;
-    height: 32px;
-    width: 360px;
-    border: none;
-    /* border: 1px solid #babec5; */
+.input-select {
+  background-color: transparent;
+  display: flex;
+  padding: 5px 0 5px 10px;
+  height: 32px;
+  width: 360px;
+  border: none;
+  /* border: 1px solid #babec5; */
 }
-.selected-option{
+.selected-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
 }
-.icon-selected{
+.icon-selected {
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
 }
-.icon-selected:hover{
+.icon-selected:hover {
   background-color: #bbb;
 }
 .arrow-dropdown {
-    background-position: -552px -352px;
+  background-position: -552px -352px;
 }
-.tranform{
+.tranform {
   transform: rotate(180deg);
-  transition: transform .15s linear;
+  transition: transform 0.15s linear;
 }
-.box-error{
+.box-error {
   border-color: red;
 }
-.box-error:hover{
+.box-error:hover {
   border-color: red;
 }
-.select-custom{
-    position: absolute;
-    width: 392px;
-    /* height: 194px; */
-    top: 198px;
-    min-width: 200px;
-    background-color: white;
-    border: 1px solid #bbb;
+.select-custom {
+  position: absolute;
+  width: 392px;
+  /* height: 194px; */
+  top: 198px;
+  min-width: 200px;
+  background-color: white;
+  border: 1px solid #bbb;
 }
-.header-select{
+.header-select {
   height: 32px;
   width: 100%;
   display: flex;
   align-items: center;
   background-color: #f4f5f8;
   padding: 0 14px 0 10px;
-  
 }
-.select-custom .item{
-    height: 32px;
-    width: 100%;
-    padding: 0 14px 0 10px;
-    text-align: left;
-    line-height: 32px;
-    display: flex;
-    align-items: center;
+.select-custom .item {
+  height: 32px;
+  width: 100%;
+  padding: 0 14px 0 10px;
+  text-align: left;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
 }
-.item:hover{
-    color: #2ca01c;
-    background-color: rgb(219, 219, 219);
+.item:hover {
+  color: #2ca01c;
+  background-color: rgb(219, 219, 219);
 }
-.invisible{
-    display: none;
+.invisible {
+  display: none;
 }
-.color{
-    background-color: #2ca01c;
-    color: white;
+.color {
+  background-color: #2ca01c;
+  color: white;
 }
-.input-error{
+.input-error {
   border: 1px solid red;
 }
-.input-overide{
+.input-overide {
   border: 1px solid #babec5;
 }
-
 
 /* @keyframes zoomIn {
     0% {
@@ -888,5 +1067,4 @@ export default {
   animation-name: zoomIn;
   animation-duration: 0.5s;
 } */
-
 </style>

@@ -419,6 +419,8 @@ export default {
       this.onRowTableDblClick(employeeClickId);
     },
 
+
+
     /* 
     Load lại dữ liệu khi click vào nút refresh
     CreatedBy: NXCHIEN 17/05/2021  
@@ -467,7 +469,6 @@ export default {
     */
     onChangeInputEmployeeFilter(e) {
       let val = e.target.value;
-      console.log(val);
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         // Lấy chuỗi cần lọc rồi gán vào biến filter
