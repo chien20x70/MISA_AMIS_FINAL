@@ -3,7 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import EmployeeList from './components/views/employee/EmployeeList.vue'
 import '../src/assets/font/fontawesome-5.15.1/css/all.min.css'
-import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
+// import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
 import './axios-libs/axios.js'
 import "./components/styles/main.css";
 import "./components/styles/input.css";
@@ -12,7 +12,6 @@ import "./components/styles/dropdown.css";
 import "./components/styles/button.css";
 import "./components/styles/icon.css";
 import VueHotkey from 'v-hotkey'
-import vuetify from './plugins/vuetify'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.use(VueHotkey)
@@ -21,19 +20,19 @@ Vue.use(Antd);
 Validate các trường để trống thì thông báo lỗi
 CreatedBy: NXCHIEN 10/05/2021
 */
-extend('required', {
-  validate(value) {
-    return {
-      required: true,
-      valid: ['', null, undefined].indexOf(value) === -1
-    };
-  },
-  computesRequired: true,
-  message: '{_field_} không thể để trống'
-});
+// extend('required', {
+//   validate(value) {
+//     return {
+//       required: true,
+//       valid: ['', null, undefined].indexOf(value) === -1
+//     };
+//   },
+//   computesRequired: true,
+//   message: '{_field_} không thể để trống'
+// });
 
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
+// Vue.component('ValidationProvider', ValidationProvider);
+// Vue.component('ValidationObserver', ValidationObserver);
 Vue.config.productionTip = false
 Vue.use(VueRouter);
 
@@ -62,6 +61,5 @@ Vue.filter('dateFormatDDMMYY', function (date) {
 
 new Vue({
   render: h => h(App),
-  vuetify,
   router
 }).$mount('#app')
