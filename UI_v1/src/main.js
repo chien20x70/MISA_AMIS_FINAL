@@ -40,7 +40,7 @@ Vue.filter('dateFormatDDMMYY', function (date) {
   var year = newDate.getFullYear();
   day = day < 10 ? "0" + day : day;
   month = month < 10 ? "0" + month : month;
-  return `${day}/${month}/${year}`;
+  return `${month}/${day}/${year}`;
 })
 
 new Vue({

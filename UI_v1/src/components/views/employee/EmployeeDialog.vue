@@ -55,6 +55,7 @@
                 <input
                   :title="(name == true) ? 'Tên không được để trống!' : '' "
                   type="text"
+                  ref="focusName"
                   style="width: 235px; margin-top: 4px;"
                   v-model="employee.fullName"
                   @input="onChangeInputName"
@@ -310,7 +311,7 @@
               </button>
               <button
                 class="add-line color"
-                style="margin-left: 20px;"
+                style="margin-left: 13px;"
                 @click="onBtnSaveAndAddClick"
               >
                 Cất và Thêm
