@@ -16,23 +16,7 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.use(VueHotkey)
 Vue.use(Antd);
-/* 
-Validate các trường để trống thì thông báo lỗi
-CreatedBy: NXCHIEN 10/05/2021
-*/
-// extend('required', {
-//   validate(value) {
-//     return {
-//       required: true,
-//       valid: ['', null, undefined].indexOf(value) === -1
-//     };
-//   },
-//   computesRequired: true,
-//   message: '{_field_} không thể để trống'
-// });
 
-// Vue.component('ValidationProvider', ValidationProvider);
-// Vue.component('ValidationObserver', ValidationObserver);
 Vue.config.productionTip = false
 Vue.use(VueRouter);
 

@@ -255,8 +255,11 @@
                   type="text"
                   style="width: 203px; margin-top: 4px;"
                   v-model="employee.email"
+                  
                 /><br />
-                <!-- <span style="color: red">{{ messageEmail }}</span> -->
+                <!-- @blur="handleBlurEmail($event.target.value)" -->
+                <!-- :class="{'input-error': messageEmail != '' && messageEmail != null}" -->
+                <!-- <span style="color: red; font-size: 12px;">{{ messageEmail }}</span> -->
               </div>
             </div>
             <div class="row-1">
@@ -364,6 +367,7 @@ export default {
       code: false, // border-code employeeCode
       department: false, // border-department employeeCode
       currentIndex: 0, // Vị trí nút bấm up down
+      messageEmail: null,
     };
   },
   //#endregion
@@ -394,10 +398,7 @@ export default {
     keymap() {
       return {
         esc: this.onBtnCloseClick,
-        // 'enter': {
-        //   keydown: this.hideD,
-        //   keyup: this.show
-        // }
+        'Ctrl + S': this.onBtnSaveClick,
       };
     },
   },
@@ -450,24 +451,43 @@ export default {
         }
       }, 500);
     },
+    //#endregion
+    /**
+     * Click nút up cập nhật vị trí currentIndex
+     * CreatedBy:NXCHIEN 19/05/2021
+     */
     up() {
       if (this.currentIndex > 0) this.currentIndex--;
     },
+
+    /**
+     * Click nút up cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
+     * CreatedBY:NXCHIEN 19/05/2021
+     */
     down() {
       if (this.showDepartment) {
         this.showDepartment = false;
       }
       if (this.currentIndex < this.departments.length - 1) this.currentIndex++;
     },
+
+    /**
+     * Click enter cập nhật các giá trị để bind lên input chứa giá trị tên phòng ban/ đơn vị
+     * CreatedBy: NXCHIEN 19/05/2021
+     */
     enter() {
-      this.saveValueDepartment = this.departments[
-        this.currentIndex
-      ].departmentId;
-      this.employee.departmentId = this.departments[
-        this.currentIndex
-      ].departmentId;
+      this.saveValueDepartment = this.departments[this.currentIndex].departmentId;
+      this.employee.departmentId = this.departments[this.currentIndex].departmentId;
       this.showDepartment = true;
+      if(this.saveValueDepartment != null){
+        this.department = false;
+      }
     },
+
+    /**
+     * Kiểm tra các trường bắt buộc nhập
+     * CreatedBy: NXCHIEN 19/05/2021
+     */
     isCheckValidate() {
       if (this.employee.employeeCode.trim() == "") {
         this.message = STR_EMPTY_CODE;
@@ -483,7 +503,7 @@ export default {
       }
       return false;
     },
-    //#endregion
+    
 
     /**
      * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList

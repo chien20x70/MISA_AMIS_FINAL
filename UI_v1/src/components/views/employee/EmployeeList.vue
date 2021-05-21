@@ -14,6 +14,7 @@
       <div class="item">
         <div class="item-right">
           <input
+            ref="focusInputSearch"
             type="text"
             placeholder="Tìm theo mã, tên nhân viên"
             class="input-search"
@@ -572,6 +573,9 @@ export default {
       return ps;
     },
   },
+  mounted(){
+    this.$refs.focusInputSearch.focus();
+  }
 };
 </script>
 <style scoped>
@@ -713,7 +717,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin-right: 200px;
-  margin-right: 60px;
+  margin-right: 40px;
 }
 .autocomplete {
   display: flex;

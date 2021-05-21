@@ -28,6 +28,7 @@ table th, td {
 tbody tr td{
     height: 46px;
     border-left: 1px dotted #bbb;
+    font-size: 13px !important;
 }
 thead tr th:nth-child(5){
     text-align: center;

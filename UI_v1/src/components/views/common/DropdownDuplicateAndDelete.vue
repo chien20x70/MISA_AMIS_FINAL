@@ -148,6 +148,7 @@ export default {
   text-align: left;
   padding: 5px 10px;
   box-sizing: border-box;
+  font-size: 13px;
 }
 .dropdown-row-1:hover {
   color: #2ca01c;
