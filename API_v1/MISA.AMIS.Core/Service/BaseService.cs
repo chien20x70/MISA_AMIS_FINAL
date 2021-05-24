@@ -193,7 +193,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">đối tượng cần validate</param>
         /// <param name="http">Phương thức POST hay PUT</param>
         /// Created By: NXCHIEN 17/05/2021
-        protected virtual void CustomValidate(MISAEntity entity, HTTPType http) { } 
+        protected virtual void CustomValidate(MISAEntity entity, HTTPType http) { }
         #endregion
 
     } 

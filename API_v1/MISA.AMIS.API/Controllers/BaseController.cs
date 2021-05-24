@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MISA.AMIS.Core.Entities;
 using MISA.AMIS.Core.Interfaces.Repository;
 using MISA.AMIS.Core.Interfaces.Service;
 using System;
@@ -43,15 +44,26 @@ namespace MISA.AMIS.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var entities = _baseRepository.GetAll();
-            if (entities.Count() > 0)
+            var res = new ServiceResult();
+            try
             {
-                return Ok(entities);
+                var entities = _baseRepository.GetAll();
+                if (entities.Count() > 0)
+                {
+                    res.Data = entities;
+                }
+                else
+                {
+                    res.Status = Core.Enums.StatusCode.Error;
+                    res.Code = "NODATA";
+                    res.Message = "Không có nhân viên nào trong hệ thống!";
+                }
             }
-            else
+            catch (Exception)
             {
-                return NoContent();
+                res.Status = Core.Enums.StatusCode.Exception;
             }
+            return Ok(res);
         }
 
         /// <summary>
@@ -66,16 +78,26 @@ namespace MISA.AMIS.API.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-
-            var entity = _baseRepository.GetById(id);
-            if (entity != null)
+            var res = new ServiceResult();
+            try
             {
-                return Ok(entity);
+                var entity = _baseRepository.GetById(id);
+                if (entity != null)
+                {
+                    res.Data = entity;
+                }
+                else
+                {
+                    res.Status = Core.Enums.StatusCode.Error;
+                    res.Code = "NODATA By ID";
+                    res.Message = $"Không tồn tại nhân viên có mã ID là {id}";
+                }
             }
-            else
+            catch (Exception)
             {
-                return NoContent();
+                res.Status = Core.Enums.StatusCode.Exception;
             }
+            return Ok(res);
         }
 
         /// <summary>
@@ -90,15 +112,27 @@ namespace MISA.AMIS.API.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] MISAEntity entity)
         {
-            var rowAffects = _baseService.Insert(entity);
-            if (rowAffects > 0)
+            var res = new ServiceResult();
+            try
             {
-                return StatusCode(201, rowAffects);
+                var rowAffects = _baseService.Insert(entity);
+                if (rowAffects > 0)
+                {
+                    res.Data = entity;
+                }
+                else
+                {
+                    res.Status = Core.Enums.StatusCode.Error;
+                    res.Code = "CANT INSERT DATA";
+                    res.Message = "Không thể thêm nhân viên";
+                    //return StatusCode(204, res);
+                }
             }
-            else
+            catch (Exception)
             {
-                return NoContent();
+                res.Status = Core.Enums.StatusCode.Exception;
             }
+            return Ok(res);
         }
 
         /// <summary>
@@ -160,31 +194,31 @@ namespace MISA.AMIS.API.Controllers
         ///     - NoContent: 204
         /// </returns>
         /// Created By: NXCHIEN 17/05/2021
-        [HttpGet("Paging")]
-        public IActionResult Filters(int pageSize, int pageIndex)
-        {
-            //Lấy tất cả bản ghi trong DB
-            var limit = _baseRepository.GetAll().Count();
-            //Kiểm tra nếu số khách trên trang hoặc vị trí trang < 1 thì trả về BadRequest
-            if (pageSize < 1 || pageIndex < 1)
-            {
-                return BadRequest();
-            }
-            // Kiểm tra nếu số khách/trang * vị trí trang < tổng khách + số khách/trang thì trả về NoContent.
-            else if (pageSize * pageIndex >= (limit + pageSize))      //limit =245 total =250        245+10
-            {
-                return NoContent();
-            }
-            var entity = _baseService.GetMISAEntities(pageSize, pageIndex);
-            if (entity != null)
-            {
-                return Ok(entity);
-            }
-            else
-            {
-                return NoContent();
-            }
-        } 
+        //[HttpGet("Paging")]
+        //public IActionResult Filters(int pageSize, int pageIndex)
+        //{
+        //    Lấy tất cả bản ghi trong DB
+        //    var limit = _baseRepository.GetAll().Count();
+        //    Kiểm tra nếu số khách trên trang hoặc vị trí trang < 1 thì trả về BadRequest
+        //    if (pageSize < 1 || pageIndex < 1)
+        //    {
+        //        return BadRequest();
+        //    }
+        //     Kiểm tra nếu số khách/trang * vị trí trang < tổng khách + số khách/trang thì trả về NoContent.
+        //    else if (pageSize * pageIndex >= (limit + pageSize))      //limit =245 total =250        245+10
+        //    {
+        //        return NoContent();
+        //    }
+        //    var entity = _baseService.GetMISAEntities(pageSize, pageIndex);
+        //    if (entity != null)
+        //    {
+        //        return Ok(entity);
+        //    }
+        //    else
+        //    {
+        //        return NoContent();
+        //    }
+        //} 
         #endregion
 
         /// <summary>
@@ -206,8 +240,8 @@ namespace MISA.AMIS.API.Controllers
                     item.SetValue(entity, id);
                 }
             }
-        } 
+        }
         #endregion
-    } 
+    }
     #endregion
 }
