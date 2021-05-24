@@ -225,31 +225,31 @@ namespace MISA.AMIS.Core.Service
             #region Check trùng các thuộc tính khác: Chuuwgs minh thư, Email, số đt
             //Check trùng IDentifyNumber
             // Khởi tạo giá trị
-            //var identifyNumber = entity.IdentifyNumber;
-            //var checkIdentifyNumberExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.IdentifyNumber, employeeId, http, identifyNumber);
-            //// Kiểm tra trùng hay không
-            //if (checkIdentifyNumberExist)
-            //{
-            //    throw new EmployeeExceptions(Properties.Resources.Msg_IdentifyNumber_Exist);
-            //}
+            var identifyNumber = entity.IdentifyNumber;
+            var checkIdentifyNumberExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.IdentifyNumber, employeeId, http, identifyNumber);
+            // Kiểm tra trùng hay không
+            if (checkIdentifyNumberExist)
+            {
+                throw new EmployeeExceptions(Properties.Resources.Msg_IdentifyNumber_Exist);
+            }
 
             //// Check trùng số điện thoại
             //// Khởi tạo giá trị
-            //var phoneNumber = entity.PhoneNumber;
-            //var checkphoneNumberExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.PhoneNumber, employeeId, http, phoneNumber);
-            //// Kiểm tra trùng hay không
-            //if (checkphoneNumberExist)
-            //{
-            //    throw new EmployeeExceptions(Properties.Resources.Msg_Phone_Exist);
-            //}
+            var phoneNumber = entity.PhoneNumber;
+            var checkphoneNumberExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.PhoneNumber, employeeId, http, phoneNumber);
+            // Kiểm tra trùng hay không
+            if (checkphoneNumberExist)
+            {
+                throw new EmployeeExceptions(Properties.Resources.Msg_Phone_Exist);
+            }
 
             ////Check trùng Email
-            //var email = entity.Email;
-            //var checkEmailExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.Email, employeeId, http, email);
-            //if (checkEmailExist)
-            //{
-            //    throw new EmployeeExceptions(Properties.Resources.Msg_Email_Exist);
-            //} 
+            var email = entity.Email;
+            var checkEmailExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.Email, employeeId, http, email);
+            if (checkEmailExist)
+            {
+                throw new EmployeeExceptions(Properties.Resources.Msg_Email_Exist);
+            }
             #endregion
         } 
         #endregion

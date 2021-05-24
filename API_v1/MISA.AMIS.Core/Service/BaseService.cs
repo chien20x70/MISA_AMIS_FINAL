@@ -141,47 +141,47 @@ namespace MISA.AMIS.Core.Service
                 //NOTREQUIRED: Đề bài không có yêu cầu check độ dài
                 #region Attribute Check độ dài khi nhập
                 // Kiểm tra độ dài mã Code của property
-                //var maxLengthAttribute = property.GetCustomAttributes(typeof(MISAMaxLength), true);
-                //if (maxLengthAttribute.Length > 0)
-                //{
-                //    // Lấy ra giá trị của property
-                //    var propertyValue = property.GetValue(entity);
-                //    // Lấy ra giá trị truyền vào của MISAMaxLength
-                //    var maxLength = (maxLengthAttribute[0] as MISAMaxLength).MaxLength;
-                //    // Kiểm tra độ dài
-                //    if (propertyValue.ToString().Length > maxLength)
-                //    {
-                //        var msgError = (maxLengthAttribute[0] as MISAMaxLength).MsgError_MaxLength;
-                //        if (string.IsNullOrEmpty(msgError))
-                //        {
-                //            msgError = $"Độ dài của {property.Name} phải nhỏ hơn {maxLength}";
-                //        }
-                //        throw new EmployeeExceptions(msgError);
-                //    }
-                //}
+                var maxLengthAttribute = property.GetCustomAttributes(typeof(MISAMaxLength), true);
+                if (maxLengthAttribute.Length > 0)
+                {
+                    // Lấy ra giá trị của property
+                    var propertyValue = property.GetValue(entity);
+                    // Lấy ra giá trị truyền vào của MISAMaxLength
+                    var maxLength = (maxLengthAttribute[0] as MISAMaxLength).MaxLength;
+                    // Kiểm tra độ dài
+                    if (propertyValue.ToString().Length > maxLength)
+                    {
+                        var msgError = (maxLengthAttribute[0] as MISAMaxLength).MsgError_MaxLength;
+                        if (string.IsNullOrEmpty(msgError))
+                        {
+                            msgError = $"Độ dài của {property.Name} phải nhỏ hơn {maxLength}";
+                        }
+                        throw new EmployeeExceptions(msgError);
+                    }
+                }
                 #endregion
 
                 //NOTREQUIRED: Đề bài không yêu cầu Check email
                 #region Attribute check xem có đúng là Email không
                 // Kiểm tra email
-                //var emailAttribute = property.GetCustomAttributes(typeof(MISAEmail), true);
-                //if (emailAttribute.Length > 0)
-                //{
-                //    // Lấy giá trị email
-                //    var emailValue = property.GetValue(entity);
-                //    // Khởi tạo regex và kiểm tra
-                //    Regex regex = new Regex(Properties.Resources.Regex_String);
-                //    if (!regex.IsMatch(emailValue.ToString()))
-                //    {
+                var emailAttribute = property.GetCustomAttributes(typeof(MISAEmail), true);
+                if (emailAttribute.Length > 0)
+                {
+                    // Lấy giá trị email
+                    var emailValue = property.GetValue(entity);
+                    // Khởi tạo regex và kiểm tra
+                    Regex regex = new Regex(Properties.Resources.Regex_String);
+                    if (!regex.IsMatch(emailValue.ToString()))
+                    {
 
-                //        var msgErrorEmail = (emailAttribute[0] as MISAEmail).MsgErrorEmail;
-                //        if (string.IsNullOrEmpty(msgErrorEmail.ToString()))
-                //        {
-                //            msgErrorEmail = property.Name + Properties.Resources.Required_Error_Message;
-                //        }
-                //        throw new EmployeeExceptions(msgErrorEmail);
-                //    }
-                //} 
+                        var msgErrorEmail = (emailAttribute[0] as MISAEmail).MsgErrorEmail;
+                        if (string.IsNullOrEmpty(msgErrorEmail.ToString()))
+                        {
+                            msgErrorEmail = property.Name + Properties.Resources.Required_Error_Message;
+                        }
+                        throw new EmployeeExceptions(msgErrorEmail);
+                    }
+                }
                 #endregion
             }
             CustomValidate(entity, http);

@@ -78,14 +78,14 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Email
         /// </summary>
-        //[MISARequired("")]
-        //[MISAEmail("")]
+        [MISARequired("")]
+        [MISAEmail("")]
         public string Email { get; set; }
 
         /// <summary>
         /// Số điện thoại
         /// </summary>
-        //[MISARequired("")]
+        [MISARequired("")]
         public string PhoneNumber { get; set; }
 
         /// <summary>
