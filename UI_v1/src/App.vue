@@ -59,4 +59,31 @@ export default {
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
+
+
+/**
+  * CSS custom thư viện vue-date-pick.
+  *
+*/
+.vdpClearInput{
+  margin-top: 4px !important;
+}
+.vdpFloating.vdpPositionLeft {
+  position: absolute;
+  left: -120px !important;
+}
+.vdpHeader{
+  padding: 0 1em 5em !important;
+  margin: -1em -1em -3.5em !important;
+}
+.vdpHeadCell {
+    padding: .3em .5em .3em !important;
+}
+.vdpPeriodControl {
+    line-height: 10px;
+}
+.vdpCellContent {
+    font-size: 15px !important;
+}
+/**-------------------------end-lib */
 </style>

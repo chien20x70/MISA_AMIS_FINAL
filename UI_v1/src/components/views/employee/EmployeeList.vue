@@ -805,4 +805,15 @@ export default {
 .display {
   display: none;
 }
+table tr{
+  border-bottom: 1px solid #bbb;
+}
+table th, td {
+  border-bottom: 1px solid #c7c7c7;
+  border-left: 1px solid #c7c7c7;
+  box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7;  
+}
+tbody tr td{
+  border-left: 1px dotted #bbb;
+}
 </style>

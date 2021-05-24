@@ -143,16 +143,19 @@
             <div class="row-1">
               <div class="dateofbirth">
                 <span class="text">Ngày sinh</span>
-                <input
+                <!-- <input
                   type="date"
                   style="width: 167px; margin-top: 4px;"
                   v-model="employee.dateOfBirth"
-                />
-                <!-- <date-pick
-                            v-model="employee.dateOfBirth"
-                            :displayFormat="'DD/MM/YYYY'"
-                            :inputAttributes="{style: 'font-size: 13px;border: none;border-radius: 2px;height: 32px;color: #000000;padding: 6px 10px;border: 1px solid #babec5;font-family: NotoSans-Regular;outline: none;'}"
-                        ></date-pick> -->
+                /> -->
+                <date-pick
+                  v-model="employee.dateOfBirth"
+                  :displayFormat="STR_DISPLAY_FORMAT"
+                  :inputAttributes="{class: 'style-input-date-lib' ,placeholder: STR_DISPLAY_FORMAT, style: 'margin-top: 4px; width: 167px;'}"                  
+                  :weekdays="localeDatePicker.weekdays"
+                  :months="localeDatePicker.months"
+                ></date-pick>
+                <!-- <date-picker v-model="employee.dateOfBirth"/> -->
               </div>
               <div class="gender">
                 <span class="text">Giới tính</span>
@@ -191,7 +194,7 @@
             </div>
             <div class="row-1">
               <div class="id">
-                <span class="text">Số CMND</span>
+                <span class="text">Số CMND <p style="color: red; display: inline;">*</p></span>
                 <input
                   type="text"
                   style="width: 245px; margin-top: 4px;"
@@ -200,11 +203,19 @@
               </div>
               <div class="dateofbirth" style="padding-left: 5px;">
                 <span class="text">Ngày cấp</span>
-                <input
+                <!-- <input
                   type="date"
                   style="width: 167px; margin-top: 4px;"
                   v-model="employee.dateOfIN"
-                />
+                /> -->
+                <date-pick
+                  v-model="employee.dateOfIN"
+                  :displayFormat="STR_DISPLAY_FORMAT"
+                  :inputAttributes="{class: 'style-input-date-lib', placeholder: STR_DISPLAY_FORMAT,style: 'margin-top: 4px; width: 167px;'}"
+                  :weekdays="localeDatePicker.weekdays"
+                  :months="localeDatePicker.months"                 
+                ></date-pick>
+                <!-- <date-picker v-model="employee.dateOfIN"/> -->
               </div>
             </div>
             <div class="row-1">
@@ -251,16 +262,15 @@
                 />
               </div>
               <div class="name" style="margin-top: 17px; margin-left: 5px;">
-                <span class="text">Email</span><br />
+                <span class="text">Email <p style="color: red; display: inline;">*</p></span><br />
                 <input
                   type="text"
                   style="width: 203px; margin-top: 4px;"
                   v-model="employee.email"
-                  
+                  @blur="handleBlurEmail($event.target.value)"
+                  :class="{'input-error': messageEmail != '' && messageEmail != null}"
                 /><br />
-                <!-- @blur="handleBlurEmail($event.target.value)" -->
-                <!-- :class="{'input-error': messageEmail != '' && messageEmail != null}" -->
-                <!-- <span style="color: red; font-size: 12px;">{{ messageEmail }}</span> -->
+                <span style="color: red; font-size: 12px;">{{ messageEmail }}</span>
               </div>
             </div>
             <div class="row-1">
@@ -343,16 +353,23 @@ import {
   MES_ADD_SUCCESS,
   MES_EDIT_SUCCESS,
 } from "../../../lang/validation.js";
+
+import DatePick from "vue-date-pick";
+import "vue-date-pick/dist/vueDatePick.css";
+// import DatePicker from '../common/DatePicker.vue';
 //#endregion
 export default {
   //#region Khai báo
   components: {
     Popup,
+    DatePick
+    // DatePicker
   },
   props: {
     state: { type: Boolean, selector: false }, // Trạng thái hiển thị Dialog
     employee: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
     flag: { type: String, selector: null }, // Cờ để check giá trị nút Thêm mới hay Sửa
+    selectedId: { type: String, default: '' }
   },
   data() {
     return {
@@ -369,6 +386,25 @@ export default {
       department: false, // border-department employeeCode
       currentIndex: 0, // Vị trí nút bấm up down
       messageEmail: null,
+      STR_DISPLAY_FORMAT: 'DD/MM/YYYY',
+      localeDatePicker: {
+      weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+      months: [
+        "Tháng 1",
+        "Tháng 2",
+        "Tháng 3",
+        "Tháng 4",
+        "Tháng 5",
+        "Tháng 6",
+        "Tháng 7",
+        "Tháng 8",
+        "Tháng 9",
+        "Tháng 10",
+        "Tháng 11",
+        "Tháng 12",
+      ],
+    },
+      dateCheck: false,
     };
   },
   //#endregion
@@ -405,6 +441,24 @@ export default {
   },
   //#region METHODS
   methods: {
+    // handleInputDateOfIN(e){
+    //   let val = e.target.value;
+    //   clearTimeout(this.timeOut);
+    //   this.timeOut = setTimeout(() => {
+    //     if(this.employee.dateOfBirth != '' && this.employee.dateOfIN != ''){
+    //       let dateB = new Date(this.employee.dateOfBirth);
+    //       let dateBY = dateB.getFullYear();
+    //       let dateIN = new Date(this.employee.dateOfIN);
+    //       let dateINY = dateIN.getFullYear();
+    //       if(dateINY - dateBY < 15){
+    //         this.dateCheck = true;
+    //       }
+    //       else{
+    //         this.dateCheck = false;
+    //       }
+    //     }
+    //   }, 500)
+    // },
     // SHow thông báo thêm, sửa thành công
     showNotification(message) {
       this.$notification["success"]({
@@ -634,15 +688,15 @@ export default {
     Xử lý blur khỏi Input Email
     CreatedBy: NXCHIEN 17/05/2021
     */
-    // handleBlurEmail(ev) {
-    //   if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {
-    //     this.messageEmail = "";
-    //   } else if (ev == "") {
-    //     this.messageEmail = "Bắt buộc nhập trường này!";
-    //   } else {
-    //     this.messageEmail = "Email Không đúng định dạng!";
-    //   }
-    // },
+    handleBlurEmail(ev) {
+      if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {
+        this.messageEmail = "";
+      } else if (ev == "") {
+        this.messageEmail = "Bắt buộc nhập trường này!";
+      } else {
+        this.messageEmail = "Email Không đúng định dạng!";
+      }
+    },
 
     /**
      * Click nút dropdown để toggle Department phòng ban
@@ -1073,4 +1127,15 @@ export default {
   animation-name: zoomIn;
   animation-duration: 0.5s;
 } */
+.style-input-date-lib{
+  font-size: 13px;
+  border: none;
+  border-radius: 2px;
+  height: 32px;
+  color: #000000;
+  padding: 6px 10px;
+  border: 1px solid #babec5;
+  font-family: NotoSans-Regular;
+  outline: none; 
+}
 </style>
