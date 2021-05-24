@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.AMIS.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// </summary>
         /// <returns>Mảng danh sách đối tượng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public IEnumerable<MISAEntity> GetAll();
+        public ServiceResult GetAll();
 
         /// <summary>
         /// Lấy 1 đối tượng theo ID.
@@ -21,7 +22,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>1 đối tượng có mã ID là entityId</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public MISAEntity GetById(Guid entityId);
+        public ServiceResult GetById(Guid entityId);
 
         /// <summary>
         /// Thêm mới 1 đối tượng.
@@ -29,7 +30,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="entity">Đối tượng cần thêm mới.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public int Insert(MISAEntity entity);
+        public ServiceResult Insert(MISAEntity entity);
 
         /// <summary>
         /// Sửa 1 đối tượng.
@@ -45,7 +46,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public int Delete(Guid entityId);
+        public ServiceResult Delete(Guid entityId);
 
         /// <summary>
         /// Phân trang đối tượng.

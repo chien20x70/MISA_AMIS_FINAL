@@ -1,5 +1,6 @@
 ﻿using MISA.AMIS.Core.CustomAttribute;
 using MISA.AMIS.Core.CustomExceptions;
+using MISA.AMIS.Core.Entities;
 using MISA.AMIS.Core.Enums;
 using MISA.AMIS.Core.Interfaces.Repository;
 using MISA.AMIS.Core.Interfaces.Service;
@@ -34,9 +35,23 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public int Delete(Guid entityId)
+        public ServiceResult Delete(Guid entityId)
         {
-            return _baseRepository.Delete(entityId);
+            var res = new ServiceResult();
+            var rowAffects = _baseRepository.Delete(entityId);
+            if (rowAffects > 0)
+            {
+                res.Status = StatusCode.Success;
+                //TODO: chỉ cần trả về Status khi thành công thôi đúng ko? có cần message ko?
+                //res.Message = "Xóa thành công";
+            }
+            else
+            {
+                res.Status = StatusCode.Error;
+                res.Code = "NODATA";
+                res.Message = "Xóa thất bại!";
+            }
+            return res;
         }
 
         /// <summary>
@@ -44,9 +59,24 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <returns>Mảng danh sách đối tượng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public IEnumerable<MISAEntity> GetAll()
+        public ServiceResult GetAll()
         {
-            return _baseRepository.GetAll();
+            //TODO: Nếu không có bản ghi trong DB thì vẫn được coi là lấy thành công
+            var res = new ServiceResult();
+            var entities = _baseRepository.GetAll();
+            if (entities.Count() > 0)
+            {
+                res.Data = entities;
+                res.Status = StatusCode.Success;
+            }
+            else
+            {
+                //TODO: không có bản ghi nào thì trả về lỗi
+                res.Status = StatusCode.Error;
+                res.Code = "NODATA";
+                res.Message = "Không có nhân viên nào trong hệ thống!";
+            }
+            return res;
         }
 
         /// <summary>
@@ -55,9 +85,21 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entityId">Mã ID của đối tượng.</param>
         /// <returns>1 đối tượng có mã ID là entityId</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public MISAEntity GetById(Guid entityId)
+        public ServiceResult GetById(Guid entityId)
         {
-            return _baseRepository.GetById(entityId);
+            var res = new ServiceResult();
+            var entity = _baseRepository.GetById(entityId);
+            if (entity != null)
+            {
+                res.Data = entity;
+            }
+            else
+            {
+                res.Status = StatusCode.Error;
+                res.Code = "NODATA By ID";
+                res.Message = $"Không tồn tại nhân viên có mã ID là {entityId}";
+            }
+            return res;
         }
 
         /// <summary>
@@ -66,10 +108,27 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">Đối tượng cần thêm mới.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public int Insert(MISAEntity entity)
+        public ServiceResult Insert(MISAEntity entity)
         {
-            Validate(entity, HTTPType.POST);
-            return _baseRepository.Insert(entity);
+            var status = Validate(entity, HTTPType.POST);
+            if (status == null)
+            {
+                var res = new ServiceResult();
+                var rowAffects = _baseRepository.Insert(entity);
+                if (rowAffects > 0)
+                {
+                    res.Data = entity;
+                    res.Status = StatusCode.Success;
+                }
+                else
+                {
+                    res.Status = StatusCode.Error;
+                    res.Code = "CANT INSERT";
+                    res.Message = "Thất bại";
+                }
+                return res; 
+            }
+            return status;
         }
 
         /// <summary>
@@ -102,7 +161,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">đối tượng truyền vào</param>
         /// <param name="http">Phương thức PUT hay POST</param>
         /// Created By: NXCHIEN 17/05/2021
-        private void Validate(MISAEntity entity, HTTPType http)
+        private ServiceResult Validate(MISAEntity entity, HTTPType http)
         {
 
             // Lấy ra tất cả property của đối tượng
@@ -133,7 +192,8 @@ namespace MISA.AMIS.Core.Service
                         {
                             msgError = property.Name + Properties.Resources.Required_NotEmpty_Message;
                         }
-                        throw new EmployeeExceptions(msgError);
+                        //throw new EmployeeExceptions(msgError);
+                        return new ServiceResult() { Status = StatusCode.Exception, Message = msgError};
                     }
                 }
                 #endregion
@@ -156,7 +216,7 @@ namespace MISA.AMIS.Core.Service
                         {
                             msgError = $"Độ dài của {property.Name} phải nhỏ hơn {maxLength}";
                         }
-                        throw new EmployeeExceptions(msgError);
+                        return new ServiceResult() { Status = StatusCode.Exception, Message = msgError };
                     }
                 }
                 #endregion
@@ -179,12 +239,13 @@ namespace MISA.AMIS.Core.Service
                         {
                             msgErrorEmail = property.Name + Properties.Resources.Required_Error_Message;
                         }
-                        throw new EmployeeExceptions(msgErrorEmail);
+                        return new ServiceResult() { Status = StatusCode.Exception, Message = msgErrorEmail };
                     }
                 }
                 #endregion
             }
             CustomValidate(entity, http);
+            return null;
         }
 
         /// <summary>
@@ -196,6 +257,6 @@ namespace MISA.AMIS.Core.Service
         protected virtual void CustomValidate(MISAEntity entity, HTTPType http) { }
         #endregion
 
-    } 
+    }
     #endregion
 }

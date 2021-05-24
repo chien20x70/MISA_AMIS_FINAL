@@ -47,21 +47,12 @@ namespace MISA.AMIS.API.Controllers
             var res = new ServiceResult();
             try
             {
-                var entities = _baseRepository.GetAll();
-                if (entities.Count() > 0)
-                {
-                    res.Data = entities;
-                }
-                else
-                {
-                    res.Status = Core.Enums.StatusCode.Error;
-                    res.Code = "NODATA";
-                    res.Message = "Không có nhân viên nào trong hệ thống!";
-                }
+                res = _baseService.GetAll();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 res.Status = Core.Enums.StatusCode.Exception;
+                res.Message = e.Message;
             }
             return Ok(res);
         }
@@ -81,17 +72,7 @@ namespace MISA.AMIS.API.Controllers
             var res = new ServiceResult();
             try
             {
-                var entity = _baseRepository.GetById(id);
-                if (entity != null)
-                {
-                    res.Data = entity;
-                }
-                else
-                {
-                    res.Status = Core.Enums.StatusCode.Error;
-                    res.Code = "NODATA By ID";
-                    res.Message = $"Không tồn tại nhân viên có mã ID là {id}";
-                }
+                res = _baseService.GetById(id);
             }
             catch (Exception)
             {
@@ -115,18 +96,7 @@ namespace MISA.AMIS.API.Controllers
             var res = new ServiceResult();
             try
             {
-                var rowAffects = _baseService.Insert(entity);
-                if (rowAffects > 0)
-                {
-                    res.Data = entity;
-                }
-                else
-                {
-                    res.Status = Core.Enums.StatusCode.Error;
-                    res.Code = "CANT INSERT DATA";
-                    res.Message = "Không thể thêm nhân viên";
-                    //return StatusCode(204, res);
-                }
+                res = _baseService.Insert(entity);              
             }
             catch (Exception)
             {
@@ -172,15 +142,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var rowAffects = _baseService.Delete(id);
-            if (rowAffects > 0)
+            var res = new ServiceResult();
+            try
             {
-                return Ok(Properties.Resources.Msg_Delete_Success);
+                res = _baseService.Delete(id);
             }
-            else
+            catch (Exception e)
             {
-                return NoContent();
+                res.Status = Core.Enums.StatusCode.Exception;
+                res.Message = e.Message;
             }
+            return Ok(res);
         }
 
         #region METHODS NOTREQUIRED
