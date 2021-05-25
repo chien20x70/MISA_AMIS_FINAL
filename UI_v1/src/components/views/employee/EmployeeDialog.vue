@@ -44,14 +44,9 @@
                   @input="onChangeInputCode"
                   :class="{ 'input-error': code == true }"
                 />
-                <!-- </ValidationProvider> -->
               </div>
               <div class="name">
-                <span class="text"
-                  >Tên
-                  <p style="color: red; display: inline;">*</p></span
-                >
-                <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
+                <span class="text">Tên <p style="color: red; display: inline;">*</p></span>
                 <input
                   :title="(name == true) ? 'Tên không được để trống!' : '' "
                   type="text"
@@ -61,22 +56,13 @@
                   @input="onChangeInputName"
                   :class="{ 'input-error': name == true }"
                 />
-                <!-- </ValidationProvider> -->
               </div>
             </div>
             <div class="row-1">
               <div class="position">
-                <span class="text"
-                  >Đơn vị
-                  <p style="color: red; display: inline;">*</p></span
-                >
-                <!-- <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }"> -->
-                <div
-                  :title="(department == true) ? 'Đơn vị không được để trống!' : '' "
-                  class="department-box"
-                  style="margin-top: 4px;"
-                  :class="{ 'input-error': department == true }"
-                >
+                <span class="text">Đơn vị <p style="color: red; display: inline;">*</p></span>
+                <div :title="(department == true) ? 'Đơn vị không được để trống!' : '' " class="department-box" style="margin-top: 4px;"
+                  :class="{ 'input-error': department == true }">
                   <div class="selected-option">
                     <input
                       type="text"
@@ -91,38 +77,23 @@
                     />
                     <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
                     <div class="icon-selected">
-                      <div
-                        class="icon icon-30 arrow-dropdown"
-                        @click="onBtnDropdownClick"
-                      ></div>
+                      <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
                     </div>
                   </div>
                 </div>
-                <!-- </ValidationProvider> -->
-                <div
-                  class="select-custom"
-                  :class="{ invisible: showDepartment }"
-                >
+                <div class="select-custom" :class="{ invisible: showDepartment }">
                   <div class="header-select">
                     <div class="text">Mã đơn vị</div>
-                    <div class="text" style="margin-left: 79px;">
-                      Tên đơn vị
-                    </div>
+                    <div class="text" style="margin-left: 79px;">Tên đơn vị</div>
                   </div>
-                  <div
-                    class="department-content"
-                    ref="positionDepartment"
-                    v-for="(department, index) in departments"
+                  <div class="department-content" ref="positionDepartment" v-for="(department, index) in departments"
                     :key="index"
                     :value="department.departmentId"
                     @click="onBtnDepartmentClick(department, index)"
-                    :class="{ color: currentIndex == index }"
-                  >
+                    :class="{ color: currentIndex == index }">
                     <div class="item">
                       <div>{{ department.departmentCode }}</div>
-                      <div style="margin-left: 100px;">
-                        {{ department.departmentName }}
-                      </div>
+                      <div style="margin-left: 100px;">{{ department.departmentName }}</div>
                     </div>
                   </div>
                 </div>
@@ -159,7 +130,7 @@
               </div>
               <div class="gender">
                 <span class="text">Giới tính</span>
-                <div class="radio" style="width: 251px; margin-top: 13px;">
+                <div class="radio" style="width: 251px; margin-top: 12px;">
                   <input
                     id="male"
                     type="radio"
