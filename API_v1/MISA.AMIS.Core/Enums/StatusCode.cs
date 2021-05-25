@@ -10,6 +10,7 @@ namespace MISA.AMIS.Core.Enums
     {
         Success,
         Error,
-        Exception
+        Exception       
     }
+    
 }

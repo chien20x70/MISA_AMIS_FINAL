@@ -79,6 +79,24 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xóa thất bại!.
+        /// </summary>
+        internal static string Msg_Delete_Fail {
+            get {
+                return ResourceManager.GetString("Msg_Delete_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xóa thành công!.
+        /// </summary>
+        internal static string Msg_Delete_Success {
+            get {
+                return ResourceManager.GetString("Msg_Delete_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email đã được sử dụng! Vui lòng điền Email khác..
         /// </summary>
         internal static string Msg_Email_Exist {
@@ -97,6 +115,24 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thêm thất bại!.
+        /// </summary>
+        internal static string Msg_Insert_Fail {
+            get {
+                return ResourceManager.GetString("Msg_Insert_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thêm thành công!.
+        /// </summary>
+        internal static string Msg_Insert_Success {
+            get {
+                return ResourceManager.GetString("Msg_Insert_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tham số truyền vào không hợp lệ!.
         /// </summary>
         internal static string Msg_Param_Error {
@@ -111,6 +147,24 @@ namespace MISA.AMIS.Core.Properties {
         internal static string Msg_Phone_Exist {
             get {
                 return ResourceManager.GetString("Msg_Phone_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sửa thất bại!.
+        /// </summary>
+        internal static string Msg_Update_Fail {
+            get {
+                return ResourceManager.GetString("Msg_Update_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sửa thành công!.
+        /// </summary>
+        internal static string Msg_Update_Success {
+            get {
+                return ResourceManager.GetString("Msg_Update_Success", resourceCulture);
             }
         }
         

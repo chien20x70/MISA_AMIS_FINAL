@@ -207,7 +207,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">đối tượng cần validate</param>
         /// <param name="http">Phương thức POST hay PUT</param>
         /// Created By: NXCHIEN 17/05/2021
-        protected override void CustomValidate(Employee entity, HTTPType http)
+        protected override ServiceResult CustomValidate(Employee entity, HTTPType http)
         {
 
             // Check trùng mã code
@@ -218,7 +218,12 @@ namespace MISA.AMIS.Core.Service
             // Kiểm tra trùng hay không
             if (checkCodeExist)
             {
-                throw new EmployeeExceptions(Properties.AttributeResource.Msg_EmployeeCode + $" <{employeeCode}>" + Properties.Resources.Msg_Code_Exist);
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Exception,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.AttributeResource.Msg_EmployeeCode + $" <{employeeCode}>" + Properties.Resources.Msg_Code_Exist,
+                };
             }
 
             //NOTREQUIRED: Đề bài không cần đến( check trùng email, sđt, chứng minh thư)
@@ -230,7 +235,12 @@ namespace MISA.AMIS.Core.Service
             // Kiểm tra trùng hay không
             if (checkIdentifyNumberExist)
             {
-                throw new EmployeeExceptions(Properties.Resources.Msg_IdentifyNumber_Exist);
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Exception,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.Resources.Msg_IdentifyNumber_Exist,
+                };
             }
 
             //// Check trùng số điện thoại
@@ -240,7 +250,12 @@ namespace MISA.AMIS.Core.Service
             // Kiểm tra trùng hay không
             if (checkphoneNumberExist)
             {
-                throw new EmployeeExceptions(Properties.Resources.Msg_Phone_Exist);
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Exception,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.Resources.Msg_Phone_Exist,
+                };
             }
 
             ////Check trùng Email
@@ -248,8 +263,14 @@ namespace MISA.AMIS.Core.Service
             var checkEmailExist = _employeeRepository.CheckEmployeeAttributeExist(Properties.AttributeResource.Email, employeeId, http, email);
             if (checkEmailExist)
             {
-                throw new EmployeeExceptions(Properties.Resources.Msg_Email_Exist);
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Exception,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.Resources.Msg_Email_Exist,
+                };
             }
+            return null;
             #endregion
         } 
         #endregion

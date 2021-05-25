@@ -123,17 +123,35 @@
   <data name="Msg_Code_Exist" xml:space="preserve">
     <value> đã tồn tại trên hệ thống, vui lòng kiểm tra lại.</value>
   </data>
+  <data name="Msg_Delete_Fail" xml:space="preserve">
+    <value>Xóa thất bại!</value>
+  </data>
+  <data name="Msg_Delete_Success" xml:space="preserve">
+    <value>Xóa thành công!</value>
+  </data>
   <data name="Msg_Email_Exist" xml:space="preserve">
     <value>Email đã được sử dụng! Vui lòng điền Email khác.</value>
   </data>
   <data name="Msg_IdentifyNumber_Exist" xml:space="preserve">
     <value>Số chứng minh thư đã tồn tại trên hệ thống! Vui lòng kiểm tra lại.</value>
   </data>
+  <data name="Msg_Insert_Fail" xml:space="preserve">
+    <value>Thêm thất bại!</value>
+  </data>
+  <data name="Msg_Insert_Success" xml:space="preserve">
+    <value>Thêm thành công!</value>
+  </data>
   <data name="Msg_Param_Error" xml:space="preserve">
     <value>Tham số truyền vào không hợp lệ!</value>
   </data>
   <data name="Msg_Phone_Exist" xml:space="preserve">
     <value>Số điện thoại đã tồn tại trên hệ thống!</value>
+  </data>
+  <data name="Msg_Update_Fail" xml:space="preserve">
+    <value>Sửa thất bại!</value>
+  </data>
+  <data name="Msg_Update_Success" xml:space="preserve">
+    <value>Sửa thành công!</value>
   </data>
   <data name="Regex_String" xml:space="preserve">
     <value>^(([^&lt;&gt;()\\.,;:\s@"]+(\.[^&lt;&gt;()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$</value>

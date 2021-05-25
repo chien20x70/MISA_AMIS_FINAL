@@ -19,6 +19,7 @@ namespace MISA.AMIS.API.Controllers
         IBaseRepository<MISAEntity> _baseRepository;
         IBaseService<MISAEntity> _baseService;
         static string tableName = typeof(MISAEntity).Name;
+        ServiceResult _serviceResult;
         #endregion
 
 
@@ -28,6 +29,7 @@ namespace MISA.AMIS.API.Controllers
         {
             _baseRepository = baseRepository;
             _baseService = baseService;
+            _serviceResult = new ServiceResult();
         }
         #endregion
 
@@ -44,17 +46,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var res = new ServiceResult();
             try
             {
-                res = _baseService.GetAll();
+                _serviceResult = _baseService.GetAll();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                res.Status = Core.Enums.StatusCode.Exception;
-                res.Message = e.Message;
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
             }
-            return Ok(res);
+            return Ok(_serviceResult);
         }
 
         /// <summary>
@@ -69,16 +71,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-            var res = new ServiceResult();
             try
             {
-                res = _baseService.GetById(id);
+                _serviceResult = _baseService.GetById(id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                res.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
             }
-            return Ok(res);
+            return Ok(_serviceResult);
         }
 
         /// <summary>
@@ -93,16 +96,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] MISAEntity entity)
         {
-            var res = new ServiceResult();
             try
             {
-                res = _baseService.Insert(entity);              
+                _serviceResult = _baseService.Insert(entity);              
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                res.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
             }
-            return Ok(res);
+            return Ok(_serviceResult);
         }
 
         /// <summary>
@@ -118,16 +122,18 @@ namespace MISA.AMIS.API.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] MISAEntity entity)
         {
-            AssignEntityIdInEntity(id, entity);
-            var rowAffects = _baseService.Update(entity);
-            if (rowAffects > 0)
+            try
             {
-                return Ok(entity);
+                AssignEntityIdInEntity(id, entity);
+                _serviceResult = _baseService.Insert(entity);
             }
-            else
+            catch (Exception ex)
             {
-                return NoContent();
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
             }
+            return Ok(_serviceResult);
         }
 
         /// <summary>
@@ -142,17 +148,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var res = new ServiceResult();
             try
             {
-                res = _baseService.Delete(id);
+                _serviceResult = _baseService.Delete(id);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                res.Status = Core.Enums.StatusCode.Exception;
-                res.Message = e.Message;
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
             }
-            return Ok(res);
+            return Ok(_serviceResult);
         }
 
         #region METHODS NOTREQUIRED
