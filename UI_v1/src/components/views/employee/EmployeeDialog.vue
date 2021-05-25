@@ -441,24 +441,6 @@ export default {
   },
   //#region METHODS
   methods: {
-    // handleInputDateOfIN(e){
-    //   let val = e.target.value;
-    //   clearTimeout(this.timeOut);
-    //   this.timeOut = setTimeout(() => {
-    //     if(this.employee.dateOfBirth != '' && this.employee.dateOfIN != ''){
-    //       let dateB = new Date(this.employee.dateOfBirth);
-    //       let dateBY = dateB.getFullYear();
-    //       let dateIN = new Date(this.employee.dateOfIN);
-    //       let dateINY = dateIN.getFullYear();
-    //       if(dateINY - dateBY < 15){
-    //         this.dateCheck = true;
-    //       }
-    //       else{
-    //         this.dateCheck = false;
-    //       }
-    //     }
-    //   }, 500)
-    // },
     // SHow thông báo thêm, sửa thành công
     showNotification(message) {
       this.$notification["success"]({

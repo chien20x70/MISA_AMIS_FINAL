@@ -38,7 +38,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="entity">Đối tượng cần sửa.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public int Update(MISAEntity entity);
+        public ServiceResult Update(MISAEntity entity);
 
         /// <summary>
         /// Xóa 1 đối tượng.

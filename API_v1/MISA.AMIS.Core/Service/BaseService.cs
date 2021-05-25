@@ -63,18 +63,16 @@ namespace MISA.AMIS.Core.Service
         {
             //TODO: Nếu không có bản ghi trong DB thì vẫn được coi là lấy thành công
             var res = new ServiceResult();
-            var entities = _baseRepository.GetAll();
-            if (entities.Count() > 0)
+            try
             {
+                var entities = _baseRepository.GetAll();
                 res.Data = entities;
                 res.Status = StatusCode.Success;
             }
-            else
+            catch (Exception ex)
             {
-                //TODO: không có bản ghi nào thì trả về lỗi
                 res.Status = StatusCode.Error;
-                res.Code = "NODATA";
-                res.Message = "Không có nhân viên nào trong hệ thống!";
+                res.Message = ex.Message;
             }
             return res;
         }
@@ -88,16 +86,16 @@ namespace MISA.AMIS.Core.Service
         public ServiceResult GetById(Guid entityId)
         {
             var res = new ServiceResult();
-            var entity = _baseRepository.GetById(entityId);
-            if (entity != null)
+            try
             {
+                var entity = _baseRepository.GetById(entityId);
                 res.Data = entity;
+                res.Status = StatusCode.Success;
             }
-            else
+            catch (Exception ex)
             {
                 res.Status = StatusCode.Error;
-                res.Code = "NODATA By ID";
-                res.Message = $"Không tồn tại nhân viên có mã ID là {entityId}";
+                res.Message = ex.Message;
             }
             return res;
         }
@@ -126,7 +124,7 @@ namespace MISA.AMIS.Core.Service
                     res.Code = "CANT INSERT";
                     res.Message = "Thất bại";
                 }
-                return res; 
+                return res;
             }
             return status;
         }
@@ -137,10 +135,29 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">Đối tượng cần sửa.</param>
         /// <returns>số dòng bị trong bảng trong DB bị ảnh hưởng</returns>
         /// CreatedBy: NXChien (17/05/2021)
-        public int Update(MISAEntity entity)
+        public ServiceResult Update(MISAEntity entity)
         {
             Validate(entity, HTTPType.PUT);
-            return _baseRepository.Update(entity);
+            //return _baseRepository.Update(entity);
+            var status = Validate(entity, HTTPType.PUT);
+            if (status == null)
+            {
+                var res = new ServiceResult();
+                var rowAffects = _baseRepository.Update(entity);
+                if (rowAffects > 0)
+                {
+                    res.Data = entity;
+                    res.Status = StatusCode.Success;
+                }
+                else
+                {
+                    res.Status = StatusCode.Error;
+                    res.Code = "CANT UPDATE";
+                    res.Message = "Thất bại";
+                }
+                return res;
+            }
+            return status;
         }
 
         /// <summary>
@@ -193,7 +210,7 @@ namespace MISA.AMIS.Core.Service
                             msgError = property.Name + Properties.Resources.Required_NotEmpty_Message;
                         }
                         //throw new EmployeeExceptions(msgError);
-                        return new ServiceResult() { Status = StatusCode.Exception, Message = msgError};
+                        return new ServiceResult() { Status = StatusCode.Exception, Message = msgError };
                     }
                 }
                 #endregion
