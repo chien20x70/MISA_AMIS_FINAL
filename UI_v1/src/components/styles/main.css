@@ -1,0 +1,25 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit; 
+    text-decoration: none;
+    outline: none;
+  }
+  
+  html, body {
+    font-family: NotoSans-Regular !important;
+    font-size: 13px;
+  }
+  @font-face {
+    font-family: "NotoSans-Regular";
+    src: url("../../assets/fonts/notosans-regular.2cb88a13.woff2") format("opentype");
+  }
+  
+  @font-face {
+    font-family: "NotoSans-Regular-italic";
+    src: url("../../assets/fonts/notosans-italic.1c1aaac9.woff2") format("opentype");
+  }

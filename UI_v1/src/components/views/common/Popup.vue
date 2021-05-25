@@ -1,0 +1,160 @@
+<template>
+<!-- :class="{'display': popState}" -->
+    <div class="popup" :class="{'display': popState}">
+        <div class="model"></div>
+        <div class="popup-box">
+          <div class="popup-content">
+            <div v-if="employeeCode != null || message.includes('đã tồn tại')" class="icon icon-48 exclamation-warning-48"></div>           
+            <div v-if="employeeCode != null" class="message">Bạn có thực sự muốn xóa Nhân viên &lt;{{employeeCode}}&gt; không?</div>
+            <div v-if="message != null && !message.includes('đã tồn tại') && employeeCode == null && !message.includes('đã bị thay đổi')" class="icon icon-48 mi-exclamation-error-48-2"></div>
+            <div v-if="message != null && message.includes('đã bị thay đổi') && employeeCode == null" class="icon icon-48 mi-exclamation-question-48"></div>
+            <div v-if="message != null" class="message">{{ message }}</div>
+          </div>
+          <div class="btn-footer">
+            <button v-if="employeeCode != null" class="btn-No" @click="onBtnNoClick">Không</button>
+            <button v-if="message != null && message.includes('thay đổi')" class="btn-No" @click="onBtnNoClick">Hủy</button>
+            <button v-if="employeeCode != null" class="btn-yes" @click="onBtnYesClick">Có</button>
+            <button v-if="message.includes('thay đổi')" class="btn-No" @click="onBtnNoClickV2" style="margin-left: 130px;">Không</button>
+            <button v-if="message.includes('thay đổi')" class="btn-yes" @click="onBtnYesClickV2">Có</button>
+            <button v-if="message != null && !message.includes('thay đổi') && employeeCode == null" class="btn-close" @click="onBtnNoClick" style="margin-left: 145px;">Đóng</button>
+          </div>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+  //#region Khai báo Props
+    props:{
+      popState:{ type: Boolean, selector: false},             // Trạng thái popup hiển thị
+      employeeCode:{ type: String, selector: null},           // Giá trị EmployeeCode được bind từ EmployeeList
+      employeeId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
+      message: {type: String, default: ''}                 // message thông báo lỗi được bind từ Dialog
+    },
+  //#endregion
+    
+  //#region METHODS
+    methods:{
+      /* 
+      Click button 'Không' thì đóng popup mà giữ lại form dialog
+      CreatedBy: NXCHIEN 17/05/2021
+       */
+      onBtnNoClick(){
+        // Gọi đến EmployeeList
+        this.$emit("hidePopupNotLoad");
+      },
+      onBtnNoClickV2(){
+        this.$emit("hidePopupAndHideDialog");
+      },
+      /* 
+      Click button 'có' thì xóa nhân viên được chọn và đóng popup và có load lại data
+      CreatedBy: NXCHIEN 17/05/2021
+       */
+      onBtnYesClick(){
+        this.axios.delete("/Employees/"+ this.employeeId).then(res =>{
+          console.log(res);
+          // Gọi đến EmployeeList
+          this.$emit("hidePopup");
+        }).catch(res =>{
+          console.log(res);
+        })
+      },
+      //Gọi qua Dialog lưu lại dữ liệu khi có sự thay đổi
+      onBtnYesClickV2(){
+        this.$emit("onClickYesWhenDataChange");
+      },
+    }
+  //#endregion
+}
+</script>
+<style scoped>
+.popup{
+}
+.popup .model {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 98;
+  transition: all 0.25s ease;
+  opacity: .5; 
+}
+.popup .popup-box{
+  border-radius: 4px;
+  width: 444px;
+  height: 203px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0 5px 20px 0 rgb(0 0 0 / 10%);
+  padding: 32px;
+  z-index: 100;
+}
+.popup-content{
+  display: flex;
+  width: 100%;
+  height: 82px;
+  align-items: center;
+  border-bottom: 1px solid #bbb;
+  margin-bottom: 20px;
+}
+
+.exclamation-warning-48 {
+    background-position: -592px -456px;
+}
+.message{
+  padding: 0px 0 0 16px;
+  display: block;
+  /* margin-bottom: 32px; */
+}
+.btn-footer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn-No{
+  height: 36px;
+  width: 84px;
+  outline: none;
+  border: 1px solid rgb(71, 71, 71);
+  padding: 8px 20px;
+  background-color: white;
+  border-radius: 4px;
+  font-weight: 700;
+  line-height: 18px;
+}
+.btn-No:hover{
+  background-color: rgb(202, 202, 202);
+}
+.btn-yes{
+  width: 59px;
+  height: 36px;
+  background-color: #2ca01c;
+  border: none;
+  color: white;
+  outline: none;
+  border-radius: 4px;
+  font-weight: 700;
+  padding: 8px 20px;
+}
+.btn-close{
+  width: 76px;
+  height: 36px;
+  background-color: #2ca01c;
+  border: none;
+  color: white;
+  outline: none;
+  border-radius: 4px;
+  font-weight: 700;
+  padding: 8px 20px;
+}
+.display{
+  display: none;
+}
+.mi-exclamation-error-48-2 {
+    background-position: -24px -954px;
+}
+</style>

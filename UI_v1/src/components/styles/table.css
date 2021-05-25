@@ -1,0 +1,52 @@
+table{
+    border-collapse: collapse;
+}
+table tr{
+    /* border-bottom: 1px solid #bbb; */
+    cursor: pointer;
+}
+table thead th{
+    position: sticky;
+    top: 0;
+    background: #eceef1;
+    text-align: left;
+    z-index: 1;
+    font-family: NotoSans-Regular;
+    font-size: 12px;
+}
+
+
+table th, td {
+    height: 34px;
+    padding: 5px 10px;
+    /* border-bottom: 1px solid #c7c7c7; */
+    /* border-left: 1px solid #c7c7c7; */
+    background-color: white;   
+    /* box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7; */  
+}
+tbody tr td{
+    height: 46px;
+    /* border-left: 1px dotted #bbb; */
+    font-size: 13px !important;
+}
+thead tr th:nth-child(5){
+    text-align: center;
+}
+tbody tr td:nth-child(5){
+    text-align: center;
+}
+/* table tbody tr:hover {
+    background-color: #bbb !important;
+} */
+
+.onColor {
+    background-color: #bbb;
+}
+body {
+    font-family: NotoSans-Regular;
+    font-size: 13px;
+  }
+@font-face {
+    font-family: "NotoSans-Regular";
+    src: url("../../assets/fonts/notosans-regular.2cb88a13.woff2") format("opentype");
+}
