@@ -10,20 +10,13 @@ namespace MISA.AMIS.Core.Interfaces.Service
 {
     public interface IEmployeeService: IBaseService<Employee>
     {
-        /// <summary>
-        /// Lấy danh sách nhân viên có lọc
-        /// </summary>
-        /// <param name="employeeFilter">Bộ lọc nhân viên</param>
-        /// <returns>Danh sách nhân viên</returns>
-        /// CreatedBy: NXCHIEN (17/05/2021)
-        public Paging<Employee> GetEmployees(int pageSize, int pageIndex, string filter);
 
         /// <summary>
         /// Lấy ra EmployeeCode lớn nhất trong DB
         /// </summary>
         /// <returns>EmployeeCode</returns>
         /// Created By: NXCHIEN 17/05/2021
-        public string GetEmployeeCodeMax();
+        public ServiceResult GetEmployeeCodeMax();
 
         /// <summary>
         /// Export file excel xuất khẩu toàn bộ nhân viên
@@ -41,6 +34,6 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="id">Mã nhân viên</param>
         /// <returns>Nhân viên được gán mã code lớn nhất</returns>
         /// Created By: NXCHIEN 17/05/2021
-        public Employee GetDuplicateEmployee(Guid id);
+        public ServiceResult GetDuplicateEmployee(Guid id);
     }
 }

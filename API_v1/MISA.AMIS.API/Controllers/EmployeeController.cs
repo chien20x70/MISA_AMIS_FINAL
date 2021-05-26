@@ -42,31 +42,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpGet("employeeCode")]
         public IActionResult GetCode()
         {
-            var employeeCode = _employeeService.GetEmployeeCodeMax();
-            if (employeeCode != null)
+            try
             {
-                return Ok(employeeCode);
+                _serviceResult = _employeeService.GetEmployeeCodeMax();
             }
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Lấy danh sách nhân viên có lọc
-        /// </summary>
-        /// <param name="pageSize">số lượng nhân viên / trang</param>
-        /// <param name="pageIndex">trang số bao nhiêu</param>
-        /// <param name="filter">chuỗi để lọc</param>
-        /// <returns>Danh sách nhân viên</returns>
-        /// CreatedBy: NXCHIEN (17/05/2021)
-        [HttpGet("Filter")]
-        public IActionResult GetEmployees([FromQuery] int pageSize, int pageIndex, string filter)
-        {
-            var res = _employeeService.GetEmployees(pageSize, pageIndex, filter);
-            if (res.Data.Any() && res.TotalRecord != null)
+            catch (Exception ex)
             {
-                return Ok(res);
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
             }
-            return NoContent();
+            return Ok(_serviceResult);
         }
 
         /// <summary>
@@ -96,12 +82,17 @@ namespace MISA.AMIS.API.Controllers
         [HttpGet("EmployeeCopy")]
         public IActionResult GetEmployeeCopy(Guid id)
         {
-            var employee = _employeeService.GetDuplicateEmployee(id);
-            if (employee != null)
+            try
             {
-                return Ok(employee);
+                _serviceResult = _employeeService.GetDuplicateEmployee(id);
             }
-            return NoContent();
+            catch (Exception ex)
+            {
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
+            }
+            return Ok(_serviceResult);
         } 
         #endregion
     } 

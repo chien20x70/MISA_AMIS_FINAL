@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Dapper;
 using System.Data;
 using MySqlConnector;
+using MISA.AMIS.Core.Entities;
 
 namespace MISA.AMIS.Infrastructure.Repository
 {
@@ -84,26 +85,6 @@ namespace MISA.AMIS.Infrastructure.Repository
         }
 
         /// <summary>
-        /// Phân trang đối tượng.
-        /// </summary>
-        /// <param name="pageSize">số đối tượng trên 1 trang.</param>
-        /// <param name="pageIndex">Trang số bao nhiêu.</param>
-        /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (07/05/2021)
-        public IEnumerable<MISAEntity> GetMISAEntities(int pageSize, int pageIndex)
-        {
-            using (dbConnection = new MySqlConnection(connectionDb))
-            {
-                var sql = $"Proc_Get{tableName}Paging";
-                DynamicParameters dynamicParameters = new DynamicParameters();
-                dynamicParameters.Add("@PageIndex", pageIndex);
-                dynamicParameters.Add("@PageSize", pageSize);
-                var entities = dbConnection.Query<MISAEntity>(sql, dynamicParameters, commandType: CommandType.StoredProcedure);
-                return entities;
-            }
-        }
-
-        /// <summary>
         /// Thêm mới 1 đối tượng.
         /// </summary>
         /// <param name="entity">Đối tượng cần thêm mới.</param>
@@ -133,7 +114,44 @@ namespace MISA.AMIS.Infrastructure.Repository
                 var rowEffects = dbConnection.Execute(sql, entity, commandType: CommandType.StoredProcedure);
                 return rowEffects;
             }
-        } 
+        }
+
+        /// <summary>
+        /// Lấy danh sách nhân viên có lọc
+        /// </summary>
+        /// <param name="pageSize">số lượng nhân viên / trang</param>
+        /// <param name="pageIndex">trang số bao nhiêu</param>
+        /// <param name="filter">chuỗi để lọc</param>
+        /// <returns>Danh sách nhân viên</returns>
+        /// CreatedBy: NXCHIEN (09/05/2021)
+        public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter)
+        {
+            var res = new Paging<MISAEntity>()
+            {
+                Page = pageIndex,
+                PageSize = pageSize
+            };
+            using (dbConnection = new MySqlConnection(connectionDb))
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@filter", filter);
+                // Tính tổng nhân viên.
+                int? totalRecord = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotal{tableName}s", parameters, commandType: CommandType.StoredProcedure);
+                if (totalRecord == null)
+                {
+                    return res;
+                }
+                res.TotalRecord = totalRecord;
+                // Lấy danh sách nhân viên.
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@pageIndex", pageIndex);
+                dynamicParameters.Add("@pageSize", pageSize);
+                dynamicParameters.Add("@filter", filter);
+                var entities = dbConnection.Query<MISAEntity>($"Proc_Get{tableName}Filter", dynamicParameters, commandType: CommandType.StoredProcedure);
+                res.Data = entities;
+                return res;
+            }
+        }
         #endregion
     } 
     #endregion

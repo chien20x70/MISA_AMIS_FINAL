@@ -80,7 +80,7 @@ namespace MISA.AMIS.API
             }
 
             app.UseHttpsRedirection();
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            //app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseRouting();
 

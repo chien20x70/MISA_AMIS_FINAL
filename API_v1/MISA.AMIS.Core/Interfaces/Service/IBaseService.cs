@@ -49,12 +49,11 @@ namespace MISA.AMIS.Core.Interfaces.Service
         public ServiceResult Delete(Guid entityId);
 
         /// <summary>
-        /// Phân trang đối tượng.
+        /// Lấy danh sách nhân viên có lọc
         /// </summary>
-        /// <param name="pageSize">số đối tượng trên 1 trang.</param>
-        /// <param name="pageIndex">Trang số bao nhiêu.</param>
-        /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (17/05/2021)
-        public IEnumerable<MISAEntity> GetMISAEntities(int pageSize, int pageIndex);
+        /// <param name="employeeFilter">Bộ lọc nhân viên</param>
+        /// <returns>Danh sách nhân viên</returns>
+        /// CreatedBy: NXCHIEN (17/05/2021)
+        public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter);
     }
 }

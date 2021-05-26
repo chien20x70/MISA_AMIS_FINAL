@@ -19,7 +19,7 @@ namespace MISA.AMIS.API.Controllers
         IBaseRepository<MISAEntity> _baseRepository;
         IBaseService<MISAEntity> _baseService;
         static string tableName = typeof(MISAEntity).Name;
-        ServiceResult _serviceResult;
+        protected ServiceResult _serviceResult;
         #endregion
 
 
@@ -125,7 +125,7 @@ namespace MISA.AMIS.API.Controllers
             try
             {
                 AssignEntityIdInEntity(id, entity);
-                _serviceResult = _baseService.Insert(entity);
+                _serviceResult = _baseService.Update(entity);
             }
             catch (Exception ex)
             {
@@ -159,45 +159,7 @@ namespace MISA.AMIS.API.Controllers
                 _serviceResult.Data = ex.Message;
             }
             return Ok(_serviceResult);
-        }
-
-        #region METHODS NOTREQUIRED
-        /// <summary>
-        /// Phân trang đối tượng
-        /// </summary>
-        /// <param name="pageSize">số đối tượng trên 1 trang</param>
-        /// <param name="pageIndex">trang số bao nhiêu</param>
-        /// <returns>
-        ///     - Thành công: 200 - Danh sách đối tượng
-        ///     - NoContent: 204
-        /// </returns>
-        /// Created By: NXCHIEN 17/05/2021
-        //[HttpGet("Paging")]
-        //public IActionResult Filters(int pageSize, int pageIndex)
-        //{
-        //    Lấy tất cả bản ghi trong DB
-        //    var limit = _baseRepository.GetAll().Count();
-        //    Kiểm tra nếu số khách trên trang hoặc vị trí trang < 1 thì trả về BadRequest
-        //    if (pageSize < 1 || pageIndex < 1)
-        //    {
-        //        return BadRequest();
-        //    }
-        //     Kiểm tra nếu số khách/trang * vị trí trang < tổng khách + số khách/trang thì trả về NoContent.
-        //    else if (pageSize * pageIndex >= (limit + pageSize))      //limit =245 total =250        245+10
-        //    {
-        //        return NoContent();
-        //    }
-        //    var entity = _baseService.GetMISAEntities(pageSize, pageIndex);
-        //    if (entity != null)
-        //    {
-        //        return Ok(entity);
-        //    }
-        //    else
-        //    {
-        //        return NoContent();
-        //    }
-        //} 
-        #endregion
+        } 
 
         /// <summary>
         /// Gán id cho 1 đối tượng
@@ -218,6 +180,30 @@ namespace MISA.AMIS.API.Controllers
                     item.SetValue(entity, id);
                 }
             }
+        }
+
+        /// <summary>
+        /// Lấy danh sách nhân viên có lọc
+        /// </summary>
+        /// <param name="pageSize">số lượng nhân viên / trang</param>
+        /// <param name="pageIndex">trang số bao nhiêu</param>
+        /// <param name="filter">chuỗi để lọc</param>
+        /// <returns>Danh sách nhân viên</returns>
+        /// CreatedBy: NXCHIEN (17/05/2021)
+        [HttpGet("Filter")]
+        public IActionResult GetMISAEntities([FromQuery] int pageSize, int pageIndex, string filter)
+        {
+            try
+            {
+                _serviceResult = _baseService.GetMISAEntities(pageSize, pageIndex, filter);
+            }
+            catch (Exception ex)
+            {
+                _serviceResult.Status = Core.Enums.StatusCode.Exception;
+                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
+                _serviceResult.Data = ex.Message;
+            }
+            return Ok(_serviceResult);
         }
         #endregion
     }

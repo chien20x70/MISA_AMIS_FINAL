@@ -126,13 +126,17 @@ namespace MISA.AMIS.Core.Service
         /// <param name="id">Mã nhân viên</param>
         /// <returns>Nhân viên được gán mã code lớn nhất</returns>
         /// Created By: NXCHIEN 17/05/2021
-        public Employee GetDuplicateEmployee(Guid id)
+        public ServiceResult GetDuplicateEmployee(Guid id)
         {
             var employee = _employeeRepository.GetById(id);
-            var employeeCode = GetEmployeeCodeMax();
+            var employeeCode = GetEmployeeCodeMax().Data.ToString();
             employee.EmployeeCode = employeeCode;
 
-            return employee;
+            _serviceResult.Data = employee;
+            _serviceResult.Status = StatusCode.Success;
+            _serviceResult.Code = MISACode.Success;
+
+            return _serviceResult;
         }
 
         /// <summary>
@@ -140,7 +144,7 @@ namespace MISA.AMIS.Core.Service
         /// </summary>
         /// <returns>EmployeeCode</returns>
         /// Created By: NXCHIEN 17/05/2021
-        public string GetEmployeeCodeMax()
+        public ServiceResult GetEmployeeCodeMax()
         {
             string codeMax = _employeeRepository.GetEmployeeCodeMax();
             string keyChar = string.Empty;
@@ -148,7 +152,12 @@ namespace MISA.AMIS.Core.Service
 
             if (codeMax == null)
             {
-                return Properties.Resources.Default_Value_EmployeeCode;
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Exception,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.Resources.Default_Value_EmployeeCode,
+                };
             }
 
             // Tách chữ và số ra hai mảng
@@ -181,24 +190,12 @@ namespace MISA.AMIS.Core.Service
 
             result += valueCode.ToString();
 
-            return result;
-        }
-
-        /// <summary>
-        /// Lấy danh sách nhân viên có lọc
-        /// </summary>
-        /// <param name="pageSize">số lượng nhân viên / trang</param>
-        /// <param name="pageIndex">trang số bao nhiêu</param>
-        /// <param name="filter">chuỗi để lọc</param>
-        /// <returns>Danh sách nhân viên</returns>
-        /// CreatedBy: NXCHIEN (17/05/2021)
-        public Paging<Employee> GetEmployees(int pageSize, int pageIndex, string filter)
-        {
-            if (pageIndex <= 0 || pageSize <= 0)
+            return new ServiceResult()
             {
-                throw new EmployeeExceptions(Properties.Resources.Msg_Param_Error);
-            }
-            return _employeeRepository.GetEmployees(pageSize, pageIndex, filter);
+                Status = StatusCode.Exception,
+                Code = MISACode.BadRequest,
+                Data = result,
+            }; ;
         }
 
         /// <summary>

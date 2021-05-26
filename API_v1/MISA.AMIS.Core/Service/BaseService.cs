@@ -125,7 +125,6 @@ namespace MISA.AMIS.Core.Service
         /// CreatedBy: NXChien (17/05/2021)
         public ServiceResult Update(MISAEntity entity)
         {
-            Validate(entity, HTTPType.PUT);
             var status = Validate(entity, HTTPType.PUT);
             if (status == null)
             {
@@ -145,18 +144,6 @@ namespace MISA.AMIS.Core.Service
                 return _serviceResult;
             }
             return status;
-        }
-
-        /// <summary>
-        /// Phân trang đối tượng.
-        /// </summary>
-        /// <param name="pageSize">số đối tượng trên 1 trang.</param>
-        /// <param name="pageIndex">Trang số bao nhiêu.</param>
-        /// <returns>Mảng danh sách đối tượng</returns>
-        /// CreatedBy: NXChien (17/05/2021)
-        public IEnumerable<MISAEntity> GetMISAEntities(int pageSize, int pageIndex)
-        {
-            return _baseRepository.GetMISAEntities(pageSize, pageIndex);
         }
 
         /// <summary>
@@ -278,6 +265,41 @@ namespace MISA.AMIS.Core.Service
         /// Created By: NXCHIEN 17/05/2021
         protected virtual ServiceResult CustomValidate(MISAEntity entity, HTTPType http) {
             return null;
+        }
+
+        /// <summary>
+        /// Lấy danh sách nhân viên có lọc
+        /// </summary>
+        /// <param name="pageSize">số lượng nhân viên / trang</param>
+        /// <param name="pageIndex">trang số bao nhiêu</param>
+        /// <param name="filter">chuỗi để lọc</param>
+        /// <returns>Danh sách nhân viên</returns>
+        /// CreatedBy: NXCHIEN (17/05/2021)
+        public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter)
+        {
+            if (pageIndex <= 0 || pageSize <= 0)
+            {
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Exception,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.Resources.Msg_Param_Error,
+                };
+            }
+            var entities = _baseRepository.GetMISAEntities(pageSize, pageIndex, filter);
+            if (entities.Data.Any() && entities.TotalRecord != null)
+            {
+                _serviceResult.Data = entities;
+                _serviceResult.Status = StatusCode.Success;
+                _serviceResult.Code = MISACode.Success;
+            }
+            else
+            {
+                _serviceResult.Status = StatusCode.Error;
+                _serviceResult.Code = MISACode.NoContent;
+            }
+            
+            return _serviceResult;
         }
         #endregion
 

@@ -76,34 +76,34 @@ namespace MISA.AMIS.Infrastructure.Repository
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (09/05/2021)
-        public Paging<Employee> GetEmployees(int pageSize, int pageIndex, string filter)
-        {
-            var res = new Paging<Employee>()
-            {
-                Page = pageIndex,
-                PageSize = pageSize
-            };
-            using (dbConnection = new MySqlConnection(connectionDb))
-            {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@filter", filter);
-                // Tính tổng nhân viên.
-                int? totalRecord = dbConnection.QueryFirstOrDefault<int>("Proc_GetTotalEmployees", parameters, commandType: CommandType.StoredProcedure);
-                if (totalRecord == null)
-                {
-                    return res;
-                }
-                res.TotalRecord = totalRecord;
-                // Lấy danh sách nhân viên.
-                DynamicParameters dynamicParameters = new DynamicParameters();
-                dynamicParameters.Add("@pageIndex", pageIndex);
-                dynamicParameters.Add("@pageSize", pageSize);
-                dynamicParameters.Add("@filter", filter);
-                var employees = dbConnection.Query<Employee>("Proc_GetEmployeeFilter", dynamicParameters, commandType: CommandType.StoredProcedure);
-                res.Data = employees;
-                return res;
-            }
-        } 
+        //public Paging<Employee> GetEmployees(int pageSize, int pageIndex, string filter)
+        //{
+        //    var res = new Paging<Employee>()
+        //    {
+        //        Page = pageIndex,
+        //        PageSize = pageSize
+        //    };
+        //    using (dbConnection = new MySqlConnection(connectionDb))
+        //    {
+        //        DynamicParameters parameters = new DynamicParameters();
+        //        parameters.Add("@filter", filter);
+        //        // Tính tổng nhân viên.
+        //        int? totalRecord = dbConnection.QueryFirstOrDefault<int>("Proc_GetTotalEmployees", parameters, commandType: CommandType.StoredProcedure);
+        //        if (totalRecord == null)
+        //        {
+        //            return res;
+        //        }
+        //        res.TotalRecord = totalRecord;
+        //        // Lấy danh sách nhân viên.
+        //        DynamicParameters dynamicParameters = new DynamicParameters();
+        //        dynamicParameters.Add("@pageIndex", pageIndex);
+        //        dynamicParameters.Add("@pageSize", pageSize);
+        //        dynamicParameters.Add("@filter", filter);
+        //        var employees = dbConnection.Query<Employee>("Proc_GetEmployeeFilter", dynamicParameters, commandType: CommandType.StoredProcedure);
+        //        res.Data = employees;
+        //        return res;
+        //    }
+        //} 
         #endregion
     }
 }
