@@ -286,6 +286,7 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnAddClick() {
+      this.filterData();
       this.axios
         .get("/Employees/employeeCode")
         .then((response) => {
@@ -296,7 +297,7 @@ export default {
           // Gán tất cả các ô data của dialog rỗng
           this.selectedEmployee = {};
           // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
-          this.selectedEmployee.employeeCode = response.data;
+          this.selectedEmployee.employeeCode = response.data.data;
           this.selectedEmployee.fullName = "";
           this.selectedEmployee.departmentId = "";
           this.selectedEmployee.gender = 1;
@@ -351,6 +352,30 @@ export default {
     hidePopupNotLoad() {
       this.valuePopup = false;
     },
+
+    /**
+     * Hàm dùng chung khi click nhân bản và dblClick 1 dòng trong bảng
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
+    onShowDialogAndAssignSelectedEmployee(response){
+      //show Dialog
+      this.show = true;
+      //Fill employee vào dialog
+      this.selectedEmployee = response.data.data;
+      // format lại dữ liệu hiển thị
+      if (this.selectedEmployee.dateOfBirth !== null) {
+        this.selectedEmployee.dateOfBirth = this.dateFormatYYMMDD(
+          this.selectedEmployee.dateOfBirth
+        );
+      }
+
+      if (this.selectedEmployee.dateOfIN !== null) {
+        this.selectedEmployee.dateOfIN = this.dateFormatYYMMDD(
+          this.selectedEmployee.dateOfIN
+        );
+      }
+    },
+
     /* 
     dblClick vào 1 dòng trong table
     - Lấy ra 1 nhân viên được chọn
@@ -364,28 +389,10 @@ export default {
 
           // gán cờ thành nút sửa
           this.status = "edit";
-          //Lấy ra id của employee
 
-          //show Dialog
-          this.show = true;
-          //Fill employee vào dialog
-          this.selectedEmployee = response.data;
-          // format lại dữ liệu hiển thị
-          if (this.selectedEmployee.dateOfBirth !== null) {
-            this.selectedEmployee.dateOfBirth = this.dateFormatYYMMDD(
-              this.selectedEmployee.dateOfBirth
-            );
-          }
-
-          if (this.selectedEmployee.dateOfIN !== null) {
-            this.selectedEmployee.dateOfIN = this.dateFormatYYMMDD(
-              this.selectedEmployee.dateOfIN
-            );
-          }
+          this.onShowDialogAndAssignSelectedEmployee(response);
         })
-        .catch((response) => {
-          console.log(response);
-        });
+        .catch(() => {});
     },
 
     duplicateClick(value) {
@@ -394,31 +401,11 @@ export default {
         .then((response) => {
           // gán cờ thành nút thêm mới
           this.status = "add";
-          //Lấy ra id của employee
-
-          //show Dialog
-          this.show = true;
-          //Fill employee vào dialog
-
-          console.log(response);
-          this.selectedEmployee = response.data;
-
-          // format lại dữ liệu hiển thị
-          if (this.selectedEmployee.dateOfBirth !== null) {
-            this.selectedEmployee.dateOfBirth = this.dateFormatYYMMDD(
-              this.selectedEmployee.dateOfBirth
-            );
-          }
-
-          if (this.selectedEmployee.dateOfIN !== null) {
-            this.selectedEmployee.dateOfIN = this.dateFormatYYMMDD(
-              this.selectedEmployee.dateOfIN
-            );
-          }
+          
+          this.onShowDialogAndAssignSelectedEmployee(response);
         })
-        .catch((response) => {
-          console.log(response);
-        });
+        .catch(() => {});
+
     },
     /* 
     Click nút Sửa trong table
@@ -455,18 +442,16 @@ export default {
         )
         .then((response) => {
           // Gán mảng nhân viên ban đầu = data từ server trả về
-          this.employees = response.data.data;
+          this.employees = response.data.data.data;
           // tổng số bản ghi = tổng số bản ghi từ server trả về
-          this.totalRecord = response.data.totalRecord;
+          this.totalRecord = response.data.data.totalRecord;
           // tổng số trang.
-          this.totalPages = response.data.totalPages;
-          if (response.data.totalRecord == undefined) {
+          this.totalPages = response.data.data.totalPages;
+          if (response.data.data.totalRecord == undefined) {
             this.totalRecord = 0;
           }
         })
-        .catch((response) => {
-          console.log(response);
-        })
+        .catch(() => {})
         .then(() => {
           this.isBusy = false;
         });

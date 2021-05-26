@@ -592,6 +592,9 @@ export default {
       }
     },
 
+    /**
+     * hàm dùng chung nút 'Cất' và Nút 'Cất và Thêm'
+     */
     validAndSave() {
       this.checkEmptyAttribute();
       // Kiểm tra nút Thêm hay Sửa
@@ -601,13 +604,22 @@ export default {
         this.employee.gender = parseInt(this.employee.gender);
         return this.axios
           .post("/Employees", this.employee)
-          .then(() => {
-            this.saveValueDepartment = null;
+          .then((res) => {
+            if(res.data.code == 200){
+              this.saveValueDepartment = null;   
+              return Promise.resolve();         
+            }else if(res.data.code == 400){
+              // Lấy ra message lỗi
+              this.message = res.data.data;
+              // show popup
+              this.valuePopup = true;
+              return Promise.reject();
+            }
             return Promise.resolve();
           })
           .catch((res) => {
             // Lấy ra message lỗi
-            this.message = res.response.data.devMsg;
+            this.message = res.data.data;
             // show popup
             this.valuePopup = true;
             return Promise.reject();
@@ -619,13 +631,22 @@ export default {
         this.employee.gender = parseInt(this.employee.gender);
         return this.axios
           .put("/Employees/" + this.employee.employeeId, this.employee)
-          .then(() => {
-            this.saveValueDepartment = null;
+          .then((res) => {
+            if(res.data.code == 200){
+              this.saveValueDepartment = null;   
+              return Promise.resolve();         
+            }else if(res.data.code == 400){
+              // Lấy ra message lỗi
+              this.message = res.data.data;
+              // show popup
+              this.valuePopup = true;
+              return Promise.reject();
+            }
             return Promise.resolve();
           })
           .catch((res) => {
             // Lấy ra message lỗi
-            this.message = res.response.data.devMsg;
+            this.message = res.data.data;
             // show popup
             this.valuePopup = true;
             return Promise.reject();
@@ -723,7 +744,7 @@ export default {
     this.axios
       .get("/Departments")
       .then((res) => {
-        this.departments = res.data;
+        this.departments = res.data.data;
       })
       .catch((res) => {
         console.log(res);
