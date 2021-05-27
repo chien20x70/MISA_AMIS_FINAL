@@ -48,9 +48,7 @@ namespace MISA.AMIS.API.Controllers
             }
             catch (Exception ex)
             {
-                _serviceResult.Status = Core.Enums.StatusCode.Exception;
-                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
-                _serviceResult.Data = ex.Message;
+                OnServiceResultException(ex);
             }
             return Ok(_serviceResult);
         }
@@ -88,9 +86,7 @@ namespace MISA.AMIS.API.Controllers
             }
             catch (Exception ex)
             {
-                _serviceResult.Status = Core.Enums.StatusCode.Exception;
-                _serviceResult.Code = Core.Enums.MISACode.ErrServer;
-                _serviceResult.Data = ex.Message;
+                OnServiceResultException(ex);
             }
             return Ok(_serviceResult);
         } 

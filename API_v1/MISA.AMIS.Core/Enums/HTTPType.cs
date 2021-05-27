@@ -11,11 +11,11 @@ namespace MISA.AMIS.Core.Enums
         /// <summary>
         /// Trạng thái thêm mới dữ liệu
         /// </summary>
-        POST,
+        ADD,
 
         /// <summary>
         /// Trạng thái sửa dữ liệu
         /// </summary>
-        PUT
+        UPDATE
     }
 }

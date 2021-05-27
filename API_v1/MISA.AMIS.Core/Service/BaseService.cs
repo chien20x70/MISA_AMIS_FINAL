@@ -42,15 +42,13 @@ namespace MISA.AMIS.Core.Service
             var rowAffects = _baseRepository.Delete(entityId);
             if (rowAffects > 0)
             {
-                _serviceResult.Status = StatusCode.Success;
-                _serviceResult.Code = MISACode.Success;
-                _serviceResult.Message = Properties.Resources.Msg_Delete_Success;
+                //_serviceResult.Data = Properties.Resources.Msg_Delete_Success;
+                OnStateServiceResult(Properties.Resources.Msg_Delete_Success, StatusCode.Success, MISACode.Success);
             }
             else
             {
-                _serviceResult.Status = StatusCode.Error;
-                _serviceResult.Code = MISACode.NoContent;
-                _serviceResult.Message = Properties.Resources.Msg_Delete_Fail;
+                //_serviceResult.Data = Properties.Resources.Msg_Delete_Fail;
+                OnStateServiceResult(Properties.Resources.Msg_Delete_Fail, StatusCode.Error, MISACode.NoContent);
             }
             return _serviceResult;
         }
@@ -64,9 +62,8 @@ namespace MISA.AMIS.Core.Service
         {
             //TODO: Nếu không có bản ghi trong DB thì vẫn được coi là lấy thành công
             var entities = _baseRepository.GetAll();
-            _serviceResult.Data = entities;
-            _serviceResult.Status = StatusCode.Success;
-            _serviceResult.Code = MISACode.Success;
+            //_serviceResult.Data = entities;
+            OnStateServiceResult(entities, StatusCode.Success, MISACode.Success);
 
             return _serviceResult;
         }
@@ -81,9 +78,7 @@ namespace MISA.AMIS.Core.Service
         {
 
             var entity = _baseRepository.GetById(entityId);
-            _serviceResult.Data = entity;
-            _serviceResult.Status = StatusCode.Success;
-            _serviceResult.Code = MISACode.Success;
+            OnStateServiceResult(entity, StatusCode.Success, MISACode.Success);
 
             return _serviceResult;
         }
@@ -96,21 +91,17 @@ namespace MISA.AMIS.Core.Service
         /// CreatedBy: NXChien (17/05/2021)
         public ServiceResult Insert(MISAEntity entity)
         {
-            var status = Validate(entity, HTTPType.POST);
+            var status = Validate(entity, HTTPType.ADD);
             if (status == null)
             {
                 var rowAffects = _baseRepository.Insert(entity);
                 if (rowAffects > 0)
                 {
-                    _serviceResult.Status = StatusCode.Success;
-                    _serviceResult.Code = MISACode.Success;
-                    _serviceResult.Data = Properties.Resources.Msg_Insert_Success;
+                    OnStateServiceResult(Properties.Resources.Msg_Insert_Success, StatusCode.Success, MISACode.Success);
                 }
                 else
                 {
-                    _serviceResult.Status = StatusCode.Error;
-                    _serviceResult.Code = MISACode.NoContent;
-                    _serviceResult.Data = Properties.Resources.Msg_Insert_Fail;
+                    OnStateServiceResult(Properties.Resources.Msg_Insert_Fail, StatusCode.Error, MISACode.NoContent);
                 }
                 return _serviceResult;
             }
@@ -125,21 +116,19 @@ namespace MISA.AMIS.Core.Service
         /// CreatedBy: NXChien (17/05/2021)
         public ServiceResult Update(MISAEntity entity)
         {
-            var status = Validate(entity, HTTPType.PUT);
+            // Lấy ra ServiceResult khi validate
+            var status = Validate(entity, HTTPType.UPDATE);
+            // Kiểm tra == null thì Update còn ko thì trả về status dạng ServiceResult.
             if (status == null)
             {
                 var rowAffects = _baseRepository.Update(entity);
                 if (rowAffects > 0)
                 {
-                    _serviceResult.Status = StatusCode.Success;
-                    _serviceResult.Code = MISACode.Success;
-                    _serviceResult.Data = Properties.Resources.Msg_Update_Success;
+                    OnStateServiceResult(Properties.Resources.Msg_Update_Success, StatusCode.Success, MISACode.Success);
                 }
                 else
                 {
-                    _serviceResult.Status = StatusCode.Error;
-                    _serviceResult.Code = MISACode.NoContent;
-                    _serviceResult.Data = Properties.Resources.Msg_Update_Fail;
+                    OnStateServiceResult(Properties.Resources.Msg_Update_Fail, StatusCode.Error, MISACode.NoContent);
                 }
                 return _serviceResult;
             }
@@ -157,11 +146,12 @@ namespace MISA.AMIS.Core.Service
 
             // Lấy ra tất cả property của đối tượng
             var properties = typeof(MISAEntity).GetProperties();
+            var eName = typeof(MISAEntity).Name;
             foreach (var property in properties)
             {
 
                 //Loại tất cả dấu cách của 1 object --- Tránh trường hợp khi thêm mã có dấu cách mà trùng với mà hiện tại vẫn thêm được.
-                if (property.Name == typeof(MISAEntity).Name + "Code")
+                if (property.Name.Equals($"{eName}Code"))
                 {
                     string propertyValue = (string)property.GetValue(entity);
                     property.SetValue(entity, propertyValue.Trim());
@@ -184,8 +174,9 @@ namespace MISA.AMIS.Core.Service
                             msgError = property.Name + Properties.Resources.Required_NotEmpty_Message;
                         }
                         //throw new EmployeeExceptions(msgError);
-                        return new ServiceResult() { 
-                            Status = StatusCode.Exception, 
+                        return new ServiceResult()
+                        {
+                            Status = StatusCode.Error,
                             Code = MISACode.BadRequest,
                             Data = msgError,
                         };
@@ -213,7 +204,7 @@ namespace MISA.AMIS.Core.Service
                         }
                         return new ServiceResult()
                         {
-                            Status = StatusCode.Exception,
+                            Status = StatusCode.Error,
                             Code = MISACode.BadRequest,
                             Data = msgError,
                         };
@@ -241,7 +232,7 @@ namespace MISA.AMIS.Core.Service
                         }
                         return new ServiceResult()
                         {
-                            Status = StatusCode.Exception,
+                            Status = StatusCode.Error,
                             Code = MISACode.BadRequest,
                             Data = msgErrorEmail,
                         };
@@ -249,6 +240,8 @@ namespace MISA.AMIS.Core.Service
                 }
                 #endregion
             }
+
+            // Lấy ra ServiceResult và kiểm tra xem có null không.
             var customServiceResult = CustomValidate(entity, http);
             if (customServiceResult != null)
             {
@@ -263,7 +256,8 @@ namespace MISA.AMIS.Core.Service
         /// <param name="entity">đối tượng cần validate</param>
         /// <param name="http">Phương thức POST hay PUT</param>
         /// Created By: NXCHIEN 17/05/2021
-        protected virtual ServiceResult CustomValidate(MISAEntity entity, HTTPType http) {
+        protected virtual ServiceResult CustomValidate(MISAEntity entity, HTTPType http)
+        {
             return null;
         }
 
@@ -277,32 +271,40 @@ namespace MISA.AMIS.Core.Service
         /// CreatedBy: NXCHIEN (17/05/2021)
         public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter)
         {
+            // Nếu nhập pageIndex <= 0 hoặc pageSize <= 0 thì trả về lỗi ServiceResult.
             if (pageIndex <= 0 || pageSize <= 0)
             {
                 return new ServiceResult()
                 {
-                    Status = StatusCode.Exception,
+                    Status = StatusCode.Error,
                     Code = MISACode.BadRequest,
                     Data = Properties.Resources.Msg_Param_Error,
                 };
             }
+
+            // Lấy ra danh sách đối tượng
             var entities = _baseRepository.GetMISAEntities(pageSize, pageIndex, filter);
+            // Kiểm tra đối tượng ko null thì trả về Success còn null thì Erorr (hoặc Success nhưng NOContent).
             if (entities.Data.Any() && entities.TotalRecord != null)
             {
-                _serviceResult.Data = entities;
-                _serviceResult.Status = StatusCode.Success;
-                _serviceResult.Code = MISACode.Success;
+                OnStateServiceResult(entities, StatusCode.Success, MISACode.Success);
             }
             else
             {
-                _serviceResult.Status = StatusCode.Error;
-                _serviceResult.Code = MISACode.NoContent;
+                OnStateServiceResult("", StatusCode.Error, MISACode.NoContent);
             }
-            
+
             return _serviceResult;
         }
         #endregion
 
+        public ServiceResult OnStateServiceResult(object data, StatusCode status, MISACode code)
+        {
+            _serviceResult.Data = data;
+            _serviceResult.Status = status;
+            _serviceResult.Code = code;
+            return _serviceResult;
+        }
     }
     #endregion
 }

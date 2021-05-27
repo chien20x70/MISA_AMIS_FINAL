@@ -21,6 +21,7 @@ namespace MISA.AMIS.Core.Entities
         /// Mã code nhân viên
         /// </summary>
         [MISARequired("")]
+        [MISAMaxLength(20, "")]
         public string EmployeeCode { get; set; }
 
         /// <summary>
