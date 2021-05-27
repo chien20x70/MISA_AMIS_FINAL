@@ -298,12 +298,11 @@ namespace MISA.AMIS.Core.Service
         }
         #endregion
 
-        public ServiceResult OnStateServiceResult(object data, StatusCode status, MISACode code)
+        public void OnStateServiceResult(object data, StatusCode status, MISACode code)
         {
             _serviceResult.Data = data;
             _serviceResult.Status = status;
             _serviceResult.Code = code;
-            return _serviceResult;
         }
     }
     #endregion

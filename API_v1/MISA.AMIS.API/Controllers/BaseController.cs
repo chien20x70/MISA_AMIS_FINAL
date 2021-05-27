@@ -200,12 +200,11 @@ namespace MISA.AMIS.API.Controllers
         /// <param name="ex">Exception</param>
         /// <returns>_serviceResult</returns>
         /// CreatedBy: NXCHIEN 27/05/2021
-        protected ServiceResult OnServiceResultException(Exception ex)
+        protected void OnServiceResultException(Exception ex)
         {
             _serviceResult.Status = Core.Enums.StatusCode.Exception;
             _serviceResult.Code = Core.Enums.MISACode.ErrServer;
             _serviceResult.Data = ex.Message;
-            return _serviceResult;
         }
         #endregion
     }
