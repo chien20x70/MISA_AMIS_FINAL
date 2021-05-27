@@ -14,6 +14,7 @@ import "./components/styles/icon.css";
 import VueHotkey from 'v-hotkey'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import 'vue-search-select/dist/VueSearchSelect.css'
 Vue.use(VueHotkey)
 Vue.use(Antd);
 

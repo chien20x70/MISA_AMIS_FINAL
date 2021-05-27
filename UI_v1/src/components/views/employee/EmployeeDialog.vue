@@ -8,11 +8,11 @@
         <div class="title flex">
           <div class="title-dialog">Thông tin nhân viên</div>
           <div class="component">
-            <input type="checkbox" style="padding: 0;" />
+            <input type="checkbox" style="padding: 0" />
             <div style="padding-left: 10px">Là khách hàng</div>
           </div>
           <div class="component">
-            <input type="checkbox" style="padding: 0;" />
+            <input type="checkbox" style="padding: 0" />
             <div style="padding-left: 10px">Là nhà cung cấp</div>
           </div>
         </div>
@@ -32,14 +32,16 @@
               <div class="code">
                 <span class="text"
                   >Mã
-                  <p style="color: red; display: inline;">*</p></span
+                  <p style="color: red; display: inline">*</p></span
                 >
                 <!-- <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
-                  :title="(code == true) ? 'Mã nhân viên không được để trống!' : '' "
+                  :title="
+                    code == true ? 'Mã nhân viên không được để trống!' : ''
+                  "
                   type="text"
                   ref="focusCode"
-                  style="width: 151px; margin-top: 4px;"
+                  style="width: 151px; margin-top: 4px"
                   v-model="employee.employeeCode"
                   @input="onChangeInputCode"
                   :class="{ 'input-error': code == true }"
@@ -49,14 +51,14 @@
               <div class="name">
                 <span class="text"
                   >Tên
-                  <p style="color: red; display: inline;">*</p></span
+                  <p style="color: red; display: inline">*</p></span
                 >
                 <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
-                  :title="(name == true) ? 'Tên không được để trống!' : '' "
+                  :title="name == true ? 'Tên không được để trống!' : ''"
                   type="text"
                   ref="focusName"
-                  style="width: 235px; margin-top: 4px;"
+                  style="width: 235px; margin-top: 4px"
                   v-model="employee.fullName"
                   @input="onChangeInputName"
                   :class="{ 'input-error': name == true }"
@@ -68,9 +70,8 @@
               <div class="position">
                 <span class="text"
                   >Đơn vị
-                  <p style="color: red; display: inline;">*</p></span
+                  <p style="color: red; display: inline">*</p></span
                 >
-                <!-- <ValidationProvider name="Đơn vị" rules="required" v-slot="{ errors }"> -->
                 <div
                   :title="(department == true) ? 'Đơn vị không được để trống!' : '' "
                   class="department-box"
@@ -89,7 +90,7 @@
                       @keydown.enter="enter"
                       @focus="focusInputKey"
                     />
-                    <!-- <model-select class="department-box" :options="departments" v-model="employee.departmentName" style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"></model-select> -->
+                    
                     <div class="icon-selected">
                       <div
                         class="icon icon-30 arrow-dropdown"
@@ -98,6 +99,17 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- <model-select
+                  :options="departments"
+                  v-model="employee.departmentName"
+                  placeholder="placeholder text"
+                  style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"
+                  @searchchange="printSearchText"
+                >
+                </model-select> -->
+                <!-- style="margin-top: 4px; border: 1px solid #babec5; height: 32px; class="department-box"" -->
+                <!-- :inputAttributes="{class: 'input-Attr'}" -->
                 <!-- </ValidationProvider> -->
                 <div
                   class="select-custom"
@@ -133,7 +145,7 @@
                 <span class="text">Chức danh</span>
                 <input
                   type="text"
-                  style="width: 392px; margin-top: 4px;"
+                  style="width: 392px; margin-top: 4px"
                   v-model="employee.positionName"
                 />
               </div>
@@ -151,7 +163,11 @@
                 <date-pick
                   v-model="employee.dateOfBirth"
                   :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{class: 'style-input-date-lib' ,placeholder: STR_DISPLAY_FORMAT, style: 'margin-top: 4px; width: 167px;'}"                  
+                  :inputAttributes="{
+                    class: 'style-input-date-lib',
+                    placeholder: STR_DISPLAY_FORMAT,
+                    style: 'margin-top: 4px; width: 167px;',
+                  }"
                   :weekdays="localeDatePicker.weekdays"
                   :months="localeDatePicker.months"
                 ></date-pick>
@@ -159,7 +175,7 @@
               </div>
               <div class="gender">
                 <span class="text">Giới tính</span>
-                <div class="radio" style="width: 251px; margin-top: 13px;">
+                <div class="radio" style="width: 251px; margin-top: 13px">
                   <input
                     id="male"
                     type="radio"
@@ -168,7 +184,7 @@
                     value="1"
                     v-model="employee.gender"
                   />
-                  <label for="male" style="margin-right: 20px;">Nam</label>
+                  <label for="male" style="margin-right: 20px">Nam</label>
 
                   <input
                     id="female"
@@ -178,7 +194,7 @@
                     value="0"
                     v-model="employee.gender"
                   />
-                  <label for="" style="margin-right: 20px;">Nữ</label>
+                  <label for="" style="margin-right: 20px">Nữ</label>
 
                   <input
                     id="orther"
@@ -194,14 +210,17 @@
             </div>
             <div class="row-1">
               <div class="id">
-                <span class="text">Số CMND <p style="color: red; display: inline;">*</p></span>
+                <span class="text"
+                  >Số CMND
+                  <p style="color: red; display: inline">*</p></span
+                >
                 <input
                   type="text"
-                  style="width: 245px; margin-top: 4px;"
+                  style="width: 245px; margin-top: 4px"
                   v-model="employee.identifyNumber"
                 />
               </div>
-              <div class="dateofbirth" style="padding-left: 5px;">
+              <div class="dateofbirth" style="padding-left: 5px">
                 <span class="text">Ngày cấp</span>
                 <!-- <input
                   type="date"
@@ -211,9 +230,13 @@
                 <date-pick
                   v-model="employee.dateOfIN"
                   :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{class: 'style-input-date-lib', placeholder: STR_DISPLAY_FORMAT,style: 'margin-top: 4px; width: 167px;'}"
+                  :inputAttributes="{
+                    class: 'style-input-date-lib',
+                    placeholder: STR_DISPLAY_FORMAT,
+                    style: 'margin-top: 4px; width: 167px;',
+                  }"
                   :weekdays="localeDatePicker.weekdays"
-                  :months="localeDatePicker.months"                 
+                  :months="localeDatePicker.months"
                 ></date-pick>
                 <!-- <date-picker v-model="employee.dateOfIN"/> -->
               </div>
@@ -223,7 +246,7 @@
                 <span class="text">Nơi cấp</span>
                 <input
                   type="text"
-                  style="width: 418px; margin-top: 4px;"
+                  style="width: 418px; margin-top: 4px"
                   v-model="employee.placeOfIN"
                 />
               </div>
@@ -233,68 +256,75 @@
         <div class="select-tab">
           <div class="tab-inf">
             <div class="row-1">
-              <div class="position" style="margin-top: 10px;">
+              <div class="position" style="margin-top: 10px">
                 <span class="text">Địa chỉ</span>
                 <input
                   type="text"
-                  style="width: 836px; margin-top: 4px;"
+                  style="width: 836px; margin-top: 4px"
                   v-model="employee.address"
                 />
               </div>
             </div>
             <div class="row-1">
-              <div class="phone" style="margin-top: 17px;">
+              <div class="phone" style="margin-top: 17px">
                 <span class="text">ĐT di động</span>
                 <!-- <ValidationProvider name="Số điện thoại" rules="required" v-slot="{ errors }"> -->
                 <input
                   type="text"
-                  style="width: 197px; margin-top: 4px;"
+                  style="width: 197px; margin-top: 4px"
                   v-model="employee.phoneNumber"
                 />
                 <!-- </ValidationProvider> -->
               </div>
-              <div class="phone" style="margin-top: 17px; margin-left: 5px;">
+              <div class="phone" style="margin-top: 17px; margin-left: 5px">
                 <span class="text">ĐT cố định</span>
                 <input
                   type="text"
-                  style="width: 197px; margin-top: 4px;"
+                  style="width: 197px; margin-top: 4px"
                   v-model="employee.telephoneNumber"
                 />
               </div>
-              <div class="name" style="margin-top: 17px; margin-left: 5px;">
-                <span class="text">Email <p style="color: red; display: inline;">*</p></span><br />
+              <div class="name" style="margin-top: 17px; margin-left: 5px">
+                <span class="text"
+                  >Email
+                  <p style="color: red; display: inline">*</p></span
+                ><br />
                 <input
                   type="text"
-                  style="width: 203px; margin-top: 4px;"
+                  style="width: 203px; margin-top: 4px"
                   v-model="employee.email"
                   @blur="handleBlurEmail($event.target.value)"
-                  :class="{'input-error': messageEmail != '' && messageEmail != null}"
+                  :class="{
+                    'input-error': messageEmail != '' && messageEmail != null,
+                  }"
                 /><br />
-                <span style="color: red; font-size: 12px;">{{ messageEmail }}</span>
+                <span style="color: red; font-size: 12px">{{
+                  messageEmail
+                }}</span>
               </div>
             </div>
             <div class="row-1">
-              <div class="phone" style="margin-top: 17px;">
+              <div class="phone" style="margin-top: 17px">
                 <span class="text">Tài khoản ngân hàng</span>
                 <input
                   type="text"
-                  style="width: 197px; margin-top: 4px;"
+                  style="width: 197px; margin-top: 4px"
                   v-model="employee.bankAccountNumber"
                 />
               </div>
-              <div class="phone" style="margin-top: 17px; margin-left: 5px;">
+              <div class="phone" style="margin-top: 17px; margin-left: 5px">
                 <span class="text">Tên ngân hàng</span>
                 <input
                   type="text"
-                  style="width: 197px; margin-top: 4px;"
+                  style="width: 197px; margin-top: 4px"
                   v-model="employee.bankName"
                 />
               </div>
-              <div class="name" style="margin-top: 17px; margin-left: 5px;">
+              <div class="name" style="margin-top: 17px; margin-left: 5px">
                 <span class="text">Chi nhánh</span><br />
                 <input
                   type="text"
-                  style="width: 203px; margin-top: 4px;"
+                  style="width: 203px; margin-top: 4px"
                   v-model="employee.bankBranchName"
                 /><br />
               </div>
@@ -306,7 +336,7 @@
           <div class="footer-btn">
             <button
               class="add-line"
-              style="width: 67px; height: 36px; boder-radius: 4px;"
+              style="width: 67px; height: 36px; boder-radius: 4px"
               @click="onBtnCloseClick"
             >
               Hủy
@@ -314,14 +344,14 @@
             <div class="btn-right">
               <button
                 class="add-line"
-                style="width: 67px; height: 36px; boder-radius: 4px;"
+                style="width: 67px; height: 36px; boder-radius: 4px"
                 @click="onBtnSaveClick"
               >
                 Cất
               </button>
               <button
                 class="add-line color"
-                style="margin-left: 13px;"
+                style="margin-left: 13px"
                 @click="onBtnSaveAndAddClick"
               >
                 Cất và Thêm
@@ -356,20 +386,22 @@ import {
 
 import DatePick from "vue-date-pick";
 import "vue-date-pick/dist/vueDatePick.css";
+// import { ModelSelect } from "vue-search-select";
 // import DatePicker from '../common/DatePicker.vue';
 //#endregion
 export default {
   //#region Khai báo
   components: {
     Popup,
-    DatePick
+    DatePick,
+    // ModelSelect,
     // DatePicker
   },
   props: {
     state: { type: Boolean, selector: false }, // Trạng thái hiển thị Dialog
     employee: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
     flag: { type: String, selector: null }, // Cờ để check giá trị nút Thêm mới hay Sửa
-    selectedId: { type: String, default: '' }
+    selectedId: { type: String, default: "" },
   },
   data() {
     return {
@@ -386,24 +418,24 @@ export default {
       department: false, // border-department employeeCode
       currentIndex: 0, // Vị trí nút bấm up down
       messageEmail: null,
-      STR_DISPLAY_FORMAT: 'DD/MM/YYYY',
+      STR_DISPLAY_FORMAT: "DD/MM/YYYY",
       localeDatePicker: {
-      weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
-      months: [
-        "Tháng 1",
-        "Tháng 2",
-        "Tháng 3",
-        "Tháng 4",
-        "Tháng 5",
-        "Tháng 6",
-        "Tháng 7",
-        "Tháng 8",
-        "Tháng 9",
-        "Tháng 10",
-        "Tháng 11",
-        "Tháng 12",
-      ],
-    },
+        weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+        months: [
+          "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12",
+        ],
+      },
       dateCheck: false,
     };
   },
@@ -435,7 +467,7 @@ export default {
     keymap() {
       return {
         esc: this.onBtnCloseClick,
-        'Ctrl + S': this.onBtnSaveClick,
+        "Ctrl + S": this.onBtnSaveClick,
       };
     },
   },
@@ -513,10 +545,14 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter() {
-      this.saveValueDepartment = this.departments[this.currentIndex].departmentId;
-      this.employee.departmentId = this.departments[this.currentIndex].departmentId;
+      this.saveValueDepartment = this.departments[
+        this.currentIndex
+      ].departmentId;
+      this.employee.departmentId = this.departments[
+        this.currentIndex
+      ].departmentId;
       this.showDepartment = true;
-      if(this.saveValueDepartment != null){
+      if (this.saveValueDepartment != null) {
         this.department = false;
       }
     },
@@ -540,7 +576,6 @@ export default {
       }
       return false;
     },
-    
 
     /**
      * Đóng dialog mà không load: gọi từ popup qua Dialog -> EmployeeList
@@ -599,59 +634,59 @@ export default {
       this.checkEmptyAttribute();
       // Kiểm tra nút Thêm hay Sửa
       this.valuePopup = this.isCheckValidate();
-      if(!this.valuePopup)
-      if (this.flag == "add") {
-        this.employee.gender = parseInt(this.employee.gender);
-        return this.axios
-          .post("/Employees", this.employee)
-          .then((res) => {
-            if(res.data.code == 200){
-              this.saveValueDepartment = null;   
-              return Promise.resolve();         
-            }else if(res.data.code == 400){
+      if (!this.valuePopup)
+        if (this.flag == "add") {
+          this.employee.gender = parseInt(this.employee.gender);
+          return this.axios
+            .post("/Employees", this.employee)
+            .then((res) => {
+              if (res.data.code == 200) {
+                this.saveValueDepartment = null;
+                return Promise.resolve();
+              } else if (res.data.code == 400) {
+                // Lấy ra message lỗi
+                this.message = res.data.data;
+                // show popup
+                this.valuePopup = true;
+                return Promise.reject();
+              }
+              return Promise.resolve();
+            })
+            .catch((res) => {
               // Lấy ra message lỗi
               this.message = res.data.data;
               // show popup
               this.valuePopup = true;
               return Promise.reject();
-            }
-            return Promise.resolve();
-          })
-          .catch((res) => {
-            // Lấy ra message lỗi
-            this.message = res.data.data;
-            // show popup
-            this.valuePopup = true;
-            return Promise.reject();
-          });
-      }
-      // Kiểm tra nút Thêm hay Sửa
-      else if (this.flag == "edit") {
-        // delete this.employee.genderName;
-        this.employee.gender = parseInt(this.employee.gender);
-        return this.axios
-          .put("/Employees/" + this.employee.employeeId, this.employee)
-          .then((res) => {
-            if(res.data.code == 200){
-              this.saveValueDepartment = null;   
-              return Promise.resolve();         
-            }else if(res.data.code == 400){
+            });
+        }
+        // Kiểm tra nút Thêm hay Sửa
+        else if (this.flag == "edit") {
+          // delete this.employee.genderName;
+          this.employee.gender = parseInt(this.employee.gender);
+          return this.axios
+            .put("/Employees/" + this.employee.employeeId, this.employee)
+            .then((res) => {
+              if (res.data.code == 200) {
+                this.saveValueDepartment = null;
+                return Promise.resolve();
+              } else if (res.data.code == 400) {
+                // Lấy ra message lỗi
+                this.message = res.data.data;
+                // show popup
+                this.valuePopup = true;
+                return Promise.reject();
+              }
+              return Promise.resolve();
+            })
+            .catch((res) => {
               // Lấy ra message lỗi
               this.message = res.data.data;
               // show popup
               this.valuePopup = true;
               return Promise.reject();
-            }
-            return Promise.resolve();
-          })
-          .catch((res) => {
-            // Lấy ra message lỗi
-            this.message = res.data.data;
-            // show popup
-            this.valuePopup = true;
-            return Promise.reject();
-          });
-      }
+            });
+        }
       return Promise.reject();
     },
 
@@ -692,7 +727,11 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021
     */
     handleBlurEmail(ev) {
-      if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(ev)) {
+      if (
+        /^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(
+          ev
+        )
+      ) {
         this.messageEmail = "";
       } else if (ev == "") {
         this.messageEmail = "Bắt buộc nhập trường này!";
@@ -749,6 +788,14 @@ export default {
       .catch((res) => {
         console.log(res);
       });
+    // this.axios.get("/Departments").then((res) => {
+    //   res.data.data.forEach((item) => {
+    //     this.departments.push({
+    //       value: item.departmentId,
+    //       text: item.departmentName,
+    //     });
+    //   });
+    // });
     this.dectectEmployee = { ...this.employee };
   },
 };
@@ -1130,7 +1177,7 @@ export default {
   animation-name: zoomIn;
   animation-duration: 0.5s;
 } */
-.style-input-date-lib{
+.style-input-date-lib {
   font-size: 13px;
   border: none;
   border-radius: 2px;
@@ -1139,6 +1186,18 @@ export default {
   padding: 6px 10px;
   border: 1px solid #babec5;
   font-family: NotoSans-Regular;
-  outline: none; 
+  outline: none;
+}
+/* .input-Attr{
+  width: 392px !important;
+  outline: none !important;
+  border: none !important;
+  /* display: inline-block; */
+/* } */
+/* .input-Attr:hover{
+  border: none !important;
+} */
+input .search {
+  width: 392px !important;
 }
 </style>

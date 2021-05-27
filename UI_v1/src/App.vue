@@ -85,5 +85,21 @@ export default {
 .vdpCellContent {
     font-size: 15px !important;
 }
+
+.ui.search.selection.dropdown>input.search{
+  height: 32px;
+}
+
+.ui.selection.dropdown{
+  border-radius: 2px !important;
+  line-height: 10px !important;
+}
+.ui.selection.dropdown>.dropdown.icon{
+  top: 7px !important;
+}
+.ui.selection.active.dropdown, .ui.selection.active.dropdown .menu {
+    border-color: none !important;
+  
+}
 /**-------------------------end-lib */
 </style>
