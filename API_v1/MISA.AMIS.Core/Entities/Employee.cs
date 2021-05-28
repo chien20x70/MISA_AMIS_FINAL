@@ -87,6 +87,7 @@ namespace MISA.AMIS.Core.Entities
         /// Số điện thoại
         /// </summary>
         [MISARequired("")]
+        [MISAPhone("")]
         public string PhoneNumber { get; set; }
 
         /// <summary>

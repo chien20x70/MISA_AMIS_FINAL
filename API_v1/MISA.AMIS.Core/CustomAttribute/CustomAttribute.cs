@@ -53,7 +53,7 @@ namespace MISA.AMIS.Core.CustomAttribute
     public class MISAPhone : Attribute
     {
         /// <summary>
-        /// message số điện thoại trùng
+        /// message check số điện thoại là dạng số
         /// </summary>
         public string MsgErrorPhone;
         public MISAPhone(string msgErrorPhone)

@@ -212,6 +212,33 @@ namespace MISA.AMIS.Core.Service
                 }
                 #endregion
 
+                #region Attribute check xem số điện thoại có đúng dạng số không
+                // Kiểm tra số điện thoại
+                var phoneAttribute = property.GetCustomAttributes(typeof(MISAPhone), true);
+                if (phoneAttribute.Length > 0)
+                {
+                    // Lấy giá trị phoneNumber
+                    var phoneValue = property.GetValue(entity);
+                    // Khởi tạo regex và kiểm tra
+                    Regex regex = new Regex(Properties.Resources.Regex_Number);
+                    if (!regex.IsMatch(phoneValue.ToString()))
+                    {
+
+                        var msgErrorPhone = (phoneAttribute[0] as MISAPhone).MsgErrorPhone;
+                        if (string.IsNullOrEmpty(msgErrorPhone.ToString()))
+                        {
+                            msgErrorPhone = Properties.Resources.Required_Error_Message_Phone;
+                        }
+                        return new ServiceResult()
+                        {
+                            Status = StatusCode.Error,
+                            Code = MISACode.BadRequest,
+                            Data = msgErrorPhone,
+                        };
+                    }
+                }
+                #endregion
+
                 //NOTREQUIRED: Đề bài không yêu cầu Check email
                 #region Attribute check xem có đúng là Email không
                 // Kiểm tra email

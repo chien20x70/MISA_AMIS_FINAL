@@ -169,6 +169,15 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ^[0-9]+$.
+        /// </summary>
+        internal static string Regex_Number {
+            get {
+                return ResourceManager.GetString("Regex_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ^(([^&lt;&gt;()\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$.
         /// </summary>
         internal static string Regex_String {
@@ -192,6 +201,15 @@ namespace MISA.AMIS.Core.Properties {
         internal static string Required_Error_Message {
             get {
                 return ResourceManager.GetString("Required_Error_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Số điện thoại bạn nhập phải là dạng số!.
+        /// </summary>
+        internal static string Required_Error_Message_Phone {
+            get {
+                return ResourceManager.GetString("Required_Error_Message_Phone", resourceCulture);
             }
         }
         
