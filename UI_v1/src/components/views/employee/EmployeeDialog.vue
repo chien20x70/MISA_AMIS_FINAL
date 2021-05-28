@@ -827,13 +827,13 @@ export default {
   left: 0;
   top: 0;
   height: 100%;
-  z-index: 98;
+  z-index: 103;
   transition: all 0.25s ease;
   opacity: 1;
 }
 
 .dialog .dialog-box {
-  z-index: 100;
+  z-index: 104;
   border-radius: 4px;
   width: 900px;
   height: 625px;

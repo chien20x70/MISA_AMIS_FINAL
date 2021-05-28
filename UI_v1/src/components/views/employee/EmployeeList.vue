@@ -55,6 +55,7 @@
               <th style="min-width: 150px">SỐ TÀI KHOẢN</th>
               <th style="min-width: 250px">TÊN NGÂN HÀNG</th>
               <th style="min-width: 250px">CHI NHÁNH TK NGÂN HÀNG</th>
+              <th style="min-width: 120px; z-index: 101;">CHỨC NĂNG</th>
             </tr>
           </thead>
           <tbody v-if="employees != undefined">
@@ -88,10 +89,32 @@
               <td>{{ employee.bankAccountNumber }}</td>
               <td>{{ employee.bankName }}</td>
               <td>{{ employee.bankBranchName }}</td>
+              <td class="editclass" :style="{ 'z-index': 100 - index }">
+                <div class="btn-edit">
+                  <button
+                    class="btn-btn hover"
+                    @click="onBtnEditClick(employee.employeeId, employee.employeeCode)"
+                  >
+                    <div class="flex btn-btn-text">
+                      <span
+                        class="pr-4"
+                        style="color: #0075c0; font-weight: 600"
+                        >Sửa</span
+                      >
+                    </div>
+                  </button>
+                  <DropdownDuplicateAndDelete
+                    @showPopup="
+                      showPopup(employee.employeeId, employee.employeeCode)
+                    "
+                    @showDialog="duplicateClick(employee.employeeId)"
+                  />
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
-        <table style="position: sticky; right: 0; z-index: 2;">
+        <!-- <table style="position: sticky; right: 0; z-index: 2;">
           <thead>
             <tr>
               <th style="min-width: 120px; border-left: 1px solid #c7c7c7; text-align: center;">
@@ -127,7 +150,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
       <div class="message" v-if="employees == undefined">
           <div class="img-report">
@@ -675,7 +698,7 @@ export default {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  z-index: 10;
+  z-index: 103;
 }
 
 .content-navpage .content-navpage-text-left {
@@ -804,5 +827,10 @@ table th, td {
 }
 tbody tr td{
   border-left: 1px dotted #bbb;
+}
+.editclass{
+  min-width: 120px; 
+  border-left: 1px dotted #c7c7c7; 
+  text-align: center;
 }
 </style>

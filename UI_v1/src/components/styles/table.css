@@ -5,6 +5,9 @@ table tr{
     /* border-bottom: 1px solid #bbb; */
     cursor: pointer;
 }
+tbody tr:hover td {
+    background: #f3f8f8;
+  }
 table thead th{
     position: sticky;
     top: 0;
@@ -35,10 +38,17 @@ thead tr th:nth-child(5){
 tbody tr td:nth-child(5){
     text-align: center;
 }
+thead tr th:last-child{
+    position: sticky;
+    right: 0;
+}
+tbody tr td:last-child{
+    position: sticky;
+    right: 0;
+}
 .resize {
     resize: horizontal;
     overflow-x: auto;
-    border: 1px solid black;
     display: block;
     border: none;
     min-width: 225px;
@@ -49,10 +59,10 @@ tbody tr td:nth-child(5){
     width: auto;
     float: right;
   }
-
+/* 
 table tr:hover{
     background-color: #eceef1 !important;  
-}
+} */
 .onColor {
     background-color: #bbb;
 }
