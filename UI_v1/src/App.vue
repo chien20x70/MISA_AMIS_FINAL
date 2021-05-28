@@ -75,6 +75,7 @@ export default {
 .vdpHeader{
   padding: 0 1em 5em !important;
   margin: -1em -1em -3.5em !important;
+  background-color: white;
 }
 .vdpHeadCell {
     padding: .3em .5em .3em !important;
@@ -101,5 +102,20 @@ export default {
     border-color: none !important;
   
 }
+
+.vdpCell.selectable .vdpCellContent:hover {
+  background-color: #2ca01c !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+.vdpCell.selected .vdpCellContent{
+  background-color: #2ca01c !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+/* .vdpCell.selected .vdpCellContent {
+    color: #fff;
+    background: #7485c2;
+} */
 /**-------------------------end-lib */
 </style>

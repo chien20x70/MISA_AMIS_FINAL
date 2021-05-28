@@ -46,7 +46,7 @@
                 <input type="checkbox" class="check-box" />
               </th>
               <th style="min-width: 150px; border-left: none;">MÃ NHÂN VIÊN</th>
-              <th style="min-width: 250px">TÊN NHÂN VIÊN</th>
+              <th style="min-width: 250px"> <div class="resize">TÊN NHÂN VIÊN</div></th>
               <th style="min-width: 120px">GIỚI TÍNH</th>
               <th style="min-width: 150px">NGÀY SINH</th>
               <th style="min-width: 200px">SỐ CMND</th>
@@ -313,6 +313,7 @@ export default {
     */
     hideDialogNotLoad() {
       this.show = false;
+      this.$refs.focusInputSearch.focus();
     },
 
     /* 
@@ -322,6 +323,7 @@ export default {
     hideDialog() {
       this.show = false;
       this.filterData();
+      this.$refs.focusInputSearch.focus();
     },
 
     /* 
@@ -343,6 +345,7 @@ export default {
     hidePopup() {
       this.valuePopup = false;
       this.filterData();
+      this.$refs.focusInputSearch.focus();
     },
 
     /* 
@@ -351,6 +354,7 @@ export default {
     */
     hidePopupNotLoad() {
       this.valuePopup = false;
+      this.$refs.focusInputSearch.focus();
     },
 
     /**

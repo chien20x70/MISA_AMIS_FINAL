@@ -1,8 +1,6 @@
 <template>
   <div class="dialog">
     <div class="model"></div>
-    <!-- <ValidationObserver v-slot="{ handleSubmit }">
-      <form> -->
     <div class="dialog-box">
       <div class="dialog-header">
         <div class="title flex">
@@ -34,19 +32,20 @@
                   >Mã
                   <p style="color: red; display: inline">*</p></span
                 >
-                <!-- <ValidationProvider name="Mã nhân viên" rules="required" v-slot="{ errors }"> -->
+                
                 <input
                   :title="
-                    code == true ? 'Mã nhân viên không được để trống!' : ''
+                    (messageCode != '' && messageCode != null) ? 'Mã nhân viên không được để trống!' : ''
                   "
                   type="text"
                   ref="focusCode"
                   style="width: 151px; margin-top: 4px"
                   v-model="employee.employeeCode"
                   @input="onChangeInputCode"
-                  :class="{ 'input-error': code == true }"
+                  :class="{ 'input-error': messageCode != '' && messageCode != null }"
+                  
                 />
-                <!-- </ValidationProvider> -->
+                <span style="color: red; font-size: 12px">{{messageCode}}</span>
               </div>
               <div class="name">
                 <span class="text"
@@ -55,15 +54,15 @@
                 >
                 <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
-                  :title="name == true ? 'Tên không được để trống!' : ''"
+                  :title="(messageName != '' && messageName != null) ? 'Tên không được để trống!' : ''"
                   type="text"
                   ref="focusName"
                   style="width: 235px; margin-top: 4px"
                   v-model="employee.fullName"
                   @input="onChangeInputName"
-                  :class="{ 'input-error': name == true }"
+                  :class="{ 'input-error': messageName != '' && messageName != null }"
                 />
-                <!-- </ValidationProvider> -->
+                <span style="color: red; font-size: 12px">{{messageName}}</span>
               </div>
             </div>
             <div class="row-1">
@@ -73,10 +72,10 @@
                   <p style="color: red; display: inline">*</p></span
                 >
                 <div
-                  :title="(department == true) ? 'Đơn vị không được để trống!' : '' "
+                  :title="(messageDepartment != '' && messageDepartment != null) ? 'Đơn vị không được để trống!' : '' "
                   class="department-box"
                   style="margin-top: 4px;"
-                  :class="{ 'input-error': department == true }"
+                  :class="{ 'input-error': messageDepartment != '' && messageDepartment != null }"
                 >
                   <div class="selected-option">
                     <input
@@ -99,7 +98,7 @@
                     </div>
                   </div>
                 </div>
-
+                <span style="color: red; font-size: 12px">{{messageDepartment}}</span>
                 <!-- <model-select
                   :options="departments"
                   v-model="employee.departmentName"
@@ -210,10 +209,7 @@
             </div>
             <div class="row-1">
               <div class="id">
-                <span class="text"
-                  >Số CMND
-                  <p style="color: red; display: inline">*</p></span
-                >
+                <span class="text">Số CMND</span>
                 <input
                   type="text"
                   style="width: 245px; margin-top: 4px"
@@ -268,13 +264,11 @@
             <div class="row-1">
               <div class="phone" style="margin-top: 17px">
                 <span class="text">ĐT di động</span>
-                <!-- <ValidationProvider name="Số điện thoại" rules="required" v-slot="{ errors }"> -->
                 <input
                   type="text"
                   style="width: 197px; margin-top: 4px"
                   v-model="employee.phoneNumber"
-                />
-                <!-- </ValidationProvider> -->
+                />              
               </div>
               <div class="phone" style="margin-top: 17px; margin-left: 5px">
                 <span class="text">ĐT cố định</span>
@@ -293,14 +287,13 @@
                   type="text"
                   style="width: 203px; margin-top: 4px"
                   v-model="employee.email"
-                  @blur="handleBlurEmail($event.target.value)"
+                  
+                  @input="onChangeInputEmail"
                   :class="{
                     'input-error': messageEmail != '' && messageEmail != null,
                   }"
                 /><br />
-                <span style="color: red; font-size: 12px">{{
-                  messageEmail
-                }}</span>
+                <span style="color: red; font-size: 12px">{{messageEmail}}</span>
               </div>
             </div>
             <div class="row-1">
@@ -362,14 +355,12 @@
       </div>
       <Popup
         v-if="valuePopup"
-        @hidePopupNotLoad="valuePopup = false"
+        @hidePopupNotLoad="hidePopupNotLoad"
         :message="message"
         @onClickYesWhenDataChange="onBtnSaveClick"
         @hidePopupAndHideDialog="hidePopupAndHideDialog"
       />
     </div>
-    <!-- </form>
-    </ValidationObserver> -->
   </div>
 </template>
 <script>
@@ -413,11 +404,11 @@ export default {
       showDepartment: true, // Hiển thị comboboxDepartment
       saveValueDepartment: null, // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {}, //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
-      name: false, // border-error employeeCode
-      code: false, // border-code employeeCode
-      department: false, // border-department employeeCode
       currentIndex: 0, // Vị trí nút bấm up down
-      messageEmail: null,
+      messageEmail: null,   // thông báo lỗi nhập liệu
+      messageCode: null,    // thông báo lỗi nhập liệu
+      messageName: null,    // thông báo lỗi nhập liệu
+      messageDepartment: null,    // thông báo lỗi nhập liệu
       STR_DISPLAY_FORMAT: "DD/MM/YYYY",
       localeDatePicker: {
         weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
@@ -473,6 +464,19 @@ export default {
   },
   //#region METHODS
   methods: {
+    hidePopupNotLoad(){
+      this.valuePopup = false;
+      if(this.messageCode != "" && this.messageCode != null){
+        this.$refs.focusCode.focus();
+        this.messageDepartment = "";
+        this.messageName = "";
+      }else if(this.messageName != "" && this.messageName != null){
+        this.$refs.focusName.focus();
+        this.messageDepartment = "";      
+      }else if(this.messageDepartment != "" && this.messageDepartment != null){
+        this.$refs.focusDepartment.focus();
+      }
+    },
     // SHow thông báo thêm, sửa thành công
     showNotification(message) {
       this.$notification["success"]({
@@ -491,8 +495,10 @@ export default {
       this.timeOut = setTimeout(() => {
         if (val !== "") {
           this.name = false;
+          this.messageName = "";
         } else if (val == "") {
           this.name = true;
+          this.messageName = "Bắt buộc nhập trường này!";
         }
       }, 200);
     },
@@ -503,8 +509,10 @@ export default {
       this.timeOut = setTimeout(() => {
         if (val !== "") {
           this.code = false;
+          this.messageCode = "";
         } else if (val == "") {
           this.code = true;
+          this.messageCode = "Bắt buộc nhập trường này!";
         }
       }, 200);
     },
@@ -514,11 +522,28 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         if (val !== "") {
-          this.department = false;
+          this.messageDepartment = "";
         } else if (val == "") {
-          this.department = true;
+          this.messageDepartment = "Bắt buộc nhập trường này!";
         }
       }, 500);
+    },
+    /* 
+    Xử lý thay đổi giá trị Input Email
+    CreatedBy: NXCHIEN 17/05/2021
+    */
+    onChangeInputEmail(e) {
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(val)) {
+          this.messageEmail = "";
+        } else if (val == "") {
+          this.messageEmail = "Bắt buộc nhập trường này!";
+        } else {
+          this.messageEmail = "Email Không đúng định dạng!";
+        }
+        }, 500);
     },
     //#endregion
     /**
@@ -553,7 +578,7 @@ export default {
       ].departmentId;
       this.showDepartment = true;
       if (this.saveValueDepartment != null) {
-        this.department = false;
+        this.messageDepartment = "";
       }
     },
 
@@ -617,13 +642,13 @@ export default {
      */
     checkEmptyAttribute() {
       if (this.employee.employeeCode == "") {
-        this.code = true;
+        this.messageCode = "Bắt buộc nhập trường này";
       }
       if (this.employee.fullName == "") {
-        this.name = true;
+        this.messageName = "Bắt buộc nhập trường này";
       }
       if (this.employee.departmentId == "") {
-        this.department = true;
+        this.messageDepartment = "Bắt buộc nhập trường này";
       }
     },
 
@@ -722,23 +747,6 @@ export default {
       this.$refs.focusCode.focus();
     },
 
-    /* 
-    Xử lý blur khỏi Input Email
-    CreatedBy: NXCHIEN 17/05/2021
-    */
-    handleBlurEmail(ev) {
-      if (
-        /^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(
-          ev
-        )
-      ) {
-        this.messageEmail = "";
-      } else if (ev == "") {
-        this.messageEmail = "Bắt buộc nhập trường này!";
-      } else {
-        this.messageEmail = "Email Không đúng định dạng!";
-      }
-    },
 
     /**
      * Click nút dropdown để toggle Department phòng ban
@@ -763,7 +771,7 @@ export default {
       // Ẩn combobox Department phòng ban
       this.showDepartment = true;
       // Ẩn border error
-      this.department = false;
+      this.messageDepartment = "";
       this.currentIndex = index;
     },
   },

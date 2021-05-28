@@ -35,10 +35,21 @@ thead tr th:nth-child(5){
 tbody tr td:nth-child(5){
     text-align: center;
 }
+.resize {
+    resize: horizontal;
+    overflow-x: auto;
+    border: 1px solid black;
+    display: block;
+    border: none;
+    min-width: 225px;
+    
+  }
+  th .resize {
+    border: 0;
+    width: auto;
+    float: right;
+  }
 
-/* table tr td:hover{
-    background-color: #eceef1;
-} */
 table tr:hover{
     background-color: #eceef1 !important;  
 }

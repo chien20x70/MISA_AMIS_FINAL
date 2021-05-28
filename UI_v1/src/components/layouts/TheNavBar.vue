@@ -206,7 +206,7 @@ export default {
   height: 100vh;
   width: 178px;
   font-family: NotoSans-Regular;
-  /* transition: width 0.3s; */
+  /* transition: width 0.3s ease 2s; */
 }
 .logo-container {
   width: 100%;
