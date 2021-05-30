@@ -34,6 +34,7 @@
                 >
                 
                 <input
+                  maxlength="20"
                   :title="
                     (messageCode != '') ? 'Mã nhân viên không được để trống!' : ''
                   "
@@ -265,10 +266,15 @@
               <div class="phone" style="margin-top: 17px">
                 <span class="text">ĐT di động</span>
                 <input
+                  maxlength="10"
+                  ref="focusPhone"
                   type="text"
                   style="width: 197px; margin-top: 4px"
+                  @input="onChangeInputPhone"
                   v-model="employee.phoneNumber"
-                />              
+                  :class="{'input-error': messagePhone != ''}"
+                />
+                <span style="color: red; font-size: 12px">{{messagePhone}}</span>          
               </div>
               <div class="phone" style="margin-top: 17px; margin-left: 5px">
                 <span class="text">ĐT cố định</span>
@@ -376,7 +382,13 @@ import {
   STR_ERROR_EMAIL,
   MES_REQUIRED_ATTRIBUTE,
   REGEX_EMAIL,
-  MES_ERROR_SERVER
+  MES_ERROR_SERVER,
+  STR_ERROR_PHONE,
+  REGEX_PHONE,
+  EMPLOYEE_CODE_EXIST,
+  EMPLOYEE_EMAIL_EXIST,
+  EMPLOYEE_PHONE_EXIST,
+  EMPLOYEE_CODE
 } from "../../../lang/validation.js";
 
 import DatePick from "vue-date-pick";
@@ -413,6 +425,7 @@ export default {
       messageCode: "",    // thông báo lỗi nhập liệu
       messageName: "",    // thông báo lỗi nhập liệu
       messageDepartment: "",    // thông báo lỗi nhập liệu
+      messagePhone: "",
       STR_DISPLAY_FORMAT: "DD/MM/YYYY",
       localeDatePicker: {
         weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
@@ -470,20 +483,37 @@ export default {
   methods: {
     hidePopupNotLoad(){
       this.valuePopup = false;
-      if(this.messageCode != ""){
+      if(this.messageCode != "" || this.message.includes(EMPLOYEE_CODE)){
         this.$refs.focusCode.focus();
         this.messageDepartment = "";
         this.messageName = "";
         this.messageEmail = "";
+        this.messagePhone = "";
+        this.messageCode = EMPLOYEE_CODE_EXIST;
       }else if(this.messageName != ""){
         this.$refs.focusName.focus();
         this.messageDepartment = "";
-        this.messageEmail = "";      
+        this.messageEmail = "";  
+        this.messagePhone = "";    
       }else if(this.messageDepartment != ""){
         this.$refs.focusDepartment.focus();
         this.messageEmail = "";
+        this.messagePhone = "";
+      }else if(this.messagePhone != ""){
+        this.$refs.focusPhone.focus();
+      }else if(this.message.includes(EMPLOYEE_PHONE_EXIST)){
+        this.messagePhone = EMPLOYEE_PHONE_EXIST;
+        this.messageEmail = "";
+        this.$refs.focusPhone.focus();
+      }else if(this.message.includes(STR_ERROR_PHONE)){
+        this.messagePhone = STR_ERROR_PHONE;
+        this.messageEmail = "";
+        this.$refs.focusPhone.focus();
       }else if(this.messageEmail != ""){
+        this.$refs.focusEmail.focus();        
+      }else if(this.messageEmail != "" || this.message.includes(EMPLOYEE_EMAIL_EXIST)){
         this.$refs.focusEmail.focus();
+        this.messageEmail = EMPLOYEE_EMAIL_EXIST;
       }
     },
     // SHow thông báo thêm, sửa thành công
@@ -530,6 +560,21 @@ export default {
           this.messageDepartment = "";
         } else if (val == "") {
           this.messageDepartment = MES_REQUIRED_ATTRIBUTE;
+        }
+      }, 500);
+    },
+
+    onChangeInputPhone(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (REGEX_PHONE.test(val)) {
+          this.messagePhone = "";
+        } else if (val == "") {
+          this.messagePhone = "";
+          delete this.employee.phoneNumber;
+        } else {
+          this.messagePhone = STR_ERROR_PHONE;
         }
       }, 500);
     },
@@ -592,7 +637,7 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     isCheckValidate() {
-      if (this.employee.employeeCode.trim() == "") {
+      if (this.employee.employeeCode.trim() == "") {       
         this.message = STR_EMPTY_CODE;
         return true;
       }
@@ -602,6 +647,10 @@ export default {
       }
       if (this.employee.departmentId == "") {
         this.message = STR_EMPTY_DEPARTMENT;
+        return true;
+      }
+      if (this.messagePhone == STR_ERROR_PHONE) {
+        this.message = STR_ERROR_PHONE;
         return true;
       }
       if (this.employee.email == "") {
@@ -665,8 +714,7 @@ export default {
       }
       if (this.employee.email == "") {
         this.messageEmail = MES_REQUIRED_ATTRIBUTE;
-      }
-      
+      }     
     },
 
     /**

@@ -52,12 +52,12 @@ tbody tr td:last-child{
     display: block;
     border: none;
     min-width: 225px;
-    
   }
   th .resize {
-    border: 0;
+    /* border: 0;
     width: auto;
-    float: right;
+    float: right; */
+    cursor: col-resize;
   }
 /* 
 table tr:hover{

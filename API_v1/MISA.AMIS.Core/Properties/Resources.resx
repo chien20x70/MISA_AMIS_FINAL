@@ -130,7 +130,7 @@
     <value>Xóa thành công!</value>
   </data>
   <data name="Msg_Email_Exist" xml:space="preserve">
-    <value>Email đã được sử dụng! Vui lòng điền Email khác.</value>
+    <value>Email đã tồn tại trên hệ thống, vui lòng kiểm tra lại.</value>
   </data>
   <data name="Msg_IdentifyNumber_Exist" xml:space="preserve">
     <value>Số chứng minh thư đã tồn tại trên hệ thống! Vui lòng kiểm tra lại.</value>
@@ -145,7 +145,7 @@
     <value>Tham số truyền vào không hợp lệ!</value>
   </data>
   <data name="Msg_Phone_Exist" xml:space="preserve">
-    <value>Số điện thoại đã tồn tại trên hệ thống!</value>
+    <value>Số điện thoại đã tồn tại trên hệ thống, vui lòng kiểm tra lại.</value>
   </data>
   <data name="Msg_Update_Fail" xml:space="preserve">
     <value>Sửa thất bại!</value>
@@ -166,7 +166,7 @@
     <value> không đúng định dạng!</value>
   </data>
   <data name="Required_Error_Message_Phone" xml:space="preserve">
-    <value>Số điện thoại bạn nhập phải là dạng số!</value>
+    <value>Số điện thoại phải là số!</value>
   </data>
   <data name="Required_NotEmpty_Message" xml:space="preserve">
     <value> không được để trống.</value>

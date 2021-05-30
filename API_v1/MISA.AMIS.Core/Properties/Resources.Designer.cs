@@ -97,7 +97,7 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email đã được sử dụng! Vui lòng điền Email khác..
+        ///   Looks up a localized string similar to Email đã tồn tại trên hệ thống, vui lòng kiểm tra lại..
         /// </summary>
         internal static string Msg_Email_Exist {
             get {
@@ -142,7 +142,7 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Số điện thoại đã tồn tại trên hệ thống!.
+        ///   Looks up a localized string similar to Số điện thoại đã tồn tại trên hệ thống, vui lòng kiểm tra lại..
         /// </summary>
         internal static string Msg_Phone_Exist {
             get {
@@ -205,7 +205,7 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Số điện thoại bạn nhập phải là dạng số!.
+        ///   Looks up a localized string similar to Số điện thoại phải là số!.
         /// </summary>
         internal static string Required_Error_Message_Phone {
             get {

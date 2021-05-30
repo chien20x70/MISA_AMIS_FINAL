@@ -4,7 +4,7 @@
       <div class="content-item">
         <div class="content-item-text">Nhân viên</div>
         <div class="component-btn">
-          <button class="btn-add" @click="onBtnAddClick">
+          <button class="btn-add" @click="onBtnAddClick" v-hotkey="keymap">
             Thêm mới nhân viên
           </button>
         </div>
@@ -50,7 +50,7 @@
               <th style="min-width: 120px">GIỚI TÍNH</th>
               <th style="min-width: 150px">NGÀY SINH</th>
               <th style="min-width: 200px">SỐ CMND</th>
-              <th style="min-width: 250px">CHỨC DANH</th>
+              <th style="min-width: 250px"><div class="resize">CHỨC DANH</div></th>
               <th style="min-width: 250px">TÊN ĐƠN VỊ</th>
               <th style="min-width: 150px">SỐ TÀI KHOẢN</th>
               <th style="min-width: 250px">TÊN NGÂN HÀNG</th>
@@ -243,7 +243,7 @@
       @hideDialogNotLoad="hideDialogNotLoad"
       :employee="selectedEmployee"
       :flag="status"
-      @saveAndAdd="onBtnAddClick"
+      @saveAndAdd="onBtnAddClick"     
     />
     <Popup     
       v-if="valuePopup"
@@ -587,6 +587,11 @@ export default {
       // Đẩy vào mảng ps chứa các nút được phép hiển thị khi phân trang
       for (let i = start; i <= end; i++) ps.push(i);
       return ps;
+    },
+    keymap() {
+      return {       
+        "Ctrl + 1": this.onBtnAddClick,
+      };
     },
   },
   mounted(){
