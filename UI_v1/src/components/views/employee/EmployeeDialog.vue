@@ -722,10 +722,12 @@ export default {
      * CreatedBY: NXCHIEN 30/05/2021
      */
     getResponseError(res){
-      if(res.data.code == 500){
-        this.message = MES_ERROR_SERVER;
-        // show popup
-        this.valuePopup = true;
+      if(res != undefined){
+        if(res.data.code == 500){
+          this.message = MES_ERROR_SERVER;
+          // show popup
+          this.valuePopup = true;
+        }
       }
     },
 
