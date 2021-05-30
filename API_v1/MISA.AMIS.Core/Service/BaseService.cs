@@ -221,6 +221,10 @@ namespace MISA.AMIS.Core.Service
                     var phoneValue = property.GetValue(entity);
                     // Khởi tạo regex và kiểm tra
                     Regex regex = new Regex(Properties.Resources.Regex_Number);
+                    if (phoneValue == null)
+                    {
+                        break;
+                    }
                     if (!regex.IsMatch(phoneValue.ToString()))
                     {
 

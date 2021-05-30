@@ -35,14 +35,14 @@
                 
                 <input
                   :title="
-                    (messageCode != '' && messageCode != null) ? 'Mã nhân viên không được để trống!' : ''
+                    (messageCode != '') ? 'Mã nhân viên không được để trống!' : ''
                   "
                   type="text"
                   ref="focusCode"
                   style="width: 151px; margin-top: 4px"
                   v-model="employee.employeeCode"
                   @input="onChangeInputCode"
-                  :class="{ 'input-error': messageCode != '' && messageCode != null }"
+                  :class="{ 'input-error': messageCode != ''}"
                   
                 />
                 <span style="color: red; font-size: 12px">{{messageCode}}</span>
@@ -54,13 +54,13 @@
                 >
                 <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
-                  :title="(messageName != '' && messageName != null) ? 'Tên không được để trống!' : ''"
+                  :title="(messageName != '') ? 'Tên không được để trống!' : ''"
                   type="text"
                   ref="focusName"
                   style="width: 235px; margin-top: 4px"
                   v-model="employee.fullName"
                   @input="onChangeInputName"
-                  :class="{ 'input-error': messageName != '' && messageName != null }"
+                  :class="{ 'input-error': messageName != ''}"
                 />
                 <span style="color: red; font-size: 12px">{{messageName}}</span>
               </div>
@@ -72,10 +72,10 @@
                   <p style="color: red; display: inline">*</p></span
                 >
                 <div
-                  :title="(messageDepartment != '' && messageDepartment != null) ? 'Đơn vị không được để trống!' : '' "
+                  :title="(messageDepartment != '') ? 'Đơn vị không được để trống!' : '' "
                   class="department-box"
                   style="margin-top: 4px;"
-                  :class="{ 'input-error': messageDepartment != '' && messageDepartment != null }"
+                  :class="{ 'input-error': messageDepartment != ''}"
                 >
                   <div class="selected-option">
                     <input
@@ -284,15 +284,14 @@
                   <p style="color: red; display: inline">*</p></span
                 ><br />
                 <input
+                  ref="focusEmail"
                   type="text"
                   style="width: 203px; margin-top: 4px"
                   v-model="employee.email"
                   
                   @input="onChangeInputEmail"
-                  :class="{
-                    'input-error': messageEmail != '' && messageEmail != null,
-                  }"
-                /><br />
+                  :class="{'input-error': messageEmail != ''}"/>
+                  <br />
                 <span style="color: red; font-size: 12px">{{messageEmail}}</span>
               </div>
             </div>
@@ -373,6 +372,11 @@ import {
   STR_DATA_CHANGE,
   MES_ADD_SUCCESS,
   MES_EDIT_SUCCESS,
+  STR_EMPTY_EMAIL,
+  STR_ERROR_EMAIL,
+  MES_REQUIRED_ATTRIBUTE,
+  REGEX_EMAIL,
+  MES_ERROR_SERVER
 } from "../../../lang/validation.js";
 
 import DatePick from "vue-date-pick";
@@ -405,10 +409,10 @@ export default {
       saveValueDepartment: null, // Biến lưu lại giá trị DepartmentId
       dectectEmployee: {}, //TODO: phát hiện sự thay đổi giá trị employee khi click nút X form dialog
       currentIndex: 0, // Vị trí nút bấm up down
-      messageEmail: null,   // thông báo lỗi nhập liệu
-      messageCode: null,    // thông báo lỗi nhập liệu
-      messageName: null,    // thông báo lỗi nhập liệu
-      messageDepartment: null,    // thông báo lỗi nhập liệu
+      messageEmail: "",   // thông báo lỗi nhập liệu
+      messageCode: "",    // thông báo lỗi nhập liệu
+      messageName: "",    // thông báo lỗi nhập liệu
+      messageDepartment: "",    // thông báo lỗi nhập liệu
       STR_DISPLAY_FORMAT: "DD/MM/YYYY",
       localeDatePicker: {
         weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
@@ -466,15 +470,20 @@ export default {
   methods: {
     hidePopupNotLoad(){
       this.valuePopup = false;
-      if(this.messageCode != "" && this.messageCode != null){
+      if(this.messageCode != ""){
         this.$refs.focusCode.focus();
         this.messageDepartment = "";
         this.messageName = "";
-      }else if(this.messageName != "" && this.messageName != null){
+        this.messageEmail = "";
+      }else if(this.messageName != ""){
         this.$refs.focusName.focus();
-        this.messageDepartment = "";      
-      }else if(this.messageDepartment != "" && this.messageDepartment != null){
+        this.messageDepartment = "";
+        this.messageEmail = "";      
+      }else if(this.messageDepartment != ""){
         this.$refs.focusDepartment.focus();
+        this.messageEmail = "";
+      }else if(this.messageEmail != ""){
+        this.$refs.focusEmail.focus();
       }
     },
     // SHow thông báo thêm, sửa thành công
@@ -494,11 +503,9 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         if (val !== "") {
-          this.name = false;
           this.messageName = "";
         } else if (val == "") {
-          this.name = true;
-          this.messageName = "Bắt buộc nhập trường này!";
+          this.messageName = MES_REQUIRED_ATTRIBUTE;
         }
       }, 200);
     },
@@ -508,11 +515,9 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         if (val !== "") {
-          this.code = false;
           this.messageCode = "";
         } else if (val == "") {
-          this.code = true;
-          this.messageCode = "Bắt buộc nhập trường này!";
+          this.messageCode = MES_REQUIRED_ATTRIBUTE;
         }
       }, 200);
     },
@@ -524,7 +529,7 @@ export default {
         if (val !== "") {
           this.messageDepartment = "";
         } else if (val == "") {
-          this.messageDepartment = "Bắt buộc nhập trường này!";
+          this.messageDepartment = MES_REQUIRED_ATTRIBUTE;
         }
       }, 500);
     },
@@ -536,12 +541,12 @@ export default {
       let val = e.target.value;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
-        if (/^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(val)) {
+        if (REGEX_EMAIL.test(val)) {
           this.messageEmail = "";
         } else if (val == "") {
-          this.messageEmail = "Bắt buộc nhập trường này!";
+          this.messageEmail = MES_REQUIRED_ATTRIBUTE;
         } else {
-          this.messageEmail = "Email Không đúng định dạng!";
+          this.messageEmail = STR_ERROR_EMAIL;
         }
         }, 500);
     },
@@ -599,6 +604,14 @@ export default {
         this.message = STR_EMPTY_DEPARTMENT;
         return true;
       }
+      if (this.employee.email == "") {
+        this.message = STR_EMPTY_EMAIL;
+        return true;
+      }
+      if (this.messageEmail == STR_ERROR_EMAIL) {
+        this.message = STR_ERROR_EMAIL;
+        return true;
+      }
       return false;
     },
 
@@ -642,29 +655,46 @@ export default {
      */
     checkEmptyAttribute() {
       if (this.employee.employeeCode == "") {
-        this.messageCode = "Bắt buộc nhập trường này";
+        this.messageCode = MES_REQUIRED_ATTRIBUTE;
       }
       if (this.employee.fullName == "") {
-        this.messageName = "Bắt buộc nhập trường này";
+        this.messageName = MES_REQUIRED_ATTRIBUTE;
       }
       if (this.employee.departmentId == "") {
-        this.messageDepartment = "Bắt buộc nhập trường này";
+        this.messageDepartment = MES_REQUIRED_ATTRIBUTE;
+      }
+      if (this.employee.email == "") {
+        this.messageEmail = MES_REQUIRED_ATTRIBUTE;
+      }
+      
+    },
+
+    /**
+     * Lấy data lỗi trả về từ server
+     * CreatedBY: NXCHIEN 30/05/2021
+     */
+    getResponseError(res){
+      if(res.data.code == 500){
+        this.message = MES_ERROR_SERVER;
+        // show popup
+        this.valuePopup = true;
       }
     },
 
     /**
-     * hàm dùng chung nút 'Cất' và Nút 'Cất và Thêm'
+     * Hàm dùng chung nút 'Cất' và Nút 'Cất và Thêm'
+     * CreatedBY: NXCHIEN 17/05/2021
      */
     validAndSave() {
+      // Kiểm tra attribute empty
       this.checkEmptyAttribute();
-      // Kiểm tra nút Thêm hay Sửa
+      // Kiểm tra validate attribute
       this.valuePopup = this.isCheckValidate();
       if (!this.valuePopup)
         if (this.flag == "add") {
           this.employee.gender = parseInt(this.employee.gender);
-          return this.axios
-            .post("/Employees", this.employee)
-            .then((res) => {
+          return this.axios.post("/Employees", this.employee)
+            .then((res) => {            
               if (res.data.code == 200) {
                 this.saveValueDepartment = null;
                 return Promise.resolve();
@@ -678,19 +708,13 @@ export default {
               return Promise.resolve();
             })
             .catch((res) => {
-              // Lấy ra message lỗi
-              this.message = res.data.data;
-              // show popup
-              this.valuePopup = true;
+              this.getResponseError(res);
               return Promise.reject();
             });
-        }
-        // Kiểm tra nút Thêm hay Sửa
+        }// Kiểm tra nút Thêm hay Sửa       
         else if (this.flag == "edit") {
-          // delete this.employee.genderName;
           this.employee.gender = parseInt(this.employee.gender);
-          return this.axios
-            .put("/Employees/" + this.employee.employeeId, this.employee)
+          return this.axios.put("/Employees/" + this.employee.employeeId, this.employee)
             .then((res) => {
               if (res.data.code == 200) {
                 this.saveValueDepartment = null;
@@ -705,10 +729,7 @@ export default {
               return Promise.resolve();
             })
             .catch((res) => {
-              // Lấy ra message lỗi
-              this.message = res.data.data;
-              // show popup
-              this.valuePopup = true;
+              this.getResponseError(res);
               return Promise.reject();
             });
         }
@@ -742,11 +763,16 @@ export default {
           this.showNotification(MES_EDIT_SUCCESS);
         }
         this.$emit("saveAndAdd");
+        
       });
-
       this.$refs.focusCode.focus();
+      
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() =>{
+        this.dectectEmployee = {};
+        this.dectectEmployee = { ...this.employee };    
+      }, 1000)
     },
-
 
     /**
      * Click nút dropdown để toggle Department phòng ban
@@ -777,9 +803,9 @@ export default {
   },
   //#endregion
 
-  created() {
-    this.dectectEmployee = { ...this.employee };
-  },
+  // created() {
+  //   this.dectectEmployee = { ...this.employee };
+  // },
 
   mounted() {
     /**

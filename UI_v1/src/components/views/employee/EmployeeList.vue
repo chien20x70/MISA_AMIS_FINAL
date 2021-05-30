@@ -318,18 +318,24 @@ export default {
           // Gán giá trị là nút Thêm mới
           this.status = "add";
           // Gán tất cả các ô data của dialog rỗng
-          this.selectedEmployee = {};
-          // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
-          this.selectedEmployee.employeeCode = response.data.data;
-          this.selectedEmployee.fullName = "";
-          this.selectedEmployee.departmentId = "";
-          this.selectedEmployee.gender = 1;
+          this.onBtnAddAssignSelectedEmployee(response);
         })
-        .catch((response) => {
-          console.log(response);
-        });
+        .catch(() => {});
     },
-
+    /**
+     * Gán SelectedEmployee khi click BtnAdd.
+     * CreatedBY: NXCHIEN 30/05/2021
+     */
+    onBtnAddAssignSelectedEmployee(response){
+      // Gán tất cả các ô data của dialog rỗng
+      this.selectedEmployee = {};
+      // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
+      this.selectedEmployee.employeeCode = response.data.data;
+      this.selectedEmployee.fullName = "";
+      this.selectedEmployee.departmentId = "";
+      this.selectedEmployee.gender = 1;
+      this.selectedEmployee.email = "";
+    },
     /* 
     Đóng dialog mà không load lại dữ liệu (được gọi từ Dialog)
     CreatedBy: NXCHIEN 17/05/2021  
@@ -442,8 +448,6 @@ export default {
       this.onRowTableDblClick(employeeClickId);
     },
 
-
-
     /* 
     Load lại dữ liệu khi click vào nút refresh
     CreatedBy: NXCHIEN 17/05/2021  
@@ -520,7 +524,7 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021 
     */
     onBtnExportClick() {
-      // Mở 1 cửa số mới gọi API để tải về.   ?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}
+      // Mở 1 cửa số mới gọi API để tải về.
       window.open(
         `https://localhost:44314/api/v1/Employees/ExportingExcel`,
         "_blank"
@@ -698,7 +702,7 @@ export default {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  z-index: 103;
+  z-index: 100;
 }
 
 .content-navpage .content-navpage-text-left {

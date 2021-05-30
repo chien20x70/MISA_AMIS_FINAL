@@ -76,7 +76,7 @@ export default {
   left: 0;
   top: 0;
   height: 100%;
-  z-index: 98;
+  z-index: 101;
   transition: all 0.25s ease;
   opacity: .5; 
 }
@@ -91,7 +91,7 @@ export default {
   background-color: white;
   box-shadow: 0 5px 20px 0 rgb(0 0 0 / 10%);
   padding: 32px;
-  z-index: 100;
+  z-index: 102;
 }
 .popup-content{
   display: flex;
@@ -109,6 +109,7 @@ export default {
   padding: 0px 0 0 16px;
   display: block;
   /* margin-bottom: 32px; */
+  font-size: 13px;
 }
 .btn-footer{
   display: flex;
