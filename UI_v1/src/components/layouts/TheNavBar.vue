@@ -18,8 +18,9 @@
         </div>
         <div class="menu-item-title">Tổng quan</div>
       </router-link>
-      <div
-        class="menu-item"        
+      <router-link
+        class="menu-item"   
+        to="/cash"     
         v-bind:class="{ active: selectedItem == 1 }"
         v-on:click="selectItem(1)"
       >
@@ -27,7 +28,7 @@
           <div class="icon icon-24 mi-sidebar-cash"></div>
         </div>
         <div class="menu-item-title">Tiền mặt</div>
-      </div>
+      </router-link>
       <div
         class="menu-item"
         v-bind:class="{ active: selectedItem == 2 }"
