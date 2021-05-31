@@ -18,10 +18,12 @@
       <div class="item-close">
         <div class="icon icon-24 help" style="margin-right: 6px"></div>
         <div
-          class="icon icon-24 close"
+          class="icon icon-24 close tooltip tooltip--position25-10"
           v-hotkey="keymap"
           @click="onBtnCloseClick"
-        ></div>
+        >
+        <span class="tooltip__text">ESC</span>
+        </div>
       </div>
       <div class="dialog-content">
         <div class="employee-inf">
@@ -35,17 +37,14 @@
                 
                 <input
                   maxlength="20"
-                  :title="
-                    (messageCode != '') ? 'Mã nhân viên không được để trống!' : ''
-                  "
+                  :title="(messageCode != '') ? 'Mã nhân viên không được để trống!' : ''"
                   type="text"
                   ref="focusCode"
                   style="width: 151px; margin-top: 4px"
                   v-model="employee.employeeCode"
                   @input="onChangeInputCode"
-                  :class="{ 'input-error': messageCode != ''}"
-                  
-                />
+                  :class="{ 'input-error': messageCode != ''}"                  
+                />         
                 <span style="color: red; font-size: 12px">{{messageCode}}</span>
               </div>
               <div class="name">
@@ -341,11 +340,12 @@
             </button>
             <div class="btn-right">
               <button
-                class="add-line"
+                class="add-line tooltip tooltip--70 tooltip--position25-10"
                 style="width: 67px; height: 36px; boder-radius: 4px"
                 @click="onBtnSaveClick"
               >
                 Cất
+                <span class="tooltip__text">Ctrl + S</span>
               </button>
               <button
                 class="add-line color"

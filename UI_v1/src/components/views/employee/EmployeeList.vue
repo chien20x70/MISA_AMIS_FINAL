@@ -4,8 +4,9 @@
       <div class="content-item">
         <div class="content-item-text">Nhân viên</div>
         <div class="component-btn">
-          <button class="btn-add" @click="onBtnAddClick" v-hotkey="keymap">
+          <button class="btn-add tooltip tooltip--position30-30" @click="onBtnAddClick" v-hotkey="keymap">
             Thêm mới nhân viên
+              <span class="tooltip__text">Ctrl + 1</span>
           </button>
         </div>
       </div>

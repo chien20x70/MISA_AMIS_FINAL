@@ -11,6 +11,7 @@ import "./components/styles/table.css";
 import "./components/styles/dropdown.css";
 import "./components/styles/button.css";
 import "./components/styles/icon.css";
+import "./components/styles/tooltip.css";
 import VueHotkey from 'v-hotkey'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
