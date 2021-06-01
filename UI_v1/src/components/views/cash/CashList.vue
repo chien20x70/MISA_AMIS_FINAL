@@ -211,14 +211,7 @@
       </div>
     </div>
     <!-- :state="show" -->
-    <CashDialog
-      v-if="show"
-      @hideDialog="hideDialog"
-      @hideDialogNotLoad="hideDialogNotLoad"
-      :employee="selectedEmployee"
-      :flag="status"
-      @saveAndAdd="onBtnAddClick"     
-    />
+    <CashDialog/>
     <Popup     
       v-if="valuePopup"
       @hidePopupNotLoad="hidePopupNotLoad"
@@ -799,6 +792,9 @@ export default {
 
 .display {
   display: none;
+}
+table tbody tr:hover td {
+    background: #f3f8f8;
 }
 table tr{
   border-bottom: 1px solid #bbb;

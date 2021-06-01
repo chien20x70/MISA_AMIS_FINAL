@@ -827,6 +827,9 @@ export default {
 .display {
   display: none;
 }
+table tbody tr:hover td {
+    background: #f3f8f8;
+}
 table tr{
   border-bottom: 1px solid #bbb;
 }

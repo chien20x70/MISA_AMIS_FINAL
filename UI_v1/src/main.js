@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 import EmployeeList from './components/views/employee/EmployeeList.vue'
 import CashList from './components/views/cash/CashList.vue'
 import '../src/assets/font/fontawesome-5.15.1/css/all.min.css'
-// import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
 import './axios-libs/axios.js'
 import "./components/styles/main.css";
 import "./components/styles/input.css";

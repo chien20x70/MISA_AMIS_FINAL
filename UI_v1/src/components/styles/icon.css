@@ -20,6 +20,12 @@
     height: 16px;
     width: 16px;
 }
+.icon-18{
+    min-width: 18px;
+    min-height: 18px;
+    height: 18px;
+    width: 18px;
+}
 .icon-48{
   min-width: 48px;
   min-height: 48px;
@@ -175,4 +181,23 @@
 }
 .mi-exclamation-question-48 {
   background-position: -826px -456px;
+}
+.mi-recent-log {
+  background-position: -648px -144px;
+}
+.mi-setting__detail {
+  background-position: -32px -144px;
+}
+.mi-help {
+  background-position: -89px -144px;
+}
+.mi-close {
+  background-position: -144px -144px;
+}
+.mi-delete {
+  background-position: -464px -312px;
+}
+.mi-attach {
+  background-position: -539px -203px;
+  margin-right: 8px;
 }
