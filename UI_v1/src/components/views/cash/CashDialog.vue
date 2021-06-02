@@ -14,7 +14,7 @@
       </div>
       <div class="cashbox__icon icon icon-24 mi-setting__detail"></div>
       <div class="cashbox__icon icon icon-24 mi-help"></div>
-      <div class="cashbox__icon icon icon-24 mi-close"></div>
+      <div class="cashbox__icon icon icon-24 mi-close" @click="onBtnCloseClick"></div>
     </div>
     <div class="cashbox__content">
       <div class="content__information">
@@ -33,7 +33,7 @@
               <input type="text" class="input--size">
             </div>
             <div class="date__form">
-              <span class="text">Ngày hạch toán</span>
+              <span class="text">Ngày hạch toán</span><br/>
               <date-pick                 
                   :displayFormat="STR_DISPLAY_FORMAT"
                   :inputAttributes="{
@@ -52,7 +52,7 @@
               <input type="text" class="input--size">
             </div>
             <div class="date__form">
-              <span class="text">Ngày phiếu chi</span>
+              <span class="text">Ngày phiếu chi</span><br/>
               <date-pick                 
                   :displayFormat="STR_DISPLAY_FORMAT"
                   :inputAttributes="{
@@ -71,7 +71,7 @@
               <input type="text" class="input--size">
             </div>
             <div class="date__form">
-              <span class="text">Số phiếu chi</span>
+              <span class="text">Số phiếu chi</span><br/>
               <date-pick                 
                   :displayFormat="STR_DISPLAY_FORMAT"
                   :inputAttributes="{
@@ -110,28 +110,30 @@
         </div>
       </div>
       <div class="content__grid">
-        <div class="detail">Hạch toán</div>      
+        <div class="detail">
+          <div class="hover">Hạch toán</div>
+        </div>      
         <div class="grid__height">
           <table border="0">
             <thead>
               <tr>
                 <th class="first__th">#</th>
-                <th style="min-width: 187px; border-left: none;">DIỄN GIẢI</th>
-                <th style="min-width: 100px;">TK NỢ</th>
-                <th style="min-width: 100px">TK CÓ</th>
-                <th style="min-width: 150px; text-align: right;">SỐ TIỀN</th>
-                <th style="min-width: 150px">ĐỐI TƯỢNG</th>
-                <th style="min-width: 250px"><div class="resize">TÊN ĐỐI TƯỢNG</div></th>
+                <th style="min-width: 315px; border-left: none;">DIỄN GIẢI</th>
+                <th style="min-width: 152px;">TK NỢ</th>
+                <th style="min-width: 146px;">TK CÓ</th>
+                <th style="min-width: 213px; text-align: right;">SỐ TIỀN</th>
+                <th style="min-width: 204px">ĐỐI TƯỢNG</th>
+                <th style="min-width: 327px"><div class="resize">TÊN ĐỐI TƯỢNG</div></th>
                 <th style="min-width: 151px">KHOẢN MỤC CP</th>
                 <th style="min-width: 250px">TÊN KHOẢN MỤC CP</th>
                 <th style="min-width: 200px;">TK NGÂN HÀNG</th>
-                <th style="min-width: 40px; z-index: 102;">Xoa</th>
+                <th style="min-width: 40px; z-index: 102;"></th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td class="first__th"></td>
-                <td style="min-width: 187px; border-left: none;"><input type="text" /></td>
+                <td style="border-left: none;"><input type="text" style="width: 100%;"/></td>
                 <td><input type="text" style="width: 100%;"/></td>
                 <td><input type="text" style="width: 100%;"/></td>
                 <td style="text-align: right;"><input type="text" style="width: 100%;"/></td>
@@ -153,10 +155,10 @@
                     z-index: 2;"></th>
                   <th style="min-width: 187px; border-left: none;"></th>
                   <th style="min-width: 100px;"></th>
-                  <th style="min-width: 100px"></th>
+                  <th style="min-width: 100px;"></th>
                   <th style="min-width: 150px; text-align: right;">1000000</th>
-                  <th style="min-width: 150px"></th>
-                  <th style="min-width: 250px"></th>
+                  <th style="min-width: 150px;"></th>
+                  <th style="min-width: 250px;"></th>
                   <th style="min-width: 151px"></th>
                   <th style="min-width: 250px"></th>
                   <th style="min-width: 200px"></th>
@@ -174,10 +176,10 @@
         <div class="upload">
           <div class="upload__flex">
             <div class="icon icon-18 mi-attach"></div>
-            <div style="font-size: 12px; font-weight: 700;">Đính kèm</div>
+            <div style="font-size: 12px; font-weight: 700; color: #111">Đính kèm</div>
             <div style="margin-left: 15px; color: #757575; font-size: 12px;">Dung lượng tối đa 5MB</div>
           </div>
-          <input type="text" class="attach__file" placeholder="Kéo/thả tệp vào đây hoặc bấm vào đây">
+          <input type="text" class="attach__file" placeholder="Kéo/thả tệp vào đây hoặc bấm vào đây" readonly>
         </div>
       </div>     
     </div>
@@ -219,6 +221,11 @@ export default {
           "Tháng 12",
         ],
       },
+    }
+  },
+  methods: {
+    onBtnCloseClick(){     
+      this.$emit("hideCashDialogNotLoad");
     }
   },
   mounted() {
@@ -360,6 +367,7 @@ export default {
 }
 .invoice{
   padding: 31px 7px 0;
+  font-size: 13px;
 }
 .row__reference{
   padding-top: 12px;
@@ -370,6 +378,7 @@ export default {
 .reference__title{
   margin-right: 16px;
   min-width: 75px;
+  font-size: 13px;
 }
 .reference__show__more{
   cursor: pointer;
@@ -384,10 +393,9 @@ export default {
 
 }
 .detail{
-  width: calc(100vw - 10px);
+  width: calc(100vw - 20px);
   padding: 18px 0 18px 30px;
   position: sticky;
-  /* width: 100vw; */
   left: 0;
   display: flex;
   font-size: 13px;
@@ -395,10 +403,12 @@ export default {
   color: #0075c0;
   font-weight: 700;
 }
+.hover:hover{
+  color: #2ca01c;
+  cursor: pointer;
+}
 .grid__height{
   margin-left: 30px;
-  /* height: calc(100% - 52px);
-  overflow-y: auto; */
   overflow-x: auto;
   width: calc(95% + 20px);
 }
@@ -465,9 +475,10 @@ table tfoot th{
 }
 .attach__file{
   margin-top: 4px;
-  width: 21%;
+  width: 30%;
   height: 50px;
   text-align: center;
+  cursor: pointer;
 }
 .attach__file::-webkit-input-placeholder{
   font-family: NotoSans-Regular-italic;

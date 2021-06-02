@@ -1,5 +1,4 @@
 <template>
-<!-- :class="{'display': popState}" -->
     <div class="popup" :class="{'display': popState}">
         <div class="model"></div>
         <div class="popup-box">

@@ -13,6 +13,23 @@
     </div>
     <div class="content-table">
       <div class="item">
+        <div class="btn-utilities">
+          <div class="check--all">
+            <div class="icon icon-24 mi-arrow-check-all"></div>
+          </div>
+          <button class="btn-btn" style="border: 2px solid #b1b2b3">
+            <div class="flex btn-btn-text">
+              <span class="pr-4" style="color: #afafaf">Thực hiện hàng loạt</span>
+              <div class="icon icon-16 arrow-up--black" style="opacity: 0.5"></div>
+            </div>
+          </button>
+          <button class="btn-btn filter" style="border: 2px solid; margin-left: 10px;" @click="onBtnFilterClick">
+            <div class="flex btn-btn-text">
+              <span class="pr-4">Lọc</span>
+              <div class="icon icon-16 arrow-up--black"></div>
+            </div>
+          </button>
+        </div>
         <div class="item-right">
           <input
             ref="focusInputSearch"
@@ -210,8 +227,7 @@
         </div>
       </div>
     </div>
-    <!-- :state="show" -->
-    <CashDialog/>
+    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad"/>
     <Popup     
       v-if="valuePopup"
       @hidePopupNotLoad="hidePopupNotLoad"
@@ -222,6 +238,7 @@
     <div class="fa-3x" v-if="isBusy">
       <i class="fas fa-spinner fa-spin" style="color: green"></i>
     </div>
+    <CashFilter v-if="toggleFilter"/>
   </div>
 </template>
 <script>
@@ -230,6 +247,8 @@ import CashDialog from "./CashDialog.vue";
 import DropdownDuplicateAndDelete from "../common/DropdownDuplicateAndDelete.vue";
 import Popup from "../common/Popup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
+import CashFilter from "../common/CashFilter.vue";
+
 //#endregion
 export default {
   //#region Khai báo
@@ -238,6 +257,7 @@ export default {
     DropdownDuplicateAndDelete,
     Popup,
     ComboboxFilter,
+    CashFilter
   },
   data() {
     return {
@@ -257,6 +277,11 @@ export default {
       valueSelect: true, // Hiển thị combobox filter phân trang
       msgSelect: " bản ghi trên 1 trang", // message default
       msgSelected: "20 bản ghi trên 1 trang", // message hiển thị khi phân trang.
+
+
+      //#region data cho CashDialog
+      toggleFilter: false,
+      //#endregion
     };
   },
   //#endregion
@@ -271,6 +296,22 @@ export default {
 
   //#region METHODS
   methods: {
+    //#region BtnAddClick
+    /**
+     * Gán SelectedEmployee khi click BtnAdd.
+     * CreatedBY: NXCHIEN 30/05/2021
+     */
+    onBtnAddAssignSelectedEmployee(response){
+      // Gán tất cả các ô data của dialog rỗng
+      this.selectedEmployee = {};
+      // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
+      this.selectedEmployee.employeeCode = response.data.data;
+      this.selectedEmployee.fullName = "";
+      this.selectedEmployee.departmentId = "";
+      this.selectedEmployee.gender = 1;
+      this.selectedEmployee.email = "";
+    },
+
     /**
      * Click thêm mới 1 nhân viên
      * CreatedBy: NXCHIEN 17/05/2021
@@ -289,31 +330,20 @@ export default {
         })
         .catch(() => {});
     },
-    /**
-     * Gán SelectedEmployee khi click BtnAdd.
-     * CreatedBY: NXCHIEN 30/05/2021
-     */
-    onBtnAddAssignSelectedEmployee(response){
-      // Gán tất cả các ô data của dialog rỗng
-      this.selectedEmployee = {};
-      // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
-      this.selectedEmployee.employeeCode = response.data.data;
-      this.selectedEmployee.fullName = "";
-      this.selectedEmployee.departmentId = "";
-      this.selectedEmployee.gender = 1;
-      this.selectedEmployee.email = "";
-    },
+    //#endregion
+
+    //#region Close CashDialog
     /* 
-    Đóng dialog mà không load lại dữ liệu (được gọi từ Dialog)
+    Đóng CashDialog mà không load lại dữ liệu (được gọi từ CashDialog)
     CreatedBy: NXCHIEN 17/05/2021  
     */
-    hideDialogNotLoad() {
+    hideCashDialogNotLoad() {
       this.show = false;
-      this.$refs.focusInputSearch.focus();
+      // this.$refs.focusInputSearch.focus();
     },
 
     /* 
-    Đóng dialog có load lại dữ liệu (được gọi từ Dialog)
+    Đóng CashDialog có load lại dữ liệu (được gọi từ CashDialog)
     CreatedBy: NXCHIEN 17/05/2021 
     */
     hideDialog() {
@@ -321,7 +351,9 @@ export default {
       this.filterData();
       this.$refs.focusInputSearch.focus();
     },
+    //#endregion
 
+    //#region Đóng mở Popup
     /* 
     Hiển thị Popup được gọi từ (dropdownDuplicateAndDelete)
     CreatedBy: NXCHIEN 17/05/2021  
@@ -352,7 +384,9 @@ export default {
       this.valuePopup = false;
       this.$refs.focusInputSearch.focus();
     },
+    //#endregion
 
+    //#region Nhân bản và dbClick
     /**
      * Hàm dùng chung khi click nhân bản và dblClick 1 dòng trong bảng
      * CreatedBy: NXCHIEN 17/05/2021
@@ -407,6 +441,8 @@ export default {
         .catch(() => {});
 
     },
+    //#endregion
+
     /* 
     Click nút Sửa trong table
     CreatedBy: NXCHIEN 17/05/2021  
@@ -468,9 +504,9 @@ export default {
         // Gán trang về 1
         this.pageIndex = 1;
         console.log(this.filter);
-        // Gọi hàm lọc có delay 1s để không gửi quá nhiều request lên serve
+        // Gọi hàm lọc có delay 0.5s để không gửi quá nhiều request lên server
         this.filterData();
-      }, 1000);
+      }, 500);
     },
 
     /* 
@@ -498,6 +534,7 @@ export default {
       );
     },
 
+    //#region Lấy dữ liệu và đóng mở form phần lọc bản ghi / trang
     /**
      * Lấy dữ liệu từ comboboxFilter để phân trang
      * CreatedBy: NXCHIEN 17/05/2021
@@ -519,6 +556,13 @@ export default {
     showSelected() {
       this.valueSelect = !this.valueSelect;
     },
+    //#endregion
+
+    onBtnFilterClick(){
+      this.toggleFilter = !this.toggleFilter;
+    },
+
+
     /* 
     Format dữ liệu ngày tháng năm theo định dạng yyyy-mm-dd
     CreatedBy: NXCHIEN 17/05/2021  
@@ -642,7 +686,7 @@ export default {
   padding: 16px 16px 10px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 .item .item-right {
   display: flex;
@@ -651,7 +695,7 @@ export default {
   justify-content: space-between;
 }
 .content-table .content-table-height {
-  height: calc(100% - 52px);
+  height: calc(100% - 70px);
   overflow-y: auto;
   overflow-x: auto;
   width: calc(100% - 41px);
@@ -793,9 +837,6 @@ export default {
 .display {
   display: none;
 }
-table tbody tr:hover td {
-    background: #f3f8f8;
-}
 table tr{
   border-bottom: 1px solid #bbb;
 }
@@ -811,5 +852,16 @@ tbody tr td{
   min-width: 120px; 
   border-left: 1px dotted #c7c7c7; 
   text-align: center;
+}
+.btn-utilities {
+  display: flex;
+  margin-right: 12px;
+  align-items: center;
+}
+.check--all{
+  padding: 13px 12px;
+}
+.filter:hover{
+  background-color: #d2d3d6;
 }
 </style>

@@ -5,7 +5,7 @@ button{
     border: 1px solid #bbbbbb;
     border-radius: 4px;
     text-align: center;
-    background-color: white;
+    background-color: #fff;
     font-family: NotoSans-Regular;
     cursor: pointer;
     line-height: 32px;
@@ -15,9 +15,14 @@ button{
     padding-right: 30px;
     padding-left: 30px;
     background-color: #2ca01c;
-    color: white;
+    color: #fff;
     border: none;
     outline: none;
     height: 36px;
     border-radius: 50px;
+    font-weight: 600;
+}
+.btn-add:hover{
+    background-color: #35bf22;
+    color: #fff;
 }

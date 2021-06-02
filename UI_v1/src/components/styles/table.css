@@ -63,7 +63,8 @@ table tfoot th{
     background-color: #f8f9fe;
     position: sticky;
     bottom: 50px;
-    height: 43px;
+    height: 35px;
+    font-size: 13px;
 }
 tfoot tr th:last-child{
     position: sticky;

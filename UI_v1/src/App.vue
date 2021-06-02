@@ -89,6 +89,7 @@ export default {
 
 .ui.search.selection.dropdown>input.search{
   height: 32px;
+  padding: 6px 10px !important;
 }
 
 .ui.selection.dropdown{
@@ -101,6 +102,18 @@ export default {
 .ui.selection.active.dropdown, .ui.selection.active.dropdown .menu {
     border-color: none !important;
   
+}
+.ui.dropdown .menu{
+  border: 1px solid #bbb !important;
+}
+
+.ui.dropdown .menu>.item{
+  font-size: 13px !important;
+}
+
+.ui.dropdown .menu .selected.item, .ui.dropdown.selected {
+    background: #2ca01c !important;
+    color: #fff !important;
 }
 
 .vdpCell.selectable .vdpCellContent:hover {

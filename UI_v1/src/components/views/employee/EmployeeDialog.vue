@@ -954,8 +954,8 @@ export default {
   transition: all 0.23s ease 0.1s;
   flex-direction: column;
   display: flex;
-  overflow: auto;
-  overflow-y: visible;
+  /* overflow: auto;
+  overflow-y: visible; */
   padding: 0 32px 20px;
 }
 .employee-inf {
@@ -1272,15 +1272,6 @@ export default {
   font-family: NotoSans-Regular;
   outline: none;
 }
-/* .input-Attr{
-  width: 392px !important;
-  outline: none !important;
-  border: none !important;
-  /* display: inline-block; */
-/* } */
-/* .input-Attr:hover{
-  border: none !important;
-} */
 input .search {
   width: 392px !important;
 }
