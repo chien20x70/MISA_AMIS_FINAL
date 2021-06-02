@@ -130,7 +130,7 @@
                 <td><input type="text" style="width: 100%" /></td>
                 <td><input type="text" style="width: 100%" /></td>
                 <td style="text-align: right">
-                  <input type="text" style="width: 100%" />
+                  <input type="text" style="width: 100%; text-align: right;" />
                 </td>
                 <td><input type="text" style="width: 100%" /></td>
                 <td><input type="text" style="width: 100%" /></td>

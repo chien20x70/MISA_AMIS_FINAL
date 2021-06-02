@@ -138,7 +138,7 @@
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
                 <th style="min-width: 150px"></th>
-                <th style="min-width: 120px; z-index: 101;"></th>
+                <th style="min-width: 120px; z-index: 100;"></th>
               </tr>
           </tfoot>
         </table>        
@@ -711,9 +711,7 @@ export default {
   position: absolute;
   bottom: 10px;
   width: calc(100% - 253px);
-  /* width: 100%; */
-  height: 50px;
-  /* border-top: 1px solid #a29d9d; */
+  height: 51px;
   background-color: white;
   align-items: center;
   display: flex;
@@ -748,7 +746,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-right: 200px;
   margin-right: 40px;
 }
 .autocomplete {
@@ -795,7 +792,7 @@ export default {
   width: 100% !important;
   display: block;
   position: absolute;
-  top: 38%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
