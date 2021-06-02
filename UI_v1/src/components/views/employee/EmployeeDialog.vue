@@ -102,14 +102,10 @@
                 <!-- <model-select
                   :options="departments"
                   v-model="employee.departmentName"
-                  placeholder="placeholder text"
                   style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"
                   @searchchange="printSearchText"
                 >
-                </model-select> -->
-                <!-- style="margin-top: 4px; border: 1px solid #babec5; height: 32px; class="department-box"" -->
-                <!-- :inputAttributes="{class: 'input-Attr'}" -->
-                <!-- </ValidationProvider> -->
+                </model-select> -->              
                 <div
                   class="select-custom"
                   :class="{ invisible: showDepartment }"

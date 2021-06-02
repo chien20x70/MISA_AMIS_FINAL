@@ -115,43 +115,6 @@
             </tr>
           </tbody>
         </table>
-        <!-- <table style="position: sticky; right: 0; z-index: 2;">
-          <thead>
-            <tr>
-              <th style="min-width: 120px; border-left: 1px solid #c7c7c7; text-align: center;">
-                CHỨC NĂNG
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(employee, index) in employees" :key="index" >
-              <td style="min-width: 120px; border-left: 1px dotted #c7c7c7; text-align: center;">
-                <div class="btn-edit">
-                  <button
-                    class="btn-btn hover"
-                    @click="
-                      onBtnEditClick(employee.employeeId, employee.employeeCode)
-                    "
-                  >
-                    <div class="flex btn-btn-text">
-                      <span
-                        class="pr-4"
-                        style="color: #0075c0; font-weight: 600"
-                        >Sửa</span
-                      >
-                    </div>
-                  </button>
-                  <DropdownDuplicateAndDelete
-                    @showPopup="
-                      showPopup(employee.employeeId, employee.employeeCode)
-                    "
-                    @showDialog="duplicateClick(employee.employeeId)"
-                  />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
       </div>
       <div class="message" v-if="employees == undefined">
           <div class="img-report">

@@ -5,11 +5,6 @@
       <div class="cashbox__title">Phiếu chi PC000000</div>
       <div class="cashbox__input">
         <div class="cashbox__input--size">
-          <!-- <model-select
-            :options="departments"
-            style="border: 1px solid #babec5; height: 32px"
-          >
-          </model-select> -->
           <Autocomplete/>
         </div>
       </div>
@@ -25,37 +20,7 @@
         <div class="basic__form">
           <div class="row__input">
             <div class="object">
-              <span class="text">Đối tượng</span>
-              <!-- <model-select
-                :options="departments"               
-                style="margin-top: 4px;border: 1px solid #babec5; height: 32px;"
-              >
-              </model-select> -->
-              <!-- <div class="department-box" style="margin-top: 4px">
-                <div class="selected-option">
-                  <input
-                    type="text"
-                    ref="focusDepartment"
-                    class="input-select"
-                  />
-
-                  <div class="icon-selected">
-                    <div class="icon icon-30 arrow-dropdown"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="select-custom" hidden="hidden">
-                <div class="header-select">
-                  <div class="text">Mã đơn vị</div>
-                  <div class="text" style="margin-left: 79px">Tên đơn vị</div>
-                </div>
-                <div class="department-content" ref="positionDepartment">
-                  <div class="item">
-                    <div></div>
-                    <div style="margin-left: 100px"></div>
-                  </div>
-                </div>
-              </div> -->
+              <span class="text">Đối tượng</span>             
               <Autocomplete/>
             </div>
             <div class="receive">
@@ -117,11 +82,6 @@
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên</span>
-              <!-- <model-select
-                :options="departments"
-                style="margin-top: 4px; border: 1px solid #babec5; height: 32px"
-              >
-              </model-select> -->
               <Autocomplete/>
             </div>
             <div class="attach">
@@ -154,9 +114,7 @@
                 <th style="min-width: 146px">TK CÓ</th>
                 <th style="min-width: 213px; text-align: right">SỐ TIỀN</th>
                 <th style="min-width: 204px">ĐỐI TƯỢNG</th>
-                <th style="min-width: 327px">
-                  <div class="resize">TÊN ĐỐI TƯỢNG</div>
-                </th>
+                <th style="min-width: 327px">TÊN ĐỐI TƯỢNG</th>
                 <th style="min-width: 151px">KHOẢN MỤC CP</th>
                 <th style="min-width: 250px">TÊN KHOẢN MỤC CP</th>
                 <th style="min-width: 200px">TK NGÂN HÀNG</th>
@@ -249,7 +207,6 @@ export default {
   },
   data() {
     return {
-      departments: [],
       STR_DISPLAY_FORMAT: "DD/MM/YYYY",
       localeDatePicker: {
         weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
@@ -274,16 +231,6 @@ export default {
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
     },
-  },
-  mounted() {
-    this.axios.get("/Departments").then((res) => {
-      res.data.data.forEach((item) => {
-        this.departments.push({
-          value: item.departmentId,
-          text: item.departmentName,
-        });
-      });
-    });
   },
 };
 </script>

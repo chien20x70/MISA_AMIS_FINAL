@@ -110,6 +110,10 @@ export default {
 .ui.dropdown .menu>.item{
   font-size: 13px !important;
 }
+.ui.search.dropdown>.text {
+    left: 0px !important;
+    font-size: 13px;  
+}
 
 .ui.dropdown .menu .selected.item, .ui.dropdown.selected {
     background: #2ca01c !important;

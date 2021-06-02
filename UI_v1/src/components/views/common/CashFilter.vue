@@ -11,11 +11,13 @@
         <div class="btn-footer">
             <div class="reason">
                 <span class="text">Thời gian</span><br/>
+                <!-- <Autocomplete/> -->
                 <model-select
-                    :options="departments"
+                v-model="options.text"
+                  :options="options"
                   style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"
                 >
-                </model-select>
+                </model-select>  
             </div>
             <div class="reason">
                 <span class="text">Từ ngày</span><br/>
@@ -52,6 +54,7 @@
 </template>
 <script>
 import DatePick from "vue-date-pick";
+
 import { ModelSelect } from "vue-search-select";
 export default {
     components:{
@@ -79,18 +82,25 @@ export default {
                 "Tháng 12",
                 ],
             },
+            options: [
+                { value: '1', text: 'Tùy chọn' },
+                { value: '2', text: 'Năm sau' },
+                { value: '3', text: 'Quý sau' },
+                { value: '4', text: 'Tháng sau' },
+                { value: '5', text: 'Đầu năm đến hiện tại' }
+            ],
         }
     },
     mounted() {
-    this.axios.get("/Departments").then((res) => {
-      res.data.data.forEach((item) => {
-        this.departments.push({
-            value: item.departmentId,
-            text: item.departmentName,
+        this.axios.get("/Departments").then((res) => {
+            res.data.data.forEach((item) => {
+                this.departments.push({
+                value: item.departmentId,
+                text: item.departmentName,
+                });
+            });
         });
-      });
-    });
-  },
+    },
 }
 </script>
 <style scoped>

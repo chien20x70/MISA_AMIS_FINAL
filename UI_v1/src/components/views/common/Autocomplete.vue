@@ -1,10 +1,22 @@
 <template>
   <div>
-    <div class="department-box" style="margin-top: 4px">
+    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false}">
       <div class="selected-option">
-        <input type="text" ref="focusDepartment" class="input-select" />
+        <input
+          type="text"
+          ref="focusDepartment"
+          class="input-select"
+          @keydown.up="up"
+          @keydown.down="down"
+          @keydown.enter="enter"
+          :value="showValueDepartment"
+          @focus="focusInputKey"
+        />
         <div class="icon-selected">
-          <div class="icon icon-30 arrow-dropdown" @click="onBtnDropdownClick"></div>
+          <div
+            class="icon icon-30 arrow-dropdown"
+            @click="onBtnDropdownClick"
+          ></div>
         </div>
       </div>
     </div>
@@ -13,10 +25,16 @@
         <div class="text">Mã đơn vị</div>
         <div class="text" style="margin-left: 79px">Tên đơn vị</div>
       </div>
-      <div class="department-content" ref="positionDepartment">
-        <div class="item">
-          <div></div>
-          <div style="margin-left: 100px"></div>
+      <div class="department-content" ref="positionDepartment" 
+        v-for="(department, index) in departments"
+        :key="index"
+        :value="department.departmentId"
+        @click="onBtnDepartmentClick(department ,index)"
+        :class="{ color: currentIndex == index }"
+      >
+        <div class="scrollItem" >
+          <div>{{ department.departmentCode }}</div>
+          <div class="scrollName" style="margin-left: 100px">{{ department.departmentName }}</div>
         </div>
       </div>
     </div>
@@ -26,15 +44,90 @@
 export default {
   data() {
     return {
+      departments: [],
       toggleAutocomplete: true,
-    }
+      currentIndex: 0,
+      saveValueDepartment: null,
+    };
   },
-    methods: {
-      onBtnDropdownClick(){
-        this.toggleAutocomplete = !this.toggleAutocomplete;
+  methods: {
+    onBtnDropdownClick() {
+      this.toggleAutocomplete = !this.toggleAutocomplete;
+      if (!this.toggleAutocomplete) {
+        this.$refs.focusDepartment.focus();
       }
     },
-}
+
+    focusInputKey() {
+      this.toggleAutocomplete = false;
+    },
+    /**
+     * Click nút up cập nhật vị trí currentIndex
+     * CreatedBy:NXCHIEN 19/05/2021
+     */
+    up() {
+      if (this.currentIndex > 0) this.currentIndex--;
+    },
+
+    /**
+     * Click nút up cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
+     * CreatedBY:NXCHIEN 19/05/2021
+     */
+    down() {
+      if (this.toggleAutocomplete) {
+        this.toggleAutocomplete = false;
+      }
+      if (this.currentIndex < this.departments.length - 1) this.currentIndex++;
+      document.getElementsByClassName("scrollName")[4].scrollIntoView();
+    },
+
+    /**
+     * Click enter cập nhật các giá trị để bind lên input chứa giá trị tên phòng ban/ đơn vị
+     * CreatedBy: NXCHIEN 19/05/2021
+     */
+    enter() {
+      this.saveValueDepartment = this.departments[this.currentIndex].departmentId;
+      
+      this.toggleAutocomplete = true;
+    },
+    onBtnDepartmentClick(department, index) {
+      // Lưu giá trị ID lấy được
+      this.saveValueDepartment = department.departmentId;
+      
+      this.toggleAutocomplete = true;
+
+      this.currentIndex = index;
+    },
+  },
+  computed:{
+    showValueDepartment: {
+      get() {
+        for (let index = 0; index < this.departments.length; index++) {
+          if (
+            this.saveValueDepartment == this.departments[index].departmentId
+          ) {
+            return this.departments[index].departmentName;
+          } 
+        }
+        return "";
+      },
+      set(value) {
+        this.saveValueDepartment = value;
+      },
+    },
+  },
+
+  mounted() {
+    this.axios
+      .get("/Departments")
+      .then((res) => {
+        this.departments = res.data.data;
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  },
+};
 </script>
 <style scoped>
 .department-box {
@@ -46,9 +139,7 @@ export default {
   background-color: #fff;
   outline: none;
   width: 100%;
-}
-.department-box:focus {
-  border-color: #2ca01c;
+  margin-top: 4px;
 }
 .department-content {
   display: flex;
@@ -60,10 +151,6 @@ export default {
   color: #35bf22;
   font-weight: 600;
   background-color: #f4f5f8;
-}
-
-.department-box:focus {
-  border-color: #2ca01c;
 }
 .selected-option {
   display: flex;
@@ -77,9 +164,11 @@ export default {
   padding: 5px 0 5px 10px;
   height: 32px;
   border: none;
-  width: 90%;
+  width: 77%;
 }
-
+.input-focus{
+  border-color: #2ca01c;
+}
 .icon-selected {
   display: flex;
   align-items: center;
@@ -95,10 +184,11 @@ export default {
   transform: rotate(180deg);
   transition: transform 0.15s linear;
 }
-.select-custom{
+.select-custom {
   position: absolute;
   overflow-y: auto;
   min-width: 200px;
+  max-height: 160px;
   background-color: white;
   border: 1px solid #bbb;
 }
@@ -112,10 +202,15 @@ export default {
   min-width: 200px;
   z-index: 4;
 }
-.cashbox__input--size .select-custom{
+.cashbox__input--size .select-custom {
   top: 43px;
   z-index: 10;
   width: 28%;
+}
+.reason .select-custom {
+  top: 213px;
+  width: 20%;
+  z-index: 5;
 }
 .header-select {
   height: 32px;
@@ -124,8 +219,10 @@ export default {
   align-items: center;
   background-color: #f4f5f8;
   padding: 0 14px 0 10px;
+  position: sticky;
+  top: 0;
 }
-.select-custom .item {
+.select-custom .scrollItem {
   height: 32px;
   width: 100%;
   padding: 0 14px 0 10px;
@@ -134,11 +231,15 @@ export default {
   display: flex;
   align-items: center;
 }
-.item:hover {
+.scrollItem:hover {
   color: #2ca01c;
   background-color: rgb(219, 219, 219);
 }
-.invisible{
+.invisible {
   display: none;
+}
+.color {
+  background-color: #2ca01c;
+  color: white;
 }
 </style>
