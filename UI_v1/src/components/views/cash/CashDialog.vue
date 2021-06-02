@@ -5,16 +5,20 @@
       <div class="cashbox__title">Phiếu chi PC000000</div>
       <div class="cashbox__input">
         <div class="cashbox__input--size">
-          <model-select
+          <!-- <model-select
             :options="departments"
-            style="border: 1px solid #babec5; height: 32px;"
+            style="border: 1px solid #babec5; height: 32px"
           >
-          </model-select>
+          </model-select> -->
+          <Autocomplete/>
         </div>
       </div>
       <div class="cashbox__icon icon icon-24 mi-setting__detail"></div>
       <div class="cashbox__icon icon icon-24 mi-help"></div>
-      <div class="cashbox__icon icon icon-24 mi-close" @click="onBtnCloseClick"></div>
+      <div
+        class="cashbox__icon icon icon-24 mi-close"
+        @click="onBtnCloseClick"
+      ></div>
     </div>
     <div class="cashbox__content">
       <div class="content__information">
@@ -22,83 +26,110 @@
           <div class="row__input">
             <div class="object">
               <span class="text">Đối tượng</span>
-              <model-select
+              <!-- <model-select
                 :options="departments"               
                 style="margin-top: 4px;border: 1px solid #babec5; height: 32px;"
               >
-              </model-select>
+              </model-select> -->
+              <!-- <div class="department-box" style="margin-top: 4px">
+                <div class="selected-option">
+                  <input
+                    type="text"
+                    ref="focusDepartment"
+                    class="input-select"
+                  />
+
+                  <div class="icon-selected">
+                    <div class="icon icon-30 arrow-dropdown"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="select-custom" hidden="hidden">
+                <div class="header-select">
+                  <div class="text">Mã đơn vị</div>
+                  <div class="text" style="margin-left: 79px">Tên đơn vị</div>
+                </div>
+                <div class="department-content" ref="positionDepartment">
+                  <div class="item">
+                    <div></div>
+                    <div style="margin-left: 100px"></div>
+                  </div>
+                </div>
+              </div> -->
+              <Autocomplete/>
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
-              <input type="text" class="input--size">
+              <input type="text" class="input--size" />
             </div>
             <div class="date__form">
-              <span class="text">Ngày hạch toán</span><br/>
-              <date-pick                 
-                  :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{
-                    class: 'style-input-date-lib',
-                    placeholder: STR_DISPLAY_FORMAT,
-                    style: 'margin-top: 4px; width: 168px;',
-                  }"
-                  :weekdays="localeDatePicker.weekdays"
-                  :months="localeDatePicker.months"
-                ></date-pick>
+              <span class="text">Ngày hạch toán</span><br />
+              <date-pick
+                :displayFormat="STR_DISPLAY_FORMAT"
+                :inputAttributes="{
+                  class: 'style-input-date-lib',
+                  placeholder: STR_DISPLAY_FORMAT,
+                  style: 'margin-top: 4px; width: 168px;',
+                }"
+                :weekdays="localeDatePicker.weekdays"
+                :months="localeDatePicker.months"
+              ></date-pick>
             </div>
-          </div>          
+          </div>
           <div class="row__input">
             <div class="address">
               <span class="text">Địa chỉ</span>
-              <input type="text" class="input--size">
+              <input type="text" class="input--size" />
             </div>
             <div class="date__form">
-              <span class="text">Ngày phiếu chi</span><br/>
-              <date-pick                 
-                  :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{
-                    class: 'style-input-date-lib',
-                    placeholder: STR_DISPLAY_FORMAT,
-                    style: 'margin-top: 4px; width: 168px;',
-                  }"
-                  :weekdays="localeDatePicker.weekdays"
-                  :months="localeDatePicker.months"
-                ></date-pick>
+              <span class="text">Ngày phiếu chi</span><br />
+              <date-pick
+                :displayFormat="STR_DISPLAY_FORMAT"
+                :inputAttributes="{
+                  class: 'style-input-date-lib',
+                  placeholder: STR_DISPLAY_FORMAT,
+                  style: 'margin-top: 4px; width: 168px;',
+                }"
+                :weekdays="localeDatePicker.weekdays"
+                :months="localeDatePicker.months"
+              ></date-pick>
             </div>
           </div>
           <div class="row__input">
             <div class="address">
               <span class="text">Lý do chi</span>
-              <input type="text" class="input--size">
+              <input type="text" class="input--size" />
             </div>
             <div class="date__form">
-              <span class="text">Số phiếu chi</span><br/>
-              <date-pick                 
-                  :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{
-                    class: 'style-input-date-lib',
-                    placeholder: STR_DISPLAY_FORMAT,
-                    style: 'margin-top: 4px; width: 168px;',
-                  }"
-                  :weekdays="localeDatePicker.weekdays"
-                  :months="localeDatePicker.months"
-                ></date-pick>
+              <span class="text">Số phiếu chi</span><br />
+              <date-pick
+                :displayFormat="STR_DISPLAY_FORMAT"
+                :inputAttributes="{
+                  class: 'style-input-date-lib',
+                  placeholder: STR_DISPLAY_FORMAT,
+                  style: 'margin-top: 4px; width: 168px;',
+                }"
+                :weekdays="localeDatePicker.weekdays"
+                :months="localeDatePicker.months"
+              ></date-pick>
             </div>
           </div>
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên</span>
-              <model-select
-                :options="departments"               
-                style="margin-top: 4px;border: 1px solid #babec5; height: 32px;"
+              <!-- <model-select
+                :options="departments"
+                style="margin-top: 4px; border: 1px solid #babec5; height: 32px"
               >
-              </model-select>
+              </model-select> -->
+              <Autocomplete/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
-              <input type="text" class="input--size" placeholder="Số lượng">
+              <input type="text" class="input--size" placeholder="Số lượng" />
             </div>
             <div class="invoice">chứng từ gốc</div>
-          </div> 
+          </div>
           <div class="row__reference">
             <div class="reference__title">Tham chiếu</div>
             <div class="reference__show__more">...</div>
@@ -112,60 +143,65 @@
       <div class="content__grid">
         <div class="detail">
           <div class="hover">Hạch toán</div>
-        </div>      
+        </div>
         <div class="grid__height">
           <table border="0">
             <thead>
               <tr>
                 <th class="first__th">#</th>
-                <th style="min-width: 315px; border-left: none;">DIỄN GIẢI</th>
-                <th style="min-width: 152px;">TK NỢ</th>
-                <th style="min-width: 146px;">TK CÓ</th>
-                <th style="min-width: 213px; text-align: right;">SỐ TIỀN</th>
+                <th style="min-width: 315px; border-left: none">DIỄN GIẢI</th>
+                <th style="min-width: 152px">TK NỢ</th>
+                <th style="min-width: 146px">TK CÓ</th>
+                <th style="min-width: 213px; text-align: right">SỐ TIỀN</th>
                 <th style="min-width: 204px">ĐỐI TƯỢNG</th>
-                <th style="min-width: 327px"><div class="resize">TÊN ĐỐI TƯỢNG</div></th>
+                <th style="min-width: 327px">
+                  <div class="resize">TÊN ĐỐI TƯỢNG</div>
+                </th>
                 <th style="min-width: 151px">KHOẢN MỤC CP</th>
                 <th style="min-width: 250px">TÊN KHOẢN MỤC CP</th>
-                <th style="min-width: 200px;">TK NGÂN HÀNG</th>
-                <th style="min-width: 40px; z-index: 102;"></th>
+                <th style="min-width: 200px">TK NGÂN HÀNG</th>
+                <th style="min-width: 40px; z-index: 102"></th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td class="first__th"></td>
-                <td style="border-left: none;"><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
-                <td style="text-align: right;"><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
-                <td><input type="text" style="width: 100%;"/></td>
+                <td style="border-left: none">
+                  <input type="text" style="width: 100%" />
+                </td>
+                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" /></td>
+                <td style="text-align: right">
+                  <input type="text" style="width: 100%" />
+                </td>
+                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" /></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete"></div>
                 </td>
-              </tr>              
+              </tr>
             </tbody>
             <tfoot>
-                <tr>
-                  <th style=" width: 40px;
-                    position: sticky;
-                    left: 0px;
-                    z-index: 2;"></th>
-                  <th style="min-width: 187px; border-left: none;"></th>
-                  <th style="min-width: 100px;"></th>
-                  <th style="min-width: 100px;"></th>
-                  <th style="min-width: 150px; text-align: right;">1000000</th>
-                  <th style="min-width: 150px;"></th>
-                  <th style="min-width: 250px;"></th>
-                  <th style="min-width: 151px"></th>
-                  <th style="min-width: 250px"></th>
-                  <th style="min-width: 200px"></th>
-                  <th style="min-width: 40px; z-index: 101;"></th>
-                </tr>
+              <tr>
+                <th
+                  style="width: 40px; position: sticky; left: 0px; z-index: 2"
+                ></th>
+                <th style="min-width: 187px; border-left: none"></th>
+                <th style="min-width: 100px"></th>
+                <th style="min-width: 100px"></th>
+                <th style="min-width: 150px; text-align: right">1000000</th>
+                <th style="min-width: 150px"></th>
+                <th style="min-width: 250px"></th>
+                <th style="min-width: 151px"></th>
+                <th style="min-width: 250px"></th>
+                <th style="min-width: 200px"></th>
+                <th style="min-width: 40px; z-index: 101"></th>
+              </tr>
             </tfoot>
-          </table>        
+          </table>
         </div>
       </div>
       <div class="grid__item">
@@ -176,12 +212,21 @@
         <div class="upload">
           <div class="upload__flex">
             <div class="icon icon-18 mi-attach"></div>
-            <div style="font-size: 12px; font-weight: 700; color: #111">Đính kèm</div>
-            <div style="margin-left: 15px; color: #757575; font-size: 12px;">Dung lượng tối đa 5MB</div>
+            <div style="font-size: 12px; font-weight: 700; color: #111">
+              Đính kèm
+            </div>
+            <div style="margin-left: 15px; color: #757575; font-size: 12px">
+              Dung lượng tối đa 5MB
+            </div>
           </div>
-          <input type="text" class="attach__file" placeholder="Kéo/thả tệp vào đây hoặc bấm vào đây" readonly>
+          <input
+            type="text"
+            class="attach__file"
+            placeholder="Kéo/thả tệp vào đây hoặc bấm vào đây"
+            readonly
+          />
         </div>
-      </div>     
+      </div>
     </div>
     <div class="cashbox__footer">
       <button class="btn-common">Hủy</button>
@@ -193,12 +238,14 @@
   </div>
 </template>
 <script>
-import { ModelSelect } from "vue-search-select";
+// import { ModelSelect } from "vue-search-select";
 import DatePick from "vue-date-pick";
+import Autocomplete from "../common/Autocomplete.vue";
 export default {
-  components:{
-    ModelSelect,
-    DatePick
+  components: {
+    // ModelSelect,
+    DatePick,
+    Autocomplete,
   },
   data() {
     return {
@@ -221,12 +268,12 @@ export default {
           "Tháng 12",
         ],
       },
-    }
+    };
   },
   methods: {
-    onBtnCloseClick(){     
+    onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
-    }
+    },
   },
   mounted() {
     this.axios.get("/Departments").then((res) => {
@@ -238,11 +285,11 @@ export default {
       });
     });
   },
-}
+};
 </script>
 
 <style scoped>
-.cashbox{
+.cashbox {
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -253,7 +300,7 @@ export default {
   left: 0;
   z-index: 104;
 }
-.cashbox__header{
+.cashbox__header {
   background-color: #f4f5f8;
   width: 100%;
   top: 0;
@@ -262,7 +309,7 @@ export default {
   align-items: center;
   height: 54px;
 }
-.cashbox__title{
+.cashbox__title {
   font-weight: 700;
   font-size: 24px;
   top: -7px;
@@ -273,7 +320,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.cashbox__input{
+.cashbox__input {
   display: flex;
   justify-content: left;
   align-items: center;
@@ -281,13 +328,13 @@ export default {
   flex: 1;
   min-width: 600px;
 }
-.cashbox__icon + .cashbox__icon{
+.cashbox__icon + .cashbox__icon {
   margin-left: 16px;
 }
-.cashbox__input--size{
+.cashbox__input--size {
   width: 350px;
 }
-.cashbox__content{
+.cashbox__content {
   flex: 1;
   min-height: 0;
   min-width: 0;
@@ -295,52 +342,52 @@ export default {
   position: relative;
   scroll-behavior: smooth;
 }
-.content__information{
+.content__information {
   display: flex;
   /* align-items: center; */
   background-color: #f4f5f8;
   padding: 7px 30px 24px 30px;
 }
-.basic__form{
+.basic__form {
   width: 75%;
 }
-.summary__info{
+.summary__info {
   width: 25%;
   text-align: right;
 }
-.summary__title{
+.summary__title {
   font-size: 13px;
 }
-.summary__number{
+.summary__number {
   font-size: 36px;
   font-weight: 700;
 }
-.row__input{
+.row__input {
   width: 100%;
   height: 70px;
   display: flex;
 }
-.object{
+.object {
   width: 34%;
-} 
-.receive{
-  padding: 0 16px 0 12px;
+}
+.receive {
+  padding: 0 11px 0 12px;
   width: 44%;
   margin-right: 11px;
 }
-.date__form{
+.date__form {
   width: 22%;
   padding: 0 0 12px 16px;
   border-left: 1px solid #d4d7dc;
 }
-.address{
+.address {
   width: 79%;
 }
-.employee{
+.employee {
   width: 34%;
   padding-right: 14px;
 }
-.attach{
+.attach {
   width: 16%;
 }
 .text {
@@ -348,39 +395,40 @@ export default {
   color: #111111;
   font-size: 12px;
 }
-.receive .input--size{
-  width: 102%;
+.receive .input--size {
+  width: calc(100% + 5px);
+  /* width: 100%; */
   margin-top: 4px;
 }
-.address .input--size{
+.address .input--size {
   width: calc(97% + 9px);
   margin-top: 4px;
 }
-.attach .input--size{
+.attach .input--size {
   width: 100%;
   margin-top: 4px;
   text-align: right;
 }
-.input--size::-webkit-input-placeholder{
+.input--size::-webkit-input-placeholder {
   font-family: NotoSans-Regular-italic;
   font-size: 12px;
 }
-.invoice{
+.invoice {
   padding: 31px 7px 0;
   font-size: 13px;
 }
-.row__reference{
+.row__reference {
   padding-top: 12px;
   width: 100%;
   height: 32px;
   display: flex;
 }
-.reference__title{
+.reference__title {
   margin-right: 16px;
   min-width: 75px;
   font-size: 13px;
 }
-.reference__show__more{
+.reference__show__more {
   cursor: pointer;
   color: #0075c0;
   font-weight: 700;
@@ -388,11 +436,9 @@ export default {
   overflow: hidden;
   font-size: 12px;
 }
-.content__grid{
-  
-
+.content__grid {
 }
-.detail{
+.detail {
   width: calc(100vw - 20px);
   padding: 18px 0 18px 30px;
   position: sticky;
@@ -403,40 +449,41 @@ export default {
   color: #0075c0;
   font-weight: 700;
 }
-.hover:hover{
+.hover:hover {
   color: #2ca01c;
   cursor: pointer;
 }
-.grid__height{
+.grid__height {
   margin-left: 30px;
   overflow-x: auto;
   width: calc(95% + 20px);
 }
 
-table tr{
+table tr {
   border-bottom: 1px solid #bbb;
 }
-table th, td {
+table th,
+td {
   border-bottom: 1px solid #c7c7c7;
   border-left: 1px solid #c7c7c7;
-  box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7;  
+  box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7;
 }
-tbody tr td{
+tbody tr td {
   border-left: 1px dotted #bbb;
   background-color: #f3f8f8;
 }
-.editclass{
-  min-width: 40px; 
-  border-left: 1px dotted #c7c7c7; 
+.editclass {
+  min-width: 40px;
+  border-left: 1px dotted #c7c7c7;
   text-align: center;
   line-height: 40px;
 }
-table tfoot th{
+table tfoot th {
   bottom: 0px !important;
   height: 32px;
   font-size: 13px;
 }
-.first__th{
+.first__th {
   width: 40px;
   position: sticky;
   left: 0px;
@@ -449,16 +496,16 @@ table tfoot th{
   align-items: center;
   justify-content: center;
 }
-.grid__item{
+.grid__item {
   padding: 0 30px 30px;
   width: 100%;
 }
-.item__flex{
+.item__flex {
   display: flex;
   align-items: center;
   padding: 10px 0 36px;
 }
-.btn-add-row{
+.btn-add-row {
   height: 24px;
   font-size: 12px;
   font-weight: 700;
@@ -466,25 +513,25 @@ table tfoot th{
   border-color: #8d9096;
   border-radius: 2.5px;
 }
-.btn-add-row + .btn-add-row{
+.btn-add-row + .btn-add-row {
   margin-left: 10px;
 }
-.upload__flex{
+.upload__flex {
   display: flex;
   align-items: center;
 }
-.attach__file{
+.attach__file {
   margin-top: 4px;
   width: 30%;
   height: 50px;
   text-align: center;
   cursor: pointer;
 }
-.attach__file::-webkit-input-placeholder{
+.attach__file::-webkit-input-placeholder {
   font-family: NotoSans-Regular-italic;
   font-size: 12px;
 }
-.cashbox__footer{
+.cashbox__footer {
   display: flex;
   align-items: center;
   padding: 8px 16px;
@@ -493,11 +540,11 @@ table tfoot th{
   height: 50px;
   justify-content: space-between;
 }
-.flex{
+.flex {
   display: flex;
   align-items: center;
 }
-.btn-common{
+.btn-common {
   border: 1px solid #6b6c72;
   color: #fff;
   background-color: transparent;
@@ -505,12 +552,105 @@ table tfoot th{
   height: 34px;
   padding: 6px 20px;
 }
-.btn-common + .btn-common{
+.btn-common + .btn-common {
   margin-left: 5px;
 }
-.btn--success{
+.btn--success {
   background-color: #35bf22;
   border: none;
 }
 
+
+
+/**css ------ department */
+.department-box {
+  height: 32px;
+  display: flex;
+  min-height: 32px;
+  border: 1px solid #babec5;
+  border-radius: 2px;
+  background-color: #fff;
+  outline: none;
+  width: 100%;
+}
+.department-box:focus {
+  border-color: #2ca01c;
+}
+.department-content {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  cursor: pointer;
+}
+.department-content:hover {
+  color: #35bf22;
+  font-weight: 600;
+  background-color: #f4f5f8;
+}
+
+.department-box:focus {
+  border-color: #2ca01c;
+}
+.selected-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.input-select {
+  background-color: transparent;
+  display: flex;
+  padding: 5px 0 5px 10px;
+  height: 32px;
+  border: none;
+  width: 90%;
+}
+
+.icon-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-selected:hover {
+  background-color: #bbb;
+}
+.arrow-dropdown {
+  background-position: -552px -352px;
+}
+.tranform {
+  transform: rotate(180deg);
+  transition: transform 0.15s linear;
+}
+
+.object .select-custom {
+  position: absolute;
+  overflow-y: auto;
+  height: 160px;
+  width: 24%;
+  top: 65px;
+  min-width: 200px;
+  background-color: white;
+  border: 1px solid #bbb;
+}
+.header-select {
+  height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #f4f5f8;
+  padding: 0 14px 0 10px;
+}
+.select-custom .item {
+  height: 32px;
+  width: 100%;
+  padding: 0 14px 0 10px;
+  text-align: left;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+}
+.item:hover {
+  color: #2ca01c;
+  background-color: rgb(219, 219, 219);
+}
 </style>

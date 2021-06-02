@@ -1163,9 +1163,7 @@ export default {
   font-weight: 600;
   background-color: #f4f5f8;
 }
-/* .item-left{
 
-} */
 .department-box:focus {
   border-color: #2ca01c;
 }
