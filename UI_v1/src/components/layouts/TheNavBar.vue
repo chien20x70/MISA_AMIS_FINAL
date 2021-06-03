@@ -10,13 +10,24 @@
       <router-link
         class="menu-item"
         to="/"
+        v-bind:class="{ active: selectedItem == -1 }"
+        v-on:click="selectItem(-1)"
+      >
+        <div class="menu-item-icon">
+          <div class="icon icon-24 mi-sidebar-dashboard"></div>
+        </div>
+        <div class="menu-item-title">Tổng quan</div>
+      </router-link>
+      <router-link
+        class="menu-item"
+        to="/employee"
         v-bind:class="{ active: selectedItem == 0 }"
         v-on:click="selectItem(0)"
       >
         <div class="menu-item-icon">
           <div class="icon icon-24 mi-sidebar-dashboard"></div>
         </div>
-        <div class="menu-item-title">Tổng quan</div>
+        <div class="menu-item-title">Danh mục</div>
       </router-link>
       <router-link
         class="menu-item"   
@@ -173,7 +184,7 @@ export default {
   },
   data: function () {
     return {
-      selectedItem: 0,
+      selectedItem: -1,
       toggle: false,
     };
   },
@@ -235,7 +246,15 @@ export default {
   cursor: pointer;
   position: relative;
 }
-.menu-item::before {
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.menu-item.router-link-exact-active{
+  background: rgba(255, 255, 255, 0.2);
+}
+.menu-item.router-link-exact-active::before{
   content: "";
   position: absolute;
   width: 6px;
@@ -243,17 +262,8 @@ export default {
   background: rgb(51, 191, 34);
   top: 0;
   left: 0;
-  display: none;
 }
-.menu-item:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-.menu-item.active {
-  background: rgba(255, 255, 255, 0.2);
-}
-.menu-item.active::before {
-  display: block; 
-}
+
 .menu-item .menu-item-icon {
   margin-right: 8px;
   margin-left: 16px;
@@ -266,12 +276,12 @@ export default {
   font-family: NotoSans-Regular;
   text-decoration: none;
 }
-.menu-item.active .menu-item-title {
+.menu-item.router-link-exact-active .menu-item-title {
   font-family: NotoSans-Regular;
   font-weight: 1000;
 }
 
-.active .icon {
+.router-link-exact-active .icon {
   background-position-y: -1585px;
 }
 
