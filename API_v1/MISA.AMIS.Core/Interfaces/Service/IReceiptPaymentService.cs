@@ -9,5 +9,8 @@ namespace MISA.AMIS.Core.Interfaces.Service
 {
     public interface IReceiptPaymentService: IBaseService<ReceiptPayment>
     {
+        public ServiceResult GetReceiptPaymentCodeMax();
+
+        public ServiceResult GetDuplicateReceiptPayment(Guid id);
     }
 }

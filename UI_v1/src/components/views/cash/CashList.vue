@@ -69,15 +69,15 @@
               <th style="min-width: 150px; text-align: right;">SỐ TIỀN</th>
               <th style="min-width: 228px">ĐỐI TƯỢNG</th>
               <th style="min-width: 323px"><div class="resize">LÝ DO THU/CHI</div></th>
-              <th style="min-width: 150px">LOẠI CHỨNG TỪ</th>
+              <!-- <th style="min-width: 150px">LOẠI CHỨNG TỪ</th> -->
               <th style="min-width: 120px; z-index: 101;">CHỨC NĂNG</th>
             </tr>
           </thead>
-          <tbody v-if="employees != undefined">
+          <tbody v-if="cashs != undefined">
             <tr
-              v-for="(employee, index) in employees"
+              v-for="(cash, index) in cashs"
               :key="index"
-              @dblclick="onRowTableDblClick(employee.employeeId)"
+              @dblclick="onRowTableDblClick(cash.receiptPaymentId)"
             >
               <td
                 style="
@@ -94,18 +94,18 @@
               >
                 <input type="checkbox" class="check-box" />
               </td>
-              <td style="border-left: none; text-align: center;">{{ employee.employeeCode }}</td>
-              <td>{{ employee.fullName }}</td>
-              <td>{{ employee.genderName }}</td>
-              <td style="text-align: right;">{{ employee.dateOfBirth | dateFormatDDMMYY }}</td>
-              <td>{{ employee.identifyNumber }}</td>
-              <td>{{ employee.positionName }}</td>
-              <td>{{ employee.departmentName }}</td>
+              <td style="border-left: none; text-align: center;">{{ cash.accountingDate | dateFormatDDMMYY}}</td>
+              <td>{{ cash.refCode }}</td>
+              <td>{{ cash.description }}</td>
+              <td style="text-align: right;">{{ cash.totalAmount | formatMoney}}</td>
+              <td>{{ cash.organizationUnitName }}</td>
+              <td>{{ cash.reasonName }}</td>
+              <!-- <td>{{ cash.accountingDate }}</td> -->
               <td class="editclass" :style="{ 'z-index': 100 - index }">
                 <div class="btn-edit">
                   <button
                     class="btn-btn hover"
-                    @click="onBtnEditClick(employee.employeeId, employee.employeeCode)"
+                    @click="onBtnEditClick(cash.receiptPaymentId, cash.refCode)"
                   >
                     <div class="flex btn-btn-text">
                       <span
@@ -117,9 +117,9 @@
                   </button>
                   <DropdownDuplicateAndDelete
                     @showPopup="
-                      showPopup(employee.employeeId, employee.employeeCode)
+                      showPopup(cash.receiptPaymentId, cash.refCode)
                     "
-                    @showDialog="duplicateClick(employee.employeeId)"
+                    @showDialog="duplicateClick(cash.receiptPaymentId)"
                   />
                 </div>
               </td>
@@ -137,13 +137,13 @@
                 <th style="min-width: 150px; text-align: right;">1000000</th>
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
-                <th style="min-width: 150px"></th>
+                <!-- <th style="min-width: 150px"></th> -->
                 <th style="min-width: 120px; z-index: 100;"></th>
               </tr>
           </tfoot>
         </table>        
       </div>
-      <div class="message" v-if="employees == undefined">
+      <div class="message" v-if="cashs == undefined">
           <div class="img-report">
             <img
               src="https://actappg2.misacdn.net/img/bg_report_nodata.76e50bd8.svg"
@@ -227,7 +227,7 @@
         </div>
       </div>
     </div>
-    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad"/>
+    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" :cash="selectedCash"/>
     <Popup     
       v-if="valuePopup"
       @hidePopupNotLoad="hidePopupNotLoad"
@@ -261,16 +261,16 @@ export default {
   },
   data() {
     return {
-      employees: [], // Mảng nhân viên
+      cashs: [], // Mảng ReceiptPayment
       show: false, // Giá trị hiển thị dialog
-      selectedEmployee: {}, // data 1 nhân viên khi dblClick hoặc click btn Sửa
+      selectedCash: {}, // data 1 ReceiptPayment khi dblClick hoặc click btn Sửa
       recordId: null, // Lưu giá trị của EmployeeId để truyền qua Popup
       status: null, // Trạng thái nút là Thêm mới hay Sửa
       isBusy: false, // Trạng thái của icon Loading
       valuePopup: false, // Giá trị hiển thị Popup
       recordCode: null, // Lưu giá trị Employeecode truyền qua Popup
       totalRecord: 0, // Tổng số bản ghi Empployee
-      pageSize: 20, // Bao nhiêu nhân viên / trang
+      pageSize: 20, // Bao nhiêu ReceiptPayment / trang
       filter: "", // Giá trị truyền vào input để lọc
       pageIndex: 1, // Trang hiện tại
       totalPages: 1, // Tổng số trang
@@ -281,6 +281,7 @@ export default {
 
       //#region data cho CashDialog
       toggleFilter: false,
+      arrDetail: [],
       //#endregion
     };
   },
@@ -298,35 +299,38 @@ export default {
   methods: {
     //#region BtnAddClick
     /**
-     * Gán SelectedEmployee khi click BtnAdd.
+     * Gán selectedCash khi click BtnAdd.
      * CreatedBY: NXCHIEN 30/05/2021
      */
-    onBtnAddAssignSelectedEmployee(response){
+    onBtnAddAssignSelectedCash(response){
       // Gán tất cả các ô data của dialog rỗng
-      this.selectedEmployee = {};
-      // Gán code Max cho ô Mã nhân viên và 1 số thuộc tính khác.
-      this.selectedEmployee.employeeCode = response.data.data;
-      this.selectedEmployee.fullName = "";
-      this.selectedEmployee.departmentId = "";
-      this.selectedEmployee.gender = 1;
-      this.selectedEmployee.email = "";
+      this.selectedCash = {};
+      // Gán code Max cho ô Mã ReceiptPayment và 1 số thuộc tính khác.
+      this.selectedCash.refCode = response.data.data;
+      this.selectedCash.description = "Chi tiền cho ";
+      this.selectedCash.listDetail = [{
+          "DescriptionDetail": "Chi tiền cho ",
+          "CreditAccount": "19008198",
+          "Amount": 0
+        },       
+      ];
     },
 
     /**
-     * Click thêm mới 1 nhân viên
+     * Click thêm mới 1 ReceiptPayment
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnAddClick() {
       this.filterData();
       this.axios
-        .get("/Employees/employeeCode")
+        .get("/ReceiptPayments/ReceiptPaymentCode")
         .then((response) => {
           // Hiển thị dialog
           this.show = true;
           // Gán giá trị là nút Thêm mới
           this.status = "add";
           // Gán tất cả các ô data của dialog rỗng
-          this.onBtnAddAssignSelectedEmployee(response);
+          this.onBtnAddAssignSelectedCash(response);
         })
         .catch(() => {});
     },
@@ -391,52 +395,44 @@ export default {
      * Hàm dùng chung khi click nhân bản và dblClick 1 dòng trong bảng
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    onShowDialogAndAssignSelectedEmployee(response){
+    onShowDialogAndAssignSelectedCash(response){
       //show Dialog
       this.show = true;
       //Fill employee vào dialog
-      this.selectedEmployee = response.data.data;
-      // format lại dữ liệu hiển thị
-      if (this.selectedEmployee.dateOfBirth !== null) {
-        this.selectedEmployee.dateOfBirth = this.dateFormatYYMMDD(
-          this.selectedEmployee.dateOfBirth
-        );
-      }
-
-      if (this.selectedEmployee.dateOfIN !== null) {
-        this.selectedEmployee.dateOfIN = this.dateFormatYYMMDD(
-          this.selectedEmployee.dateOfIN
-        );
-      }
+      this.selectedCash = response.data.data;
+      
+      this.selectedCash.listDetail = JSON.parse(this.selectedCash.receiptPaymentDetail);
+      console.log(this.selectedCash.listDetail);
     },
 
     /* 
     dblClick vào 1 dòng trong table
-    - Lấy ra 1 nhân viên được chọn
+    - Lấy ra 1 ReceiptPayment được chọn
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onRowTableDblClick(eId) {
-    
+      
       this.axios
-        .get("/Employees/" + eId)
+        .get("/ReceiptPayments/" + eId)
         .then((response) => {
 
           // gán cờ thành nút sửa
           this.status = "edit";
 
-          this.onShowDialogAndAssignSelectedEmployee(response);
+          this.onShowDialogAndAssignSelectedCash(response);
         })
         .catch(() => {});
     },
 
     duplicateClick(value) {
+      
       this.axios
-        .get("/Employees/EmployeeCopy?id=" + value)
+        .get("/ReceiptPayment/ReceiptPaymentCopy?id=" + value)
         .then((response) => {
           // gán cờ thành nút thêm mới
           this.status = "add";
           
-          this.onShowDialogAndAssignSelectedEmployee(response);
+          this.onShowDialogAndAssignSelectedCash(response);
         })
         .catch(() => {});
 
@@ -472,11 +468,11 @@ export default {
       this.isBusy = true;
       this.axios
         .get(
-          `/Employees/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`
+          `/ReceiptPayments/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`
         )
         .then((response) => {
-          // Gán mảng nhân viên ban đầu = data từ server trả về
-          this.employees = response.data.data.data;
+          // Gán mảng ReceiptPayment ban đầu = data từ server trả về
+          this.cashs = response.data.data.data;
           // tổng số bản ghi = tổng số bản ghi từ server trả về
           this.totalRecord = response.data.data.totalRecord;
           // tổng số trang.
@@ -484,6 +480,8 @@ export default {
           if (response.data.data.totalRecord == undefined) {
             this.totalRecord = 0;
           }
+          this.assignListDetail();
+          
         })
         .catch(() => {})
         .then(() => {
@@ -492,7 +490,7 @@ export default {
     },
 
     /* 
-    Kiểm tra giá trị input thay đổi thì lọc mảng nhân viên bằng cách gọi tới API
+    Kiểm tra giá trị input thay đổi thì lọc mảng ReceiptPayment bằng cách gọi tới API
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onChangeInputEmployeeFilter(e) {
@@ -511,7 +509,7 @@ export default {
 
     /* 
     Kiểm tra click thay đổi phân trang
-    - Lọc lại mảng nhân viên khi click.
+    - Lọc lại mảng ReceiptPayment khi click.
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onPageChange(page) {
@@ -529,7 +527,7 @@ export default {
     onBtnExportClick() {
       // Mở 1 cửa số mới gọi API để tải về.
       window.open(
-        `https://localhost:44314/api/v1/Employees/ExportingExcel`,
+        `https://localhost:44314/api/v1/cashs/ExportingExcel`,
         "_blank"
       );
     },
@@ -544,11 +542,11 @@ export default {
       this.msgSelected = "";
       this.msgSelected = value + this.msgSelect;
 
-      // số nhân viên trên/ trang
+      // số ReceiptPayment trên/ trang
       this.pageSize = value;
       // trang số 1
       this.pageIndex = 1;
-      // Lọc nhân viên
+      // Lọc ReceiptPayment
       this.filterData();
       this.valueSelect = true;
     },
@@ -601,7 +599,7 @@ export default {
     },
     keymap() {
       return {       
-        "Ctrl + 1": this.onBtnAddClick,
+        "Ctrl + 2": this.onBtnAddClick,
       };
     },
   },

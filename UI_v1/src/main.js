@@ -46,6 +46,15 @@ Vue.filter('dateFormatDDMMYY', function (date) {
   return `${day}/${month}/${year}`;
 })
 
+Vue.filter('formatMoney', function (money) { 
+  if(money == null){
+    return 0;
+  }else{
+    let val = (money).toFixed(1).replace('.', ',');
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  } 
+})
+
 new Vue({
   render: h => h(App),
   router

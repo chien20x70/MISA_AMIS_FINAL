@@ -15,10 +15,39 @@ namespace MISA.AMIS.API.Controllers
     [ApiController]
     public class ReceiptPaymentController : BaseController<ReceiptPayment>
     {
+        IReceiptPaymentService _receiptPaymentService;
         public ReceiptPaymentController(IReceiptPaymentRepository receiptPaymentRepository, IReceiptPaymentService receiptPaymentService)
             : base(receiptPaymentRepository, receiptPaymentService)
         {
+            _receiptPaymentService = receiptPaymentService;
+        }
 
+        [HttpGet("ReceiptPaymentCode")]
+        public IActionResult GetCode()
+        {
+            try
+            {
+                _serviceResult = _receiptPaymentService.GetReceiptPaymentCodeMax();
+            }
+            catch (Exception ex)
+            {
+                OnServiceResultException(ex);
+            }
+            return Ok(_serviceResult);
+        }
+
+        [HttpGet("ReceiptPaymentCopy")]
+        public IActionResult GetEmployeeCopy(Guid id)
+        {
+            try
+            {
+                _serviceResult = _receiptPaymentService.GetDuplicateReceiptPayment(id);
+            }
+            catch (Exception ex)
+            {
+                OnServiceResultException(ex);
+            }
+            return Ok(_serviceResult);
         }
     }
 }

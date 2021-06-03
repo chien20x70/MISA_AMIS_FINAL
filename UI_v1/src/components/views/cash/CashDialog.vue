@@ -25,11 +25,12 @@
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
-              <input type="text" class="input--size" />
+              <input type="text" class="input--size" v-model="cash.receiver"/>
             </div>
             <div class="date__form">
               <span class="text">Ngày hạch toán</span><br />
               <date-pick
+                v-model="cash.accountingDate"
                 :displayFormat="STR_DISPLAY_FORMAT"
                 :inputAttributes="{
                   class: 'style-input-date-lib',
@@ -44,11 +45,12 @@
           <div class="row__input">
             <div class="address">
               <span class="text">Địa chỉ</span>
-              <input type="text" class="input--size" />
+              <input type="text" class="input--size" v-model="cash.organizationUnitAddress"/>
             </div>
             <div class="date__form">
               <span class="text">Ngày phiếu chi</span><br />
               <date-pick
+                v-model="cash.refDate"
                 :displayFormat="STR_DISPLAY_FORMAT"
                 :inputAttributes="{
                   class: 'style-input-date-lib',
@@ -63,20 +65,11 @@
           <div class="row__input">
             <div class="address">
               <span class="text">Lý do chi</span>
-              <input type="text" class="input--size" />
+              <input type="text" class="input--size" v-model="cash.description"/>
             </div>
             <div class="date__form">
               <span class="text">Số phiếu chi</span><br />
-              <date-pick
-                :displayFormat="STR_DISPLAY_FORMAT"
-                :inputAttributes="{
-                  class: 'style-input-date-lib',
-                  placeholder: STR_DISPLAY_FORMAT,
-                  style: 'margin-top: 4px; width: 168px;',
-                }"
-                :weekdays="localeDatePicker.weekdays"
-                :months="localeDatePicker.months"
-              ></date-pick>
+              <input type="text" class="input--size" v-model="cash.refCode">
             </div>
           </div>
           <div class="row__input">
@@ -86,7 +79,7 @@
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
-              <input type="text" class="input--size" placeholder="Số lượng" />
+              <input type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
             </div>
             <div class="invoice">chứng từ gốc</div>
           </div>
@@ -97,7 +90,7 @@
         </div>
         <div class="summary__info">
           <div class="summary__title">Tổng tiền</div>
-          <div class="summary__number">0,00</div>
+          <div class="summary__number" >0.00</div>
         </div>
       </div>
       <div class="content__grid">
@@ -115,28 +108,22 @@
                 <th style="min-width: 213px; text-align: right">SỐ TIỀN</th>
                 <th style="min-width: 204px">ĐỐI TƯỢNG</th>
                 <th style="min-width: 327px">TÊN ĐỐI TƯỢNG</th>
-                <th style="min-width: 151px">KHOẢN MỤC CP</th>
-                <th style="min-width: 250px">TÊN KHOẢN MỤC CP</th>
-                <th style="min-width: 200px">TK NGÂN HÀNG</th>
                 <th style="min-width: 40px; z-index: 102"></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="first__th"></td>
+              <tr v-for="(list, index) in cash.listDetail" :key="index">
+                <td class="first__th">{{index}}</td>
                 <td style="border-left: none">
-                  <input type="text" style="width: 100%" />
+                  <input type="text" style="width: 100%" v-model="list.DescriptionDetail"/>
                 </td>
-                <td><input type="text" style="width: 100%" /></td>
-                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" v-model="list.DebtAccount"/></td>
+                <td><input type="text" style="width: 100%" v-model="list.CreditAccount"/></td>
                 <td style="text-align: right">
-                  <input type="text" style="width: 100%; text-align: right;" />
+                  <input type="text" style="width: 100%; text-align: right;" v-model="showAmount"/>
                 </td>
-                <td><input type="text" style="width: 100%" /></td>
-                <td><input type="text" style="width: 100%" /></td>
-                <td><input type="text" style="width: 100%" /></td>
-                <td><input type="text" style="width: 100%" /></td>
-                <td><input type="text" style="width: 100%" /></td>
+                <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitCode"/></td>
+                <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitName"/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete"></div>
                 </td>
@@ -153,9 +140,6 @@
                 <th style="min-width: 150px; text-align: right">1000000</th>
                 <th style="min-width: 150px"></th>
                 <th style="min-width: 250px"></th>
-                <th style="min-width: 151px"></th>
-                <th style="min-width: 250px"></th>
-                <th style="min-width: 200px"></th>
                 <th style="min-width: 40px; z-index: 101"></th>
               </tr>
             </tfoot>
@@ -196,14 +180,15 @@
   </div>
 </template>
 <script>
-// import { ModelSelect } from "vue-search-select";
 import DatePick from "vue-date-pick";
 import Autocomplete from "../common/Autocomplete.vue";
 export default {
   components: {
-    // ModelSelect,
     DatePick,
     Autocomplete,
+  },
+  props:{
+    cash: {type: Object, default: null},
   },
   data() {
     return {
@@ -230,6 +215,23 @@ export default {
   methods: {
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
+    },
+  },
+  computed:{
+    showAmount: {
+      get() {             
+        this.cash.listDetail.forEach(element => {
+          if(element.Amount != undefined){
+            return element.Amount.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
+          }
+        });
+        return "";
+      },
+      set(money) {
+        this.cash.listDetail.forEach(element => {
+          element.Amount = money;
+        });
+      },
     },
   },
 };
@@ -355,6 +357,10 @@ export default {
   width: 100%;
   margin-top: 4px;
   text-align: right;
+}
+.date__form .input--size {
+  width: 168px;
+  margin-top: 4px;
 }
 .input--size::-webkit-input-placeholder {
   font-family: NotoSans-Regular-italic;

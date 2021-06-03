@@ -9,5 +9,6 @@ namespace MISA.AMIS.Core.Interfaces.Repository
 {
     public interface IReceiptPaymentRepository: IBaseRepository<ReceiptPayment>
     {
+        public string GetReceiptPaymentCodeMax();
     }
 }

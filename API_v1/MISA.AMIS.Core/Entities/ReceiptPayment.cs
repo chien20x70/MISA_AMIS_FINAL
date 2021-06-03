@@ -11,7 +11,7 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Mã ID thu chi tiền mặt
         /// </summary>
-        public Guid ReceiptPaymentID { get; set; }
+        public Guid ReceiptPaymentId { get; set; }
 
         /// <summary>
         /// Mã ref số chứng từ

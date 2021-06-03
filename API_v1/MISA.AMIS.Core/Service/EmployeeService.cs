@@ -154,8 +154,8 @@ namespace MISA.AMIS.Core.Service
             {
                 return new ServiceResult()
                 {
-                    Status = StatusCode.Exception,
-                    Code = MISACode.BadRequest,
+                    Status = StatusCode.Success,
+                    Code = MISACode.Success,
                     Data = Properties.Resources.Default_Value_EmployeeCode,
                 };
             }
@@ -192,8 +192,8 @@ namespace MISA.AMIS.Core.Service
 
             return new ServiceResult()
             {
-                Status = StatusCode.Exception,
-                Code = MISACode.BadRequest,
+                Status = StatusCode.Success,
+                Code = MISACode.Success,
                 Data = result,
             }; ;
         }
@@ -217,7 +217,7 @@ namespace MISA.AMIS.Core.Service
             {
                 return new ServiceResult()
                 {
-                    Status = StatusCode.Exception,
+                    Status = StatusCode.Error,
                     Code = MISACode.BadRequest,
                     Data = Properties.AttributeResource.Msg_EmployeeCode + $" <{employeeCode}>" + Properties.Resources.Msg_Code_Exist,
                 };
@@ -234,7 +234,7 @@ namespace MISA.AMIS.Core.Service
             {
                 return new ServiceResult()
                 {
-                    Status = StatusCode.Exception,
+                    Status = StatusCode.Error,
                     Code = MISACode.BadRequest,
                     Data = Properties.Resources.Msg_IdentifyNumber_Exist,
                 };
@@ -249,7 +249,7 @@ namespace MISA.AMIS.Core.Service
             {
                 return new ServiceResult()
                 {
-                    Status = StatusCode.Exception,
+                    Status = StatusCode.Error,
                     Code = MISACode.BadRequest,
                     Data = Properties.Resources.Msg_Phone_Exist,
                 };
@@ -262,7 +262,7 @@ namespace MISA.AMIS.Core.Service
             {
                 return new ServiceResult()
                 {
-                    Status = StatusCode.Exception,
+                    Status = StatusCode.Error,
                     Code = MISACode.BadRequest,
                     Data = Properties.Resources.Msg_Email_Exist,
                 };
