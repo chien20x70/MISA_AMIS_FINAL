@@ -4,6 +4,8 @@ using MISA.AMIS.Core.Entities;
 using MISA.AMIS.Core.Enums;
 using MISA.AMIS.Core.Interfaces.Repository;
 using MISA.AMIS.Core.Interfaces.Service;
+using Nancy.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +64,26 @@ namespace MISA.AMIS.Core.Service
         {
             //TODO: Nếu không có bản ghi trong DB thì vẫn được coi là lấy thành công
             var entities = _baseRepository.GetAll();
-            //_serviceResult.Data = entities;
+            //var tableName = typeof(MISAEntity).Name;
+            //if (tableName.Equals("ReceiptPayment"))
+            //{
+            //    var propertyListDetail = typeof(MISAEntity).GetProperty("listDetail");
+            //    var properties = typeof(MISAEntity).GetProperties();
+            //    foreach (var property in properties)
+            //    {
+            //        if (property.Name.Equals("receiptPaymentDetail"))
+            //        {
+            //            string value = (string)property.GetValue(entities);
+
+            //            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            //            dynamic item = serializer.Deserialize<ReceiptPaymentDetail>(value);
+            //            //string test = item["test"];
+            //            //var arrDetail = JsonConvert.DeserializeObject<ReceiptPaymentDetail>(value);
+            //            propertyListDetail.SetValue(entities, item);
+                        
+            //        }
+            //    }
+            //}
             OnStateServiceResult(entities, StatusCode.Success, MISACode.Success);
 
             return _serviceResult;
