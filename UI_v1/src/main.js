@@ -16,6 +16,10 @@ import VueHotkey from 'v-hotkey'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import 'vue-search-select/dist/VueSearchSelect.css'
+import money from 'v-money'
+ 
+// register directive v-money and component <money>
+Vue.use(money, {precision: 4})
 Vue.use(VueHotkey)
 Vue.use(Antd);
 

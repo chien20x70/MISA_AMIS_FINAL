@@ -227,7 +227,8 @@
         </div>
       </div>
     </div>
-    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" :cash="selectedCash"/>
+    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" :cash="selectedCash" :flag="status"/>
+    <!-- :cash="selectedCash" -->
     <Popup     
       v-if="valuePopup"
       @hidePopupNotLoad="hidePopupNotLoad"
@@ -281,7 +282,6 @@ export default {
 
       //#region data cho CashDialog
       toggleFilter: false,
-      arrDetail: [],
       //#endregion
     };
   },
@@ -411,7 +411,7 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onRowTableDblClick(eId) {
-      
+
       this.axios
         .get("/ReceiptPayments/" + eId)
         .then((response) => {

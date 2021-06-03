@@ -120,7 +120,7 @@
                 <td><input type="text" style="width: 100%" v-model="list.DebtAccount"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.CreditAccount"/></td>
                 <td style="text-align: right">
-                  <input type="text" style="width: 100%; text-align: right;" v-model="showAmount"/>
+                  <input type="text" style="width: 100%; text-align: right;" v-model="list.Amount" v-money="money"/>
                 </td>
                 <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitCode"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitName"/></td>
@@ -182,16 +182,25 @@
 <script>
 import DatePick from "vue-date-pick";
 import Autocomplete from "../common/Autocomplete.vue";
+import {VMoney} from 'v-money'
 export default {
+  directives: {money: VMoney},
   components: {
     DatePick,
     Autocomplete,
   },
   props:{
     cash: {type: Object, default: null},
+    flag: {type: String, default: ''},
   },
   data() {
     return {
+      money: {
+          decimal: ',',
+          thousands: '.',
+          precision: 1,
+          masked: false /* doesn't work with directive */
+        },
       STR_DISPLAY_FORMAT: "DD/MM/YYYY",
       localeDatePicker: {
         weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
@@ -212,28 +221,13 @@ export default {
       },
     };
   },
+  
   methods: {
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
     },
   },
-  computed:{
-    showAmount: {
-      get() {             
-        this.cash.listDetail.forEach(element => {
-          if(element.Amount != undefined){
-            return element.Amount.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
-          }
-        });
-        return "";
-      },
-      set(money) {
-        this.cash.listDetail.forEach(element => {
-          element.Amount = money;
-        });
-      },
-    },
-  },
+  
 };
 </script>
 
