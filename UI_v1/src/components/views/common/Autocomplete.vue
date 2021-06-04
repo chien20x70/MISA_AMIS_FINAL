@@ -45,29 +45,25 @@
 </template>
 <script>
 export default {
-  props: ['value'],
+  props: ['value', 'code'],
   data() {
     return {
-      // content: null,
       employees: [],
       toggleAutocomplete: true,
       currentIndex: 0,
-      saveValueEmployee: null,
-      checkModeClick: false,
+      saveValueEmployeeName: '',
+      saveValueEmployeeCode: null,
+      saveValueEmployeeId: null,
+      flag: true,
     };
   },
   methods: {
-    // blurAutocomplete(){
-    //   if(!this.checkModeClick){
-    //     this.toggleAutocomplete = true;
-    //   }
-    // },
+    
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
       if (!this.toggleAutocomplete) {
         this.$refs.focusDepartment.focus();
       }
-      this.checkModeClick = true;
     },
 
     focusInputKey() {
@@ -97,18 +93,29 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter() {
-      this.saveValueEmployee = this.employees[this.currentIndex].fullName;
-      this.value = this.employees[this.currentIndex].fullName;
+      this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
+      this.saveValueEmployeeCode = this.employees[this.currentIndex].employeeCode;
+      this.saveValueEmployeeId = this.employees[this.currentIndex].employeeId;
       this.toggleAutocomplete = true;
+      this.flag = false;
+      if (this.code != undefined) {
+        this.$emit("sendIdToCashDialog", this.saveValueEmployeeId, this.code);
+      }
     },
     
     onBtnEmployeeClick(employee, index) {
       
-      this.saveValueEmployee = employee.fullName;
-      this.value = employee.fullName;
+      this.saveValueEmployeeName = employee.fullName;
+      this.saveValueEmployeeCode = employee.employeeCode;
+      this.saveValueEmployeeId = employee.employeeId;
+      // this.value = employee.fullName;
       this.toggleAutocomplete = true;
 
       this.currentIndex = index;
+      this.flag = false;
+      if (this.code != undefined) {
+        this.$emit("sendIdToCashDialog", this.saveValueEmployeeId, this.code);
+      }
     },
   },
   created(){
@@ -120,7 +127,6 @@ export default {
     
   },
   mounted() {
-    // this.content = this.saveValueEmployee;
     this.axios
       .get(
         `/Employees/Filter?pageSize=20&pageIndex=2&filter=`
@@ -131,25 +137,51 @@ export default {
       .catch(() => {});
   },
   computed:{
-    showEmployeeName: {
-      get() {
-        for (let index = 0; index < this.employees.length; index++) {
-          if (
-            this.saveValueEmployee == this.employees[index].fullName
-          ) {
-            return this.employees[index].fullName;
-          } else if (
-            this.value == this.employees[index].fullName
-          ) {
-            return this.employees[index].fullName;
-          }
+    showEmployeeName() {
+      // get(){
+        if(this.flag){
+          return this.value;
+        }else if(this.code != undefined){
+          return this.saveValueEmployeeCode;
+        }else{
+          return this.saveValueEmployeeName;
         }
-        return "";
-      },
-      set(value) {
-        this.value = value;
-      },
+      // },
+      // set(value) {
+      //   this.saveValueEmployeeName = value;
+      // },
+      // // get() {
+      //   for (let index = 0; index < this.employees.length; index++) {
+      //     if (
+      //       this.saveValueEmployeeName == this.employees[index].fullName
+      //     ) {
+      //       return this.employees[index].fullName;
+      //     } else if (
+      //       this.value == this.employees[index].fullName
+      //     ) {
+      //       return this.employees[index].fullName;
+      //     }
+      //   }
+      //   return "";
+      // // },
+      // // set(value) {
+      // //   this.value = value;
+      // // },
+      
     },
+    // employeeFilter(){
+    //   function compare(a, b) {
+    //     if (a.fullName < b.fullName) return -1;
+    //     if (a.fullName > b.fullName) return 1;
+    //     return 0;
+    //   }     
+    //   return this.employees.filter(employee => {
+    //     if (this.showEmployeeName != undefined) {
+    //       return employee.fullName.toLowerCase().includes(this.saveValueEmployeeName.toLowerCase())
+    //     }
+    //     return employee
+    //   }).sort(compare);
+    // }
   },
 };
 </script>
@@ -230,6 +262,16 @@ export default {
   top: 43px;
   z-index: 10;
   width: 28%;
+}
+.grid__height .department-box{
+  margin-top: 0;
+}
+.grid__height .select-custom{
+  /* top: 475px; */
+  top: 280px;
+  width: 60%;
+  z-index: 1;
+  left: 390px;
 }
 .reason .select-custom {
   top: 213px;

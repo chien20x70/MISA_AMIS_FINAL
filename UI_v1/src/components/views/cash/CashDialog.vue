@@ -112,7 +112,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(list, index) in cash.listDetail" :key="index">
+              <tr v-for="(list, index) in listDetailFilter" :key="index">
                 <td class="first__th">{{index}}</td>
                 <td style="border-left: none">
                   <input type="text" style="width: 100%" v-model="list.DescriptionDetail"/>
@@ -120,10 +120,11 @@
                 <td><input type="text" style="width: 100%" v-model="list.DebtAccount"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.CreditAccount"/></td>
                 <td style="text-align: right">
-                  <input type="text" style="width: 100%; text-align: right;" v-model="list.Amount" v-money="money" @blur="onChangeInputMoney"/>
+                  <money style="width: 100%; text-align: right;" v-model="list.Amount" v-bind="money"/>
                 </td>
-                <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitCode"/></td>
-                <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitName"/></td>
+                <!-- <input type="text" style="width: 100%" v-model="list.OrganizationUnitCode"/> -->
+                <td><Autocomplete v-model="list.OrganizationUnitCode" :code="index" @sendIdToCashDialog="getDataId"/></td>
+                <td><input type="text" style="width: 100%; cursor: pointer;" v-model="list.OrganizationUnitName" readonly/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete"></div>
                 </td>
@@ -182,7 +183,9 @@
 <script>
 import DatePick from "vue-date-pick";
 import Autocomplete from "../common/Autocomplete.vue";
-import {VMoney} from 'v-money'
+import {VMoney, Money} from 'v-money'
+
+
 import {
   
   MES_ADD_SUCCESS,
@@ -194,6 +197,7 @@ export default {
   components: {
     DatePick,
     Autocomplete,
+    Money
   },
   props:{
     cash: {type: Object, default: null},
@@ -201,7 +205,9 @@ export default {
   },
   data() {
     return {
-      totalMoney: 0,
+      check: null,
+      employee: {},
+      recordId: null,
       money: {
           decimal: ',',
           thousands: '.',
@@ -230,15 +236,22 @@ export default {
   },
   
   methods: {
-    onChangeInputMoney(){
-      this.assignValueMoney();
+    getDataId(valueId, valueCheck){
+      this.recordId = valueId;
+      this.check = valueCheck
+      console.log(this.recordId);
+      console.log(this.check);
+      this.axios.get("/Employees/"+ this.recordId)
+      .then((response) => {
+        this.employee = response.data.data;
+        console.log(this.employee);
+      })
+      .catch(() => {});
     },
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
     },
-    assignValueMoney(){
-      this.totalMoney = this.cash.listDetail.map(x => x["Amount"]).reduce((a,b) => a + b);
-    },
+
     validAndSave() {
         if (this.flag == "add") {
           return this.axios.post("/ReceiptPayments", this.cash)
@@ -316,9 +329,39 @@ export default {
       });
     },
   },
-  created(){
-    this.assignValueMoney();
-  },
+  computed:{
+    totalMoney(){
+      var total = 0;
+      for ( var i = 0, _len = this.cash.listDetail.length; i < _len; i++ ) {
+        total += this.cash.listDetail[i].Amount;
+      }
+      return total;      
+    },
+    listDetailFilter(){
+      //   function getName() {
+      //   for (var i = 0, _len = this.cash.listDetail.length; i < _len; i++ ) {
+          
+      //   }
+      // }    
+      if (this.check != null) {
+        return this.cash.listDetail.filter(item => {
+          if (item.OrganizationUnitCode == this.employee.employeeCode) {
+            return item.OrganizationUnitName = this.employee.fullName;
+          }
+          return item;
+        });
+      }else{
+        return this.cash.listDetail;
+      }
+      // for ( var i = 0, _len = this.cash.listDetail.length; i < _len; i++ ) {
+      //   if (this.check == i) {
+      //     return this.employee.fullName;
+      //   }
+      //   return this.cash.listDetail[i].OrganizationUnitName;
+      // }
+      // return "";
+    } 
+  }
 };
 </script>
 
