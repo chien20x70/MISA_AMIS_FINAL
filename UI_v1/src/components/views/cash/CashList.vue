@@ -403,6 +403,7 @@ export default {
       
       this.selectedCash.listDetail = JSON.parse(this.selectedCash.receiptPaymentDetail);
       console.log(this.selectedCash.listDetail);
+      console.log(this.selectedCash);
     },
 
     /* 
@@ -427,7 +428,7 @@ export default {
     duplicateClick(value) {
       
       this.axios
-        .get("/ReceiptPayment/ReceiptPaymentCopy?id=" + value)
+        .get("/ReceiptPayments/ReceiptPaymentCopy?id=" + value)
         .then((response) => {
           // gán cờ thành nút thêm mới
           this.status = "add";

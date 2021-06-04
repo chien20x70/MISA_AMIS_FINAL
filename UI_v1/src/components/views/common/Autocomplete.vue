@@ -9,7 +9,7 @@
           @keydown.up="up"
           @keydown.down="down"
           @keydown.enter="enter"
-          :value="showValueDepartment"
+          v-model="showEmployeeName"
           @focus="focusInputKey"
         />
         <div class="icon-selected">
@@ -22,19 +22,22 @@
     </div>
     <div class="select-custom" :class="{ invisible: toggleAutocomplete }">
       <div class="header-select">
-        <div class="text">Mã đơn vị</div>
-        <div class="text" style="margin-left: 79px">Tên đơn vị</div>
+        <div class="text text-hidden">Mã nhân viên</div>
+        <div class="text scrollName text-hidden">Tên nhân viên</div>
+        <div class="text scrollName text-hidden">Đơn vị</div>
+        <div class="text scrollName text-hidden">Số điện thoại</div>
       </div>
       <div class="department-content" ref="positionDepartment" 
-        v-for="(department, index) in departments"
+        v-for="(employee, index) in employees"
         :key="index"
-        :value="department.departmentId"
-        @click="onBtnDepartmentClick(department ,index)"
+        @click="onBtnEmployeeClick(employee ,index)"
         :class="{ color: currentIndex == index }"
       >
         <div class="scrollItem" >
-          <div>{{ department.departmentCode }}</div>
-          <div class="scrollName" style="margin-left: 100px">{{ department.departmentName }}</div>
+          <div class="text-hidden">{{ employee.employeeCode }}</div>
+          <div class="scrollName text-hidden">{{ employee.fullName }}</div>
+          <div class="scrollName text-hidden">{{ employee.departmentName }}</div>
+          <div class="scrollName text-hidden">{{ employee.phoneNumber }}</div>
         </div>
       </div>
     </div>
@@ -42,20 +45,29 @@
 </template>
 <script>
 export default {
+  props: ['value'],
   data() {
     return {
-      departments: [],
+      // content: null,
+      employees: [],
       toggleAutocomplete: true,
       currentIndex: 0,
-      saveValueDepartment: null,
+      saveValueEmployee: null,
+      checkModeClick: false,
     };
   },
   methods: {
+    // blurAutocomplete(){
+    //   if(!this.checkModeClick){
+    //     this.toggleAutocomplete = true;
+    //   }
+    // },
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
       if (!this.toggleAutocomplete) {
         this.$refs.focusDepartment.focus();
       }
+      this.checkModeClick = true;
     },
 
     focusInputKey() {
@@ -77,8 +89,7 @@ export default {
       if (this.toggleAutocomplete) {
         this.toggleAutocomplete = false;
       }
-      if (this.currentIndex < this.departments.length - 1) this.currentIndex++;
-      document.getElementsByClassName("scrollName")[4].scrollIntoView();
+      if (this.currentIndex < this.employees.length - 1) this.currentIndex++;
     },
 
     /**
@@ -86,46 +97,58 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter() {
-      this.saveValueDepartment = this.departments[this.currentIndex].departmentId;
-      
+      this.saveValueEmployee = this.employees[this.currentIndex].fullName;
+      this.value = this.employees[this.currentIndex].fullName;
       this.toggleAutocomplete = true;
     },
-    onBtnDepartmentClick(department, index) {
-      // Lưu giá trị ID lấy được
-      this.saveValueDepartment = department.departmentId;
+    
+    onBtnEmployeeClick(employee, index) {
       
+      this.saveValueEmployee = employee.fullName;
+      this.value = employee.fullName;
       this.toggleAutocomplete = true;
 
       this.currentIndex = index;
     },
   },
+  created(){
+    window.addEventListener("click", (e) => {
+      if (!this.$el.contains(e.target)) {
+        this.toggleAutocomplete = true;
+      }
+    });
+  },
+  mounted() {
+    // this.content = this.saveValueEmployee;
+    this.axios
+      .get(
+        `/Employees/Filter?pageSize=20&pageIndex=2&filter=`
+      )
+      .then((response) => {
+        this.employees = response.data.data.data;
+      })
+      .catch(() => {});
+  },
   computed:{
-    showValueDepartment: {
+    showEmployeeName: {
       get() {
-        for (let index = 0; index < this.departments.length; index++) {
+        for (let index = 0; index < this.employees.length; index++) {
           if (
-            this.saveValueDepartment == this.departments[index].departmentId
+            this.saveValueEmployee == this.employees[index].fullName
           ) {
-            return this.departments[index].departmentName;
-          } 
+            return this.employees[index].fullName;
+          } else if (
+            this.value == this.employees[index].fullName
+          ) {
+            return this.employees[index].fullName;
+          }
         }
         return "";
       },
       set(value) {
-        this.saveValueDepartment = value;
+        this.value = value;
       },
     },
-  },
-
-  mounted() {
-    this.axios
-      .get("/Departments")
-      .then((res) => {
-        this.departments = res.data.data;
-      })
-      .catch((res) => {
-        console.log(res);
-      });
   },
 };
 </script>
@@ -222,6 +245,11 @@ export default {
   position: sticky;
   top: 0;
 }
+.text{
+  font-weight: 700;
+  color: #111111;
+  font-size: 12px;
+}
 .select-custom .scrollItem {
   height: 32px;
   width: 100%;
@@ -230,10 +258,25 @@ export default {
   line-height: 32px;
   display: flex;
   align-items: center;
+  font-size: 12px;
 }
 .scrollItem:hover {
   color: #2ca01c;
   background-color: rgb(219, 219, 219);
+}
+.text-hidden{
+  text-overflow: ellipsis;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.scrollItem .scrollName{
+  width: 30%;
+  padding-left: 60px;
+}
+.header-select .scrollName{
+  width: 30%;
+  padding-left: 50px;
 }
 .invisible {
   display: none;

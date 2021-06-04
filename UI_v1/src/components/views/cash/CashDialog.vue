@@ -21,7 +21,7 @@
           <div class="row__input">
             <div class="object">
               <span class="text">Đối tượng</span>             
-              <Autocomplete/>
+              <Autocomplete :value="cash.employee"/>
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
@@ -75,7 +75,7 @@
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên</span>
-              <Autocomplete/>
+              <Autocomplete :value="cash.employee"/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
@@ -90,7 +90,7 @@
         </div>
         <div class="summary__info">
           <div class="summary__title">Tổng tiền</div>
-          <div class="summary__number" >0.00</div>
+          <div class="summary__number" >{{totalMoney | formatMoney}}</div>
         </div>
       </div>
       <div class="content__grid">
@@ -137,7 +137,7 @@
                 <th style="min-width: 187px; border-left: none"></th>
                 <th style="min-width: 100px"></th>
                 <th style="min-width: 100px"></th>
-                <th style="min-width: 150px; text-align: right">1000000</th>
+                <th style="min-width: 150px; text-align: right">{{totalMoney | formatMoney}}</th>
                 <th style="min-width: 150px"></th>
                 <th style="min-width: 250px"></th>
                 <th style="min-width: 40px; z-index: 101"></th>
@@ -173,7 +173,7 @@
     <div class="cashbox__footer">
       <button class="btn-common">Hủy</button>
       <div class="flex">
-        <button class="btn-common">Cất</button>
+        <button class="btn-common" @click="onBtnSaveClick">Cất</button>
         <button class="btn-common btn--success">Cất và In</button>
       </div>
     </div>
@@ -183,6 +183,12 @@
 import DatePick from "vue-date-pick";
 import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney} from 'v-money'
+import {
+  
+  MES_ADD_SUCCESS,
+  MES_EDIT_SUCCESS,
+  
+} from "../../../lang/validation.js";
 export default {
   directives: {money: VMoney},
   components: {
@@ -195,6 +201,7 @@ export default {
   },
   data() {
     return {
+      totalMoney: 0,
       money: {
           decimal: ',',
           thousands: '.',
@@ -226,8 +233,97 @@ export default {
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
     },
+    assignValueMoney(){
+      this.totalMoney = this.cash.listDetail.map(x => x["Amount"]).reduce((a,b) => a + b);
+    },
+    validAndSave() {
+        if (this.flag == "add") {
+          return this.axios.post("/ReceiptPayments", this.cash)
+            .then((res) => {            
+              if (res.data.code == 200) {
+                this.saveValueDepartment = null;
+                return Promise.resolve();
+              } else if (res.data.code == 400) {
+                // Lấy ra message lỗi
+                this.message = res.data.data;
+                console.log(this.message);
+                // show popup
+                // this.valuePopup = true;
+                return Promise.reject();
+              }
+              return Promise.resolve();
+            })
+            .catch((res) => {
+              this.getResponseError(res);
+              return Promise.reject();
+            });
+        }// Kiểm tra nút Thêm hay Sửa       
+        else if (this.flag == "edit") {
+          return this.axios.put("/ReceiptPayments/" + this.cash.receiptPaymentId, this.cash)
+            .then((res) => {
+              if (res.data.code == 200) {
+                this.saveValueDepartment = null;
+                return Promise.resolve();
+              } else if (res.data.code == 400) {
+                // Lấy ra message lỗi
+                this.message = res.data.data;
+                console.log(this.message);
+                // show popup
+                // this.valuePopup = true;
+                return Promise.reject();
+              }
+              return Promise.resolve();
+            })
+            .catch((res) => {
+              this.getResponseError(res);
+              return Promise.reject();
+            });
+        }
+      return Promise.reject();
+    },
+
+    /* 
+    Click Save nhân viên
+    CreatedBy: NXCHIEN 17/05/2021
+    */
+    onBtnSaveClick() {
+      this.validAndSave().then(() => {
+        if (this.flag == "add") {
+          this.showNotification(MES_ADD_SUCCESS);
+        } else {
+          this.showNotification(MES_EDIT_SUCCESS);
+        }
+        this.$emit("hideDialog");
+      });
+    },
+
+    /**
+     * Click nút Cất và Thêm cho phép lưu dữ liệu và reset form để người dùng có thể thêm tiếp mà ko cần click nút Thêm mới.
+     * CreatedBy: NXCHIEN 17/05/2021
+     */
+    onBtnSaveAndAddClick() {
+      this.validAndSave().then(() => {
+        if (this.flag == "add") {
+          this.showNotification(MES_ADD_SUCCESS);
+        } else {
+          this.showNotification(MES_EDIT_SUCCESS);
+        }
+        this.$emit("saveAndAdd");
+        
+      });
+      // this.$refs.focusCode.focus();
+      
+      // clearTimeout(this.timeOut);
+      // this.timeOut = setTimeout(() =>{
+      //   this.dectectEmployee = {};
+      //   this.dectectEmployee = { ...this.employee };    
+      // }, 1000)
+    },
   },
-  
+  created(){
+    this.assignValueMoney();
+    console.log(this.totalMoney);
+  },
 };
 </script>
 
