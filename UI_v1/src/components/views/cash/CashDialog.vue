@@ -120,7 +120,7 @@
                 <td><input type="text" style="width: 100%" v-model="list.DebtAccount"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.CreditAccount"/></td>
                 <td style="text-align: right">
-                  <input type="text" style="width: 100%; text-align: right;" v-model="list.Amount" v-money="money"/>
+                  <input type="text" style="width: 100%; text-align: right;" v-model="list.Amount" v-money="money" @blur="onChangeInputMoney"/>
                 </td>
                 <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitCode"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.OrganizationUnitName"/></td>
@@ -230,6 +230,9 @@ export default {
   },
   
   methods: {
+    onChangeInputMoney(){
+      this.assignValueMoney();
+    },
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
     },
@@ -311,18 +314,10 @@ export default {
         this.$emit("saveAndAdd");
         
       });
-      // this.$refs.focusCode.focus();
-      
-      // clearTimeout(this.timeOut);
-      // this.timeOut = setTimeout(() =>{
-      //   this.dectectEmployee = {};
-      //   this.dectectEmployee = { ...this.employee };    
-      // }, 1000)
     },
   },
   created(){
     this.assignValueMoney();
-    console.log(this.totalMoney);
   },
 };
 </script>

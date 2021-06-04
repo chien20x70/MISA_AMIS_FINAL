@@ -12,5 +12,7 @@ namespace MISA.AMIS.Core.Interfaces.Service
         public ServiceResult GetReceiptPaymentCodeMax();
 
         public ServiceResult GetDuplicateReceiptPayment(Guid id);
+
+        //public ServiceResult GetAllReceiptPayment();
     }
 }

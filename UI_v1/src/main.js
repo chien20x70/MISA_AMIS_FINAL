@@ -54,7 +54,7 @@ Vue.filter('formatMoney', function (money) {
   if(money == null){
     return 0;
   }else{
-    let val = (money).toFixed(0).replace('.', ',');
+    let val = (money).toFixed(1).replace('.', ',');
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   } 
 })

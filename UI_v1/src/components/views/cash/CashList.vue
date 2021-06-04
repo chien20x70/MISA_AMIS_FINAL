@@ -134,7 +134,7 @@
                 <th style="min-width: 147px; border-left: none; text-align: center;">Tổng</th>
                 <th style="min-width: 125px"></th>
                 <th style="min-width: 320px"></th>
-                <th style="min-width: 150px; text-align: right;">1000000</th>
+                <th style="min-width: 150px; text-align: right;">{{totalMoney | formatMoney}}</th>
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
                 <!-- <th style="min-width: 150px"></th> -->
@@ -282,6 +282,7 @@ export default {
 
       //#region data cho CashDialog
       toggleFilter: false,
+      totalMoney: 0,
       //#endregion
     };
   },
@@ -480,6 +481,9 @@ export default {
           this.totalPages = response.data.data.totalPages;
           if (response.data.data.totalRecord == undefined) {
             this.totalRecord = 0;
+          }
+          if (response.data.data.totalMoney != undefined) {
+            this.totalMoney = response.data.data.totalMoney;
           }
           this.assignListDetail();
           

@@ -64,26 +64,6 @@ namespace MISA.AMIS.Core.Service
         {
             //TODO: Nếu không có bản ghi trong DB thì vẫn được coi là lấy thành công
             var entities = _baseRepository.GetAll();
-            //var tableName = typeof(MISAEntity).Name;
-            //if (tableName.Equals("ReceiptPayment"))
-            //{
-            //    var propertyListDetail = typeof(MISAEntity).GetProperty("listDetail");
-            //    var properties = typeof(MISAEntity).GetProperties();
-            //    foreach (var property in properties)
-            //    {
-            //        if (property.Name.Equals("receiptPaymentDetail"))
-            //        {
-            //            string value = (string)property.GetValue(entities);
-
-            //            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //            dynamic item = serializer.Deserialize<ReceiptPaymentDetail>(value);
-            //            //string test = item["test"];
-            //            //var arrDetail = JsonConvert.DeserializeObject<ReceiptPaymentDetail>(value);
-            //            propertyListDetail.SetValue(entities, item);
-                        
-            //        }
-            //    }
-            //}
             OnStateServiceResult(entities, StatusCode.Success, MISACode.Success);
 
             return _serviceResult;

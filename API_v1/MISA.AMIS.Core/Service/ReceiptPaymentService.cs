@@ -84,5 +84,23 @@ namespace MISA.AMIS.Core.Service
 
             return _serviceResult;
         }
+
+        //public ServiceResult GetAllReceiptPayment()
+        //{
+        //    var receiptPayments = _receiptPaymentRepository.GetAll();
+        //    decimal totalMoney = 0;
+        //    //for (int i = 0; i < receiptPayments.Count(); i++)
+        //    //{
+        //    //    totalMoney += receiptPayments.t
+        //    //}
+        //    foreach (var item in receiptPayments)
+        //    {
+        //        totalMoney += item.TotalAmount;
+        //    }
+
+        //    OnStateServiceResult(receiptPayments, StatusCode.Success, MISACode.Success);
+
+        //    return _serviceResult;
+        //}
     }
 }

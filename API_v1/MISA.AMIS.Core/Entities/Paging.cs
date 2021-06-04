@@ -39,7 +39,8 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Dữ liệu
         /// </summary>
-        public IEnumerable<MISAEntity>? Data { get; set; } 
+        public IEnumerable<MISAEntity>? Data { get; set; }
+        public int? TotalMoney { get; set; }
         #endregion
     } 
     #endregion

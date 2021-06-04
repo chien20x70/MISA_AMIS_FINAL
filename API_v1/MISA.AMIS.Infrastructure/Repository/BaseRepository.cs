@@ -147,6 +147,15 @@ namespace MISA.AMIS.Infrastructure.Repository
                 dynamicParameters.Add("@pageIndex", pageIndex);
                 dynamicParameters.Add("@pageSize", pageSize);
                 dynamicParameters.Add("@filter", filter);
+                if (typeof(MISAEntity).Name.Equals("ReceiptPayment"))
+                {
+                    int? totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoney", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    if (totalMoney == null)
+                    {
+                        return res;
+                    }
+                    res.TotalMoney = totalMoney;
+                }                
                 var entities = dbConnection.Query<MISAEntity>($"Proc_Get{tableName}Filter", dynamicParameters, commandType: CommandType.StoredProcedure);
                 res.Data = entities;
                 return res;
