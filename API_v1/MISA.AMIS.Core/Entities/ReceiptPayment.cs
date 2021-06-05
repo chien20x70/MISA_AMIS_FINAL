@@ -82,6 +82,5 @@ namespace MISA.AMIS.Core.Entities
         /// Ngày chỉnh sửa
         /// </summary>
         public DateTime? ModifiedDate { get; set; }
-        public IEnumerable<ReceiptPaymentDetail> ListDetail { get; set; }
     }
 }
