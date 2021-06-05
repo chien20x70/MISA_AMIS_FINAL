@@ -404,7 +404,7 @@ export default {
     state: { type: Boolean, selector: false }, // Trạng thái hiển thị Dialog
     employee: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
     flag: { type: String, selector: null }, // Cờ để check giá trị nút Thêm mới hay Sửa
-    selectedId: { type: String, default: "" },
+    // selectedId: { type: String, default: "" },
   },
   data() {
     return {

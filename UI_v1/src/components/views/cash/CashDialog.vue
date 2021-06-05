@@ -21,7 +21,7 @@
           <div class="row__input">
             <div class="object">
               <span class="text">Đối tượng</span>             
-              <Autocomplete :value="cash.employee"/>
+              <Autocomplete :value="cash.organizationUnitName" @sendNameToCashDialog="getNameData"/>
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
@@ -75,7 +75,7 @@
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên</span>
-              <Autocomplete :value="cash.employee"/>
+              <Autocomplete v-model="cash.employee" @sendDataEmployee="getDataEmployee"/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
@@ -122,7 +122,6 @@
                 <td style="text-align: right">
                   <money style="width: 100%; text-align: right;" v-model="list.Amount" v-bind="money"/>
                 </td>
-                <!-- <input type="text" style="width: 100%" v-model="list.OrganizationUnitCode"/> -->
                 <td><Autocomplete v-model="list.OrganizationUnitCode" :code="index" @sendIdToCashDialog="getDataId"/></td>
                 <td><input type="text" style="width: 100%; cursor: pointer;" v-model="list.OrganizationUnitName" readonly/></td>
                 <td class="editclass">
@@ -199,15 +198,18 @@ export default {
     Autocomplete,
     Money
   },
+  //TODO: Thông báo sửa chưa viết hàm Notification
+  //TODO: Gán mảng listDetail null thì Bảng bị mất.
   props:{
     cash: {type: Object, default: null},
     flag: {type: String, default: ''},
   },
   data() {
     return {
+      listDetail: [],
       check: null,
-      employee: {},
-      recordId: null,
+      employeeName: null,
+      recordCode: null,
       money: {
           decimal: ',',
           thousands: '.',
@@ -236,28 +238,40 @@ export default {
   },
   
   methods: {
-    getDataId(valueId, valueCheck){
-      this.recordId = valueId;
-      this.check = valueCheck
-      console.log(this.recordId);
-      console.log(this.check);
-      this.axios.get("/Employees/"+ this.recordId)
-      .then((response) => {
-        this.employee = response.data.data;
-        console.log(this.employee);
-      })
-      .catch(() => {});
+    showNotification(message) {
+      this.$notification["success"]({
+        message,
+        duration: 1,
+      });
+    },
+    getDataId(valueCode, valueCheck, employeeName){
+      this.recordCode = valueCode;
+      this.check = valueCheck;
+      this.employeeName = employeeName;
+    },
+    getNameData(valueName, valueAddress){
+      this.cash.organizationUnitName = valueName;
+      this.cash.organizationUnitAddress = valueAddress;
+    },
+    getDataEmployee(value){
+      this.cash.employee = value;
     },
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
     },
+    convertListDetailtoJSON(){
+      this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
+      this.cash.totalAmount = this.totalMoney;
+      this.cash.reasonName = "Chi khác";
+    },
 
     validAndSave() {
         if (this.flag == "add") {
+          this.convertListDetailtoJSON();
           return this.axios.post("/ReceiptPayments", this.cash)
             .then((res) => {            
               if (res.data.code == 200) {
-                this.saveValueDepartment = null;
+                // this.saveValueDepartment = null;
                 return Promise.resolve();
               } else if (res.data.code == 400) {
                 // Lấy ra message lỗi
@@ -275,10 +289,11 @@ export default {
             });
         }// Kiểm tra nút Thêm hay Sửa       
         else if (this.flag == "edit") {
+          this.convertListDetailtoJSON();
           return this.axios.put("/ReceiptPayments/" + this.cash.receiptPaymentId, this.cash)
             .then((res) => {
               if (res.data.code == 200) {
-                this.saveValueDepartment = null;
+                // this.saveValueDepartment = null;
                 return Promise.resolve();
               } else if (res.data.code == 400) {
                 // Lấy ra message lỗi
@@ -309,7 +324,7 @@ export default {
         } else {
           this.showNotification(MES_EDIT_SUCCESS);
         }
-        this.$emit("hideDialog");
+        this.$emit("hideCashDialog");
       });
     },
 
@@ -328,40 +343,33 @@ export default {
         
       });
     },
+
+    onChangeArr(){
+      for (var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
+        if(this.check != null){
+          this.listDetail[this.check].OrganizationUnitName = this.employeeName; 
+          this.listDetail[this.check].OrganizationUnitCode = this.recordCode; 
+          return this.listDetail;
+        }  
+      }
+      return this.listDetail;
+    },
   },
   computed:{
     totalMoney(){
       var total = 0;
-      for ( var i = 0, _len = this.cash.listDetail.length; i < _len; i++ ) {
-        total += this.cash.listDetail[i].Amount;
+      for ( var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
+        total += this.listDetail[i].Amount;
       }
       return total;      
     },
-    listDetailFilter(){
-      //   function getName() {
-      //   for (var i = 0, _len = this.cash.listDetail.length; i < _len; i++ ) {
-          
-      //   }
-      // }    
-      if (this.check != null) {
-        return this.cash.listDetail.filter(item => {
-          if (item.OrganizationUnitCode == this.employee.employeeCode) {
-            return item.OrganizationUnitName = this.employee.fullName;
-          }
-          return item;
-        });
-      }else{
-        return this.cash.listDetail;
-      }
-      // for ( var i = 0, _len = this.cash.listDetail.length; i < _len; i++ ) {
-      //   if (this.check == i) {
-      //     return this.employee.fullName;
-      //   }
-      //   return this.cash.listDetail[i].OrganizationUnitName;
-      // }
-      // return "";
+    listDetailFilter(){    
+      return this.onChangeArr();  
     } 
-  }
+  },
+  mounted() {
+    this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);
+  },
 };
 </script>
 

@@ -53,7 +53,7 @@ export default {
       currentIndex: 0,
       saveValueEmployeeName: '',
       saveValueEmployeeCode: null,
-      saveValueEmployeeId: null,
+      saveValueAddress: null,
       flag: true,
     };
   },
@@ -95,11 +95,13 @@ export default {
     enter() {
       this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
       this.saveValueEmployeeCode = this.employees[this.currentIndex].employeeCode;
-      this.saveValueEmployeeId = this.employees[this.currentIndex].employeeId;
+      this.saveValueAddress = this.employees[this.currentIndex].address;
       this.toggleAutocomplete = true;
       this.flag = false;
       if (this.code != undefined) {
-        this.$emit("sendIdToCashDialog", this.saveValueEmployeeId, this.code);
+        this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);
+      }else{
+        this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
       }
     },
     
@@ -107,15 +109,18 @@ export default {
       
       this.saveValueEmployeeName = employee.fullName;
       this.saveValueEmployeeCode = employee.employeeCode;
-      this.saveValueEmployeeId = employee.employeeId;
-      // this.value = employee.fullName;
+      this.saveValueAddress = employee.address;
       this.toggleAutocomplete = true;
 
       this.currentIndex = index;
       this.flag = false;
       if (this.code != undefined) {
-        this.$emit("sendIdToCashDialog", this.saveValueEmployeeId, this.code);
+        this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);       
+      }else{
+        this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
+        this.$emit("sendDataEmployee", this.saveValueEmployeeName);
       }
+      
     },
   },
   created(){
@@ -137,8 +142,8 @@ export default {
       .catch(() => {});
   },
   computed:{
-    showEmployeeName() {
-      // get(){
+    showEmployeeName: {
+      get(){
         if(this.flag){
           return this.value;
         }else if(this.code != undefined){
@@ -146,27 +151,10 @@ export default {
         }else{
           return this.saveValueEmployeeName;
         }
-      // },
-      // set(value) {
-      //   this.saveValueEmployeeName = value;
-      // },
-      // // get() {
-      //   for (let index = 0; index < this.employees.length; index++) {
-      //     if (
-      //       this.saveValueEmployeeName == this.employees[index].fullName
-      //     ) {
-      //       return this.employees[index].fullName;
-      //     } else if (
-      //       this.value == this.employees[index].fullName
-      //     ) {
-      //       return this.employees[index].fullName;
-      //     }
-      //   }
-      //   return "";
-      // // },
-      // // set(value) {
-      // //   this.value = value;
-      // // },
+      },
+      set(val) {
+        this.value = val;
+      },
       
     },
     // employeeFilter(){
@@ -176,10 +164,10 @@ export default {
     //     return 0;
     //   }     
     //   return this.employees.filter(employee => {
-    //     if (this.showEmployeeName != undefined) {
+    //     if (this.saveValueEmployeeName != '') {
     //       return employee.fullName.toLowerCase().includes(this.saveValueEmployeeName.toLowerCase())
     //     }
-    //     return employee
+    //     // return employee
     //   }).sort(compare);
     // }
   },

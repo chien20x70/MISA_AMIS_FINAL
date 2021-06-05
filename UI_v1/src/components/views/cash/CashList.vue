@@ -111,7 +111,7 @@
                       <span
                         class="pr-4"
                         style="color: #0075c0; font-weight: 600"
-                        >Xem</span
+                        >Sửa</span
                       >
                     </div>
                   </button>
@@ -138,7 +138,7 @@
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
                 <!-- <th style="min-width: 150px"></th> -->
-                <th style="min-width: 120px; z-index: 100;"></th>
+                <th style="min-width: 120px;"></th>
               </tr>
           </tfoot>
         </table>        
@@ -227,7 +227,7 @@
         </div>
       </div>
     </div>
-    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" :cash="selectedCash" :flag="status"/>
+    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cash="selectedCash" :flag="status"/>
     <!-- :cash="selectedCash" -->
     <Popup     
       v-if="valuePopup"
@@ -250,6 +250,12 @@ import Popup from "../common/Popup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
 import CashFilter from "../common/CashFilter.vue";
 
+const arrDetailAdd = [{
+          "DescriptionDetail": "Chi tiền cho ",
+          "CreditAccount": "19008198",
+          "Amount": 0
+        },       
+      ];
 //#endregion
 export default {
   //#region Khai báo
@@ -304,17 +310,16 @@ export default {
      * CreatedBY: NXCHIEN 30/05/2021
      */
     onBtnAddAssignSelectedCash(response){
+      // Hiển thị dialog
+      this.show = true;
       // Gán tất cả các ô data của dialog rỗng
       this.selectedCash = {};
       // Gán code Max cho ô Mã ReceiptPayment và 1 số thuộc tính khác.
       this.selectedCash.refCode = response.data.data;
+      this.selectedCash.organizationUnitAddress = "";
+      this.selectedCash.organizationUnitName = "";
       this.selectedCash.description = "Chi tiền cho ";
-      this.selectedCash.listDetail = [{
-          "DescriptionDetail": "Chi tiền cho ",
-          "CreditAccount": "19008198",
-          "Amount": 0
-        },       
-      ];
+      this.selectedCash.receiptPaymentDetail = JSON.stringify(arrDetailAdd);
     },
 
     /**
@@ -326,8 +331,7 @@ export default {
       this.axios
         .get("/ReceiptPayments/ReceiptPaymentCode")
         .then((response) => {
-          // Hiển thị dialog
-          this.show = true;
+         
           // Gán giá trị là nút Thêm mới
           this.status = "add";
           // Gán tất cả các ô data của dialog rỗng
@@ -344,14 +348,14 @@ export default {
     */
     hideCashDialogNotLoad() {
       this.show = false;
-      // this.$refs.focusInputSearch.focus();
+      this.$refs.focusInputSearch.focus();
     },
 
     /* 
     Đóng CashDialog có load lại dữ liệu (được gọi từ CashDialog)
     CreatedBy: NXCHIEN 17/05/2021 
     */
-    hideDialog() {
+    hideCashDialog() {
       this.show = false;
       this.filterData();
       this.$refs.focusInputSearch.focus();
@@ -400,11 +404,8 @@ export default {
       //show Dialog
       this.show = true;
       //Fill employee vào dialog
-      this.selectedCash = response.data.data;
-      
-      this.selectedCash.listDetail = JSON.parse(this.selectedCash.receiptPaymentDetail);
-      console.log(this.selectedCash.listDetail);
-      console.log(this.selectedCash);
+      this.selectedCash = response.data.data;      
+      // this.selectedCash.listDetail = JSON.parse(this.selectedCash.receiptPaymentDetail);
     },
 
     /* 
@@ -485,7 +486,7 @@ export default {
           if (response.data.data.totalMoney != undefined) {
             this.totalMoney = response.data.data.totalMoney;
           }
-          this.assignListDetail();
+          // this.assignListDetail();
           
         })
         .catch(() => {})

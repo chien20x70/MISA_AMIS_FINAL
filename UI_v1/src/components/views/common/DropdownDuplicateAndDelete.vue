@@ -35,7 +35,7 @@ export default {
     btnDropdownClick(event) {
       this.valueDrop = !this.valueDrop;
       this.left = event.clientX - 80;
-      this.top = event.clientY + 15;      
+      this.top = event.clientY + 15; 
     },
 
     /* 
