@@ -69,13 +69,13 @@
             </div>
             <div class="date__form">
               <span class="text">Số phiếu chi</span><br />
-              <input type="text" class="input--size" v-model="cash.refCode">
+              <input type="text" class="input--size" v-model="cash.receiptPaymentCode">
             </div>
           </div>
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên</span>
-              <Autocomplete v-model="cash.employee" @sendDataEmployee="getDataEmployee"/>
+              <Autocomplete v-model="cash.fullName" @sendDataEmployee="getDataEmployee"/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>

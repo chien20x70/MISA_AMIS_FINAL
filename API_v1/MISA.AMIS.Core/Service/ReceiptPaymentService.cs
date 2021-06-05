@@ -76,7 +76,7 @@ namespace MISA.AMIS.Core.Service
         {
             var receiptPayment = _receiptPaymentRepository.GetById(id);
             var refCode = GetReceiptPaymentCodeMax().Data.ToString();
-            receiptPayment.RefCode = refCode;
+            receiptPayment.ReceiptPaymentCode = refCode;
 
             _serviceResult.Data = receiptPayment;
             _serviceResult.Status = StatusCode.Success;

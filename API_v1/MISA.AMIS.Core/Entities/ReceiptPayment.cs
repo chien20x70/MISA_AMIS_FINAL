@@ -16,7 +16,7 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Mã ref số chứng từ
         /// </summary>
-        public string RefCode { get; set; }
+        public string ReceiptPaymentCode { get; set; }
 
         /// <summary>
         /// Ngày hạch toán
@@ -51,8 +51,8 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Tên nhân viên
         /// </summary>
-        public string Employee { get; set; }
-
+        public Guid EmployeeId { get; set; }
+        public string FullName { get; set; }
         /// <summary>
         /// Người nhận
         /// </summary>

@@ -69,7 +69,6 @@
               <th style="min-width: 150px; text-align: right;">SỐ TIỀN</th>
               <th style="min-width: 228px">ĐỐI TƯỢNG</th>
               <th style="min-width: 323px"><div class="resize">LÝ DO THU/CHI</div></th>
-              <!-- <th style="min-width: 150px">LOẠI CHỨNG TỪ</th> -->
               <th style="min-width: 120px; z-index: 101;">CHỨC NĂNG</th>
             </tr>
           </thead>
@@ -95,7 +94,7 @@
                 <input type="checkbox" class="check-box" />
               </td>
               <td style="border-left: none; text-align: center;">{{ cash.accountingDate | dateFormatDDMMYY}}</td>
-              <td>{{ cash.refCode }}</td>
+              <td>{{ cash.receiptPaymentCode }}</td>
               <td>{{ cash.description }}</td>
               <td style="text-align: right;">{{ cash.totalAmount | formatMoney}}</td>
               <td>{{ cash.organizationUnitName }}</td>
@@ -105,7 +104,7 @@
                 <div class="btn-edit">
                   <button
                     class="btn-btn hover"
-                    @click="onBtnEditClick(cash.receiptPaymentId, cash.refCode)"
+                    @click="onBtnEditClick(cash.receiptPaymentId, cash.receiptPaymentCode)"
                   >
                     <div class="flex btn-btn-text">
                       <span
@@ -117,7 +116,7 @@
                   </button>
                   <DropdownDuplicateAndDelete
                     @showPopup="
-                      showCashPopup(cash.receiptPaymentId, cash.refCode)
+                      showCashPopup(cash.receiptPaymentId, cash.receiptPaymentCode)
                     "
                     @showDialog="duplicateClick(cash.receiptPaymentId)"
                   />
@@ -285,7 +284,7 @@ export default {
       msgSelect: " bản ghi trên 1 trang", // message default
       msgSelected: "20 bản ghi trên 1 trang", // message hiển thị khi phân trang.
 
-
+      //TODO: Validate --------------- and ChangeData.
       //#region data cho CashDialog
       toggleFilter: false,
       totalMoney: 0,
@@ -317,7 +316,7 @@ export default {
       // Gán tất cả các ô data của dialog rỗng
       this.selectedCash = {};
       // Gán code Max cho ô Mã ReceiptPayment và 1 số thuộc tính khác.
-      this.selectedCash.refCode = response.data.data;
+      this.selectedCash.receiptPaymentCode = response.data.data;
       this.selectedCash.organizationUnitAddress = "";
       this.selectedCash.organizationUnitName = "";
       this.selectedCash.description = "Chi tiền cho ";
@@ -369,11 +368,11 @@ export default {
     Hiển thị Popup được gọi từ (dropdownDuplicateAndDelete)
     CreatedBy: NXCHIEN 17/05/2021  
     */
-    showCashPopup(receiptPaymentId, refCode) {
+    showCashPopup(receiptPaymentId, receiptPaymentCode) {
 
       this.valuePopup = true;
       this.formMode = "CashList";
-      this.message = `Bạn có muốn xóa chứng từ <${refCode}> không?`;
+      this.message = `Bạn có muốn xóa chứng từ <${receiptPaymentCode}> không?`;
       // Lưu giá trị Id khi click vào nút sửa trên bảng.
       this.recordId = receiptPaymentId;
     },
@@ -408,7 +407,6 @@ export default {
       this.show = true;
       //Fill employee vào dialog
       this.selectedCash = response.data.data;      
-      // this.selectedCash.listDetail = JSON.parse(this.selectedCash.receiptPaymentDetail);
     },
 
     /* 
@@ -489,7 +487,6 @@ export default {
           if (response.data.data.totalMoney != undefined) {
             this.totalMoney = response.data.data.totalMoney;
           }
-          // this.assignListDetail();
           
         })
         .catch(() => {})
