@@ -1,5 +1,4 @@
 button{
-
     color: #000000;
     height: 32px;
     border: 1px solid #bbbbbb;
@@ -19,10 +18,23 @@ button{
     border: none;
     outline: none;
     height: 36px;
-    border-radius: 50px;
     font-weight: 600;
+    line-height: 18px;
 }
 .btn-add:hover{
     background-color: #35bf22;
     color: #fff;
+}
+.btn-yes{
+    padding: 8px 20px;
+}
+.btn-No{
+    height: 36px;
+    width: 84px;
+    border: 1px solid rgb(71, 71, 71);
+    font-weight: 700;
+    line-height: 18px;
+}
+.btn-No:hover{
+    background-color: rgb(202, 202, 202);
 }

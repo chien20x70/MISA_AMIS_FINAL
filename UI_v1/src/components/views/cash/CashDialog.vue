@@ -115,7 +115,7 @@
               <tr v-for="(list, index) in listDetailFilter" :key="index">
                 <td class="first__th">{{index}}</td>
                 <td style="border-left: none">
-                  <input type="text" style="width: 100%" v-model="list.DescriptionDetail"/>
+                  <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.DescriptionDetail"/>
                 </td>
                 <td><input type="text" style="width: 100%" v-model="list.DebtAccount"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.CreditAccount"/></td>
@@ -125,7 +125,7 @@
                 <td><Autocomplete v-model="list.OrganizationUnitCode" :code="index" @sendIdToCashDialog="getDataId"/></td>
                 <td><input type="text" style="width: 100%; cursor: pointer;" v-model="list.OrganizationUnitName" readonly/></td>
                 <td class="editclass">
-                  <div class="icon icon-16 mi-delete"></div>
+                  <div class="icon icon-16 mi-delete" @click="onBtnDeleteRowClick(index)"></div>
                 </td>
               </tr>
             </tbody>
@@ -148,8 +148,8 @@
       </div>
       <div class="grid__item">
         <div class="item__flex">
-          <button class="btn-add-row">Thêm dòng</button>
-          <button class="btn-add-row">Xóa hết dòng</button>
+          <button class="btn-add-row" @click="onBtnAddRowClick">Thêm dòng</button>
+          <button class="btn-add-row" @click="onBtnDeleteAllRow">Xóa hết dòng</button>
         </div>
         <div class="upload">
           <div class="upload__flex">
@@ -177,35 +177,44 @@
         <button class="btn-common btn--success">Cất và In</button>
       </div>
     </div>
+    <CashPopup
+        v-if="valuePopup"
+        @hideCashPopupNotLoad="hideCashPopupNotLoad"
+        :message="message"
+        @hideCashPopupAndRemoveRow="hideCashPopupAndRemoveRow"
+        :formMode="formMode"
+      />
   </div>
 </template>
 <script>
 import DatePick from "vue-date-pick";
 import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney, Money} from 'v-money'
-
+import CashPopup from '../common/CashPopup.vue'
 
 import {
-  
   MES_ADD_SUCCESS,
   MES_EDIT_SUCCESS,
-  
 } from "../../../lang/validation.js";
+
 export default {
   directives: {money: VMoney},
   components: {
     DatePick,
     Autocomplete,
-    Money
+    Money, 
+    CashPopup
   },
-  //TODO: Thông báo sửa chưa viết hàm Notification
-  //TODO: Gán mảng listDetail null thì Bảng bị mất.
   props:{
     cash: {type: Object, default: null},
     flag: {type: String, default: ''},
   },
   data() {
     return {
+      formMode: '',
+      valuePopup: false,
+      message: '',
+      rowIndex: null,
       listDetail: [],
       check: null,
       employeeName: null,
@@ -238,6 +247,27 @@ export default {
   },
   
   methods: {
+    hideCashPopupNotLoad(){
+      this.valuePopup = false;
+    },
+    hideCashPopupAndRemoveRow(){
+      this.valuePopup = false;
+      let arrDetailAdd = [{"DescriptionDetail": ""}];
+      this.listDetail = arrDetailAdd;
+      this.$refs.focusDescriptionDetail[0].focus();
+    },
+    onBtnDeleteAllRow(){
+      this.valuePopup = true;
+      this.message = "Bạn có thực sự muốn xóa tất cả dòng đã nhập không?";
+      this.formMode = "CashDialog";
+    },
+    onBtnDeleteRowClick(value){
+      this.listDetail.pop(this.listDetail[value]);
+    },
+    onBtnAddRowClick(){
+      this.rowIndex += 1;
+      this.listDetail.push(this.listDetail[this.rowIndex - 2]);
+    },
     showNotification(message) {
       this.$notification["success"]({
         message,
@@ -369,6 +399,7 @@ export default {
   },
   mounted() {
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);
+    this.rowIndex = this.listDetail.length;
   },
 };
 </script>
@@ -601,6 +632,9 @@ table tfoot th {
   padding: 2px 20px;
   border-color: #8d9096;
   border-radius: 2.5px;
+}
+.btn-add-row:hover{
+  background-color: #d2d3d6;
 }
 .btn-add-row + .btn-add-row {
   margin-left: 10px;

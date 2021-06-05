@@ -117,7 +117,7 @@
                   </button>
                   <DropdownDuplicateAndDelete
                     @showPopup="
-                      showPopup(cash.receiptPaymentId, cash.refCode)
+                      showCashPopup(cash.receiptPaymentId, cash.refCode)
                     "
                     @showDialog="duplicateClick(cash.receiptPaymentId)"
                   />
@@ -229,12 +229,13 @@
     </div>
     <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cash="selectedCash" :flag="status"/>
     <!-- :cash="selectedCash" -->
-    <Popup     
+    <CashPopup     
       v-if="valuePopup"
-      @hidePopupNotLoad="hidePopupNotLoad"
-      @hidePopup="hidePopup"
-      :employeeCode="recordCode"
-      :employeeId="recordId"
+      @hideCashPopupNotLoad="hideCashPopupNotLoad"
+      @hideCashPopup="hideCashPopup"
+      :refId="recordId"
+      :formMode="formMode"
+      :message="message"
     />
     <div class="fa-3x" v-if="isBusy">
       <i class="fas fa-spinner fa-spin" style="color: green"></i>
@@ -246,7 +247,7 @@
 //#region Import
 import CashDialog from "./CashDialog.vue";
 import DropdownDuplicateAndDelete from "../common/DropdownDuplicateAndDelete.vue";
-import Popup from "../common/Popup.vue";
+import CashPopup from "../common/CashPopup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
 import CashFilter from "../common/CashFilter.vue";
 
@@ -262,7 +263,7 @@ export default {
   components: {
     CashDialog,
     DropdownDuplicateAndDelete,
-    Popup,
+    CashPopup,
     ComboboxFilter,
     CashFilter
   },
@@ -275,7 +276,6 @@ export default {
       status: null, // Trạng thái nút là Thêm mới hay Sửa
       isBusy: false, // Trạng thái của icon Loading
       valuePopup: false, // Giá trị hiển thị Popup
-      recordCode: null, // Lưu giá trị Employeecode truyền qua Popup
       totalRecord: 0, // Tổng số bản ghi Empployee
       pageSize: 20, // Bao nhiêu ReceiptPayment / trang
       filter: "", // Giá trị truyền vào input để lọc
@@ -289,6 +289,8 @@ export default {
       //#region data cho CashDialog
       toggleFilter: false,
       totalMoney: 0,
+      formMode: "",
+      message: '',
       //#endregion
     };
   },
@@ -367,19 +369,20 @@ export default {
     Hiển thị Popup được gọi từ (dropdownDuplicateAndDelete)
     CreatedBy: NXCHIEN 17/05/2021  
     */
-    showPopup(employeeId, employeeCode) {
+    showCashPopup(receiptPaymentId, refCode) {
 
       this.valuePopup = true;
+      this.formMode = "CashList";
+      this.message = `Bạn có muốn xóa chứng từ <${refCode}> không?`;
       // Lưu giá trị Id khi click vào nút sửa trên bảng.
-      this.recordId = employeeId;
-      this.recordCode = employeeCode;
+      this.recordId = receiptPaymentId;
     },
 
     /* 
     Đóng popup có load lại dữ liệu
     CreatedBy: NXCHIEN 17/05/2021  
     */
-    hidePopup() {
+    hideCashPopup() {
       this.valuePopup = false;
       this.filterData();
       this.$refs.focusInputSearch.focus();
@@ -389,7 +392,7 @@ export default {
     Đóng popup mà không load lại dữ liệu
     CreatedBy: NXCHIEN 17/05/2021  
     */
-    hidePopupNotLoad() {
+    hideCashPopupNotLoad() {
       this.valuePopup = false;
       this.$refs.focusInputSearch.focus();
     },
