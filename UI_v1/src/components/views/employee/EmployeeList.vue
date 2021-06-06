@@ -30,22 +30,7 @@
         <table class="tblListEmployee" border="0" width="100%">
           <thead>
             <tr>
-              <th
-                style="
-                  width: 40px;
-                  position: sticky;
-                  left: 0px;
-                  top: 0;
-                  z-index: 3;
-                  border-left: none;
-                  border-bottom: none;
-                  display: flex;
-                  border-right: 1px solid #c7c7c7;
-                  align-items: center;
-                "
-              >
-                <input type="checkbox" class="check-box" />
-              </th>
+              <th class="first__th"><input type="checkbox" class="check-box" /></th>
               <th style="min-width: 150px; border-left: none;">MÃ NHÂN VIÊN</th>
               <th style="min-width: 250px"> <div class="resize">TÊN NHÂN VIÊN</div></th>
               <th style="min-width: 120px">GIỚI TÍNH</th>
@@ -65,21 +50,7 @@
               :key="index"
               @dblclick="onRowTableDblClick(employee.employeeId)"
             >
-              <td
-                style="
-                  width: 40px;
-                  position: sticky;
-                  left: 0px;
-                  z-index: 2;
-                  border-left: none;
-                  border-bottom: none;
-                  display: flex;
-                  border-right: 1px dotted #c7c7c7;
-                  align-items: center;
-                "
-              >
-                <input type="checkbox" class="check-box" />
-              </td>
+              <td class="first__th" style="z-index: 2;"><input type="checkbox" class="check-box" /></td>
               <td style="border-left: none;">{{ employee.employeeCode }}</td>
               <td>{{ employee.fullName }}</td>
               <td>{{ employee.genderName }}</td>
@@ -655,7 +626,18 @@ export default {
   margin-left: 16px;
   margin-top: 5px;
 }
-
+.first__th {
+  width: 40px;
+  position: sticky;
+  left: 0px;
+  top: 0;
+  z-index: 3;
+  border-left: none;
+  border-bottom: none;
+  display: flex;
+  border-right: 1px solid #c7c7c7;
+  align-items: center;
+}
 .check-box {
   padding: 0;
 }
@@ -721,11 +703,6 @@ export default {
   align-items: center;
   padding: 6px 0 6px 12px;
   justify-content: space-around;
-}
-.btn-filter {
-  width: 23px;
-  height: 23px;
-  border: none;
 }
 .style {
   border: none;

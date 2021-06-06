@@ -29,17 +29,7 @@
             </div>
             <div class="date__form">
               <span class="text">Ngày hạch toán</span><br />
-              <date-pick
-                v-model="cash.accountingDate"
-                :displayFormat="STR_DISPLAY_FORMAT"
-                :inputAttributes="{
-                  class: 'style-input-date-lib',
-                  placeholder: STR_DISPLAY_FORMAT,
-                  style: 'margin-top: 4px; width: 168px;',
-                }"
-                :weekdays="localeDatePicker.weekdays"
-                :months="localeDatePicker.months"
-              ></date-pick>
+              <DatePicker v-model="cash.accountingDate" :accountingDate="'accountingDate'"  @sendAccountingDate="getAccountingDate"/>
             </div>
           </div>
           <div class="row__input">
@@ -49,17 +39,7 @@
             </div>
             <div class="date__form">
               <span class="text">Ngày phiếu chi</span><br />
-              <date-pick
-                v-model="cash.refDate"
-                :displayFormat="STR_DISPLAY_FORMAT"
-                :inputAttributes="{
-                  class: 'style-input-date-lib',
-                  placeholder: STR_DISPLAY_FORMAT,
-                  style: 'margin-top: 4px; width: 168px;',
-                }"
-                :weekdays="localeDatePicker.weekdays"
-                :months="localeDatePicker.months"
-              ></date-pick>
+              <DatePicker v-model="cash.refDate" :refDate="'refDate'" @sendRefDate="getRefDate"/>
             </div>
           </div>
           <div class="row__input">
@@ -187,10 +167,10 @@
   </div>
 </template>
 <script>
-import DatePick from "vue-date-pick";
 import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
+import DatePicker from '../common/DatePicker.vue'
 
 import {
   MES_ADD_SUCCESS,
@@ -200,10 +180,10 @@ import {
 export default {
   directives: {money: VMoney},
   components: {
-    DatePick,
     Autocomplete,
     Money, 
-    CashPopup
+    CashPopup,
+    DatePicker
   },
   props:{
     cash: {type: Object, default: null},
@@ -225,28 +205,16 @@ export default {
           precision: 1,
           masked: false /* doesn't work with directive */
         },
-      STR_DISPLAY_FORMAT: "DD/MM/YYYY",
-      localeDatePicker: {
-        weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
-        months: [
-          "Tháng 1",
-          "Tháng 2",
-          "Tháng 3",
-          "Tháng 4",
-          "Tháng 5",
-          "Tháng 6",
-          "Tháng 7",
-          "Tháng 8",
-          "Tháng 9",
-          "Tháng 10",
-          "Tháng 11",
-          "Tháng 12",
-        ],
-      },
     };
   },
   
   methods: {
+    getAccountingDate(value){
+      this.cash.accountingDate = value;
+    },
+    getRefDate(value){
+      this.cash.refDate = value;
+    },
     hideCashPopupNotLoad(){
       this.valuePopup = false;
     },
@@ -283,8 +251,9 @@ export default {
       this.cash.organizationUnitName = valueName;
       this.cash.organizationUnitAddress = valueAddress;
     },
-    getDataEmployee(value){
-      this.cash.employee = value;
+    getDataEmployee(valueName, valueId){
+      this.cash.employeeId = valueId;
+      this.cash.fullName = valueName;
     },
     onBtnCloseClick() {
       this.$emit("hideCashDialogNotLoad");
@@ -460,7 +429,6 @@ export default {
 }
 .content__information {
   display: flex;
-  /* align-items: center; */
   background-color: #f4f5f8;
   padding: 7px 30px 24px 30px;
 }
@@ -625,20 +593,6 @@ table tfoot th {
   align-items: center;
   padding: 10px 0 36px;
 }
-.btn-add-row {
-  height: 24px;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 2px 20px;
-  border-color: #8d9096;
-  border-radius: 2.5px;
-}
-.btn-add-row:hover{
-  background-color: #d2d3d6;
-}
-.btn-add-row + .btn-add-row {
-  margin-left: 10px;
-}
 .upload__flex {
   display: flex;
   align-items: center;
@@ -667,113 +621,5 @@ table tfoot th {
   display: flex;
   align-items: center;
 }
-.btn-common {
-  border: 1px solid #6b6c72;
-  color: #fff;
-  background-color: transparent;
-  position: relative;
-  height: 34px;
-  padding: 6px 20px;
-}
-.btn-common + .btn-common {
-  margin-left: 5px;
-}
-.btn--success {
-  background-color: #35bf22;
-  border: none;
-}
 
-
-
-/**css ------ department */
-.department-box {
-  height: 32px;
-  display: flex;
-  min-height: 32px;
-  border: 1px solid #babec5;
-  border-radius: 2px;
-  background-color: #fff;
-  outline: none;
-  width: 100%;
-}
-.department-box:focus {
-  border-color: #2ca01c;
-}
-.department-content {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  cursor: pointer;
-}
-.department-content:hover {
-  color: #35bf22;
-  font-weight: 600;
-  background-color: #f4f5f8;
-}
-
-.department-box:focus {
-  border-color: #2ca01c;
-}
-.selected-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-.input-select {
-  background-color: transparent;
-  display: flex;
-  padding: 5px 0 5px 10px;
-  height: 32px;
-  border: none;
-  width: 90%;
-}
-
-.icon-selected {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.icon-selected:hover {
-  background-color: #bbb;
-}
-.arrow-dropdown {
-  background-position: -552px -352px;
-}
-.tranform {
-  transform: rotate(180deg);
-  transition: transform 0.15s linear;
-}
-
-.object .select-custom {
-  position: absolute;
-  overflow-y: auto;
-  height: 160px;
-  width: 24%;
-  top: 65px;
-  min-width: 200px;
-  background-color: white;
-  border: 1px solid #bbb;
-}
-.header-select {
-  height: 32px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  background-color: #f4f5f8;
-  padding: 0 14px 0 10px;
-}
-.select-custom .item {
-  height: 32px;
-  width: 100%;
-  padding: 0 14px 0 10px;
-  text-align: left;
-  line-height: 32px;
-  display: flex;
-  align-items: center;
-}
-.item:hover {
-  color: #2ca01c;
-  background-color: rgb(219, 219, 219);
-}
 </style>

@@ -34,7 +34,6 @@
                   >Mã
                   <p style="color: red; display: inline">*</p></span
                 >
-                
                 <input
                   maxlength="20"
                   :title="(messageCode != '') ? 'Mã nhân viên không được để trống!' : ''"
@@ -52,7 +51,6 @@
                   >Tên
                   <p style="color: red; display: inline">*</p></span
                 >
-                <!-- <ValidationProvider name="Tên nhân viên" rules="required" v-slot="{ errors }"> -->
                 <input
                   :title="(messageName != '') ? 'Tên không được để trống!' : ''"
                   type="text"
@@ -98,14 +96,7 @@
                     </div>
                   </div>
                 </div>
-                <span style="color: red; font-size: 12px">{{messageDepartment}}</span>
-                <!-- <model-select
-                  :options="departments"
-                  v-model="employee.departmentName"
-                  style="margin-top: 4px; border: 1px solid #babec5; height: 32px;"
-                  @searchchange="printSearchText"
-                >
-                </model-select> -->              
+                <span style="color: red; font-size: 12px">{{messageDepartment}}</span>            
                 <div
                   class="select-custom"
                   :class="{ invisible: showDepartment }"
@@ -150,23 +141,7 @@
             <div class="row-1">
               <div class="dateofbirth">
                 <span class="text">Ngày sinh</span>
-                <!-- <input
-                  type="date"
-                  style="width: 167px; margin-top: 4px;"
-                  v-model="employee.dateOfBirth"
-                /> -->
-                <date-pick
-                  v-model="employee.dateOfBirth"
-                  :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{
-                    class: 'style-input-date-lib',
-                    placeholder: STR_DISPLAY_FORMAT,
-                    style: 'margin-top: 4px; width: 167px;',
-                  }"
-                  :weekdays="localeDatePicker.weekdays"
-                  :months="localeDatePicker.months"
-                ></date-pick>
-                <!-- <date-picker v-model="employee.dateOfBirth"/> -->
+                <DatePicker v-model="employee.dateOfBirth" :dateOfBirth="'dateOfBirth'" @sendDateOfBirth="getDateOfBirth"/>
               </div>
               <div class="gender">
                 <span class="text">Giới tính</span>
@@ -214,23 +189,7 @@
               </div>
               <div class="dateofbirth" style="padding-left: 5px">
                 <span class="text">Ngày cấp</span>
-                <!-- <input
-                  type="date"
-                  style="width: 167px; margin-top: 4px;"
-                  v-model="employee.dateOfIN"
-                /> -->
-                <date-pick
-                  v-model="employee.dateOfIN"
-                  :displayFormat="STR_DISPLAY_FORMAT"
-                  :inputAttributes="{
-                    class: 'style-input-date-lib',
-                    placeholder: STR_DISPLAY_FORMAT,
-                    style: 'margin-top: 4px; width: 167px;',
-                  }"
-                  :weekdays="localeDatePicker.weekdays"
-                  :months="localeDatePicker.months"
-                ></date-pick>
-                <!-- <date-picker v-model="employee.dateOfIN"/> -->
+                <DatePicker v-model="employee.dateOfIN" :dateOfIN="'dateOfIN'" @sendDateOfIN="getDateOfIN"/>
               </div>
             </div>
             <div class="row-1">
@@ -328,7 +287,7 @@
           <div class="divide"></div>
           <div class="footer-btn">
             <button
-              class="add-line"
+              class="btn-No btn-yes add-line"
               style="width: 67px; height: 36px; boder-radius: 4px"
               @click="onBtnCloseClick"
             >
@@ -336,7 +295,7 @@
             </button>
             <div class="btn-right">
               <button
-                class="add-line tooltip tooltip--70 tooltip--position25-10"
+                class="btn-No btn-yes add-line tooltip tooltip--70 tooltip--position25-10"
                 style="width: 67px; height: 36px; boder-radius: 4px"
                 @click="onBtnSaveClick"
               >
@@ -344,7 +303,7 @@
                 <span class="tooltip__text">Ctrl + S</span>
               </button>
               <button
-                class="add-line color"
+                class="btn-common btn--success btn-save-add"
                 style="margin-left: 13px"
                 @click="onBtnSaveAndAddClick"
               >
@@ -367,6 +326,7 @@
 <script>
 //#region Import
 import Popup from "../common/Popup.vue";
+import DatePicker from "../common/DatePicker.vue"
 import {
   STR_EMPTY_CODE,
   STR_EMPTY_NAME,
@@ -387,24 +347,17 @@ import {
   EMPLOYEE_CODE
 } from "../../../lang/validation.js";
 
-import DatePick from "vue-date-pick";
-import "vue-date-pick/dist/vueDatePick.css";
-// import { ModelSelect } from "vue-search-select";
-// import DatePicker from '../common/DatePicker.vue';
 //#endregion
 export default {
   //#region Khai báo
   components: {
     Popup,
-    DatePick,
-    // ModelSelect,
-    // DatePicker
+    DatePicker
   },
   props: {
     state: { type: Boolean, selector: false }, // Trạng thái hiển thị Dialog
     employee: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
     flag: { type: String, selector: null }, // Cờ để check giá trị nút Thêm mới hay Sửa
-    // selectedId: { type: String, default: "" },
   },
   data() {
     return {
@@ -422,24 +375,6 @@ export default {
       messageName: "",    // thông báo lỗi nhập liệu
       messageDepartment: "",    // thông báo lỗi nhập liệu
       messagePhone: "",
-      STR_DISPLAY_FORMAT: "DD/MM/YYYY",
-      localeDatePicker: {
-        weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
-        months: [
-          "Tháng 1",
-          "Tháng 2",
-          "Tháng 3",
-          "Tháng 4",
-          "Tháng 5",
-          "Tháng 6",
-          "Tháng 7",
-          "Tháng 8",
-          "Tháng 9",
-          "Tháng 10",
-          "Tháng 11",
-          "Tháng 12",
-        ],
-      },
       dateCheck: false,
     };
   },
@@ -477,6 +412,12 @@ export default {
   },
   //#region METHODS
   methods: {
+    getDateOfIN(value){
+      this.employee.dateOfIN = value;
+    },
+    getDateOfBirth(value){
+      this.employee.dateOfBirth = value;
+    },
     hidePopupNotLoad(){
       this.valuePopup = false;
       if(this.messageCode != "" || this.message.includes(EMPLOYEE_CODE)){
@@ -849,10 +790,6 @@ export default {
   },
   //#endregion
 
-  // created() {
-  //   this.dectectEmployee = { ...this.employee };
-  // },
-
   mounted() {
     /**
      * Lấy ra danh sách các phòng ban rồi bind vào ô Select Department
@@ -868,14 +805,6 @@ export default {
       .catch((res) => {
         console.log(res);
       });
-    // this.axios.get("/Departments").then((res) => {
-    //   res.data.data.forEach((item) => {
-    //     this.departments.push({
-    //       value: item.departmentId,
-    //       text: item.departmentName,
-    //     });
-    //   });
-    // });
     this.dectectEmployee = { ...this.employee };
   },
 };
@@ -914,7 +843,6 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  /* box-shadow: 0 5px 20px 0 rgb(0 0 0 / 10%); */
 }
 
 .dialog-box .dialog-header {
@@ -1074,14 +1002,6 @@ export default {
 }
 .delete {
   background-position: -464px -312px;
-}
-.add-line {
-  border: 1px solid #c9ccd2;
-  width: 109px;
-  height: 24px;
-  background-color: white;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .footer {

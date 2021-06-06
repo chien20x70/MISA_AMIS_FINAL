@@ -1,6 +1,6 @@
 <template>
   <date-pick
-    v-model="value"
+    v-model="content"
     @input="handleInput"
     :displayFormat="displayFormat"
     :inputAttributes="{
@@ -17,13 +17,25 @@ import DatePick from "vue-date-pick";
 import "vue-date-pick/dist/vueDatePick.css";
 export default {
   name: "DatePicker",
-  props: ['value'],
+  props: ['value', 'accountingDate', 'refDate','dateOfIN', 'dateOfBirth'],
   components: {
     DatePick,
   },
   methods: {
-    handleInput () {
-      this.$emit('input', this.value)
+    handleInput (value) {
+      this.content = value;
+      if(this.accountingDate == 'accountingDate'){
+        this.$emit('sendAccountingDate', this.content);
+      } 
+      if (this.refDate == 'refDate') {
+        this.$emit('sendRefDate', this.content);
+      }
+      if (this.dateOfIN == 'dateOfIN') {
+        this.$emit('sendDateOfIN', this.content);
+      }
+      if (this.dateOfBirth == 'dateOfBirth') {
+        this.$emit('sendDateOfBirth', this.content);
+      }
     }
   },
   mounted() {

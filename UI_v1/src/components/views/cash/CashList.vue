@@ -47,22 +47,7 @@
         <table class="tblListEmployee" border="0" width="100%">
           <thead>
             <tr>
-              <th
-                style="
-                  width: 40px;
-                  position: sticky;
-                  left: 0px;
-                  top: 0;
-                  z-index: 3;
-                  border-left: none;
-                  border-bottom: none;
-                  display: flex;
-                  border-right: 1px solid #c7c7c7;
-                  align-items: center;
-                "
-              >
-                <input type="checkbox" class="check-box" />
-              </th>
+              <th class="first__th"><input type="checkbox" class="check-box" /></th>
               <th style="min-width: 147px; border-left: none; text-align: center;">NGÀY HOẠCH TOÁN</th>
               <th style="min-width: 125px"> <div class="resize">SỐ CHỨNG TỪ</div></th>
               <th style="min-width: 320px">DIỄN GIẢI</th>
@@ -78,28 +63,13 @@
               :key="index"
               @dblclick="onRowTableDblClick(cash.receiptPaymentId)"
             >
-              <td
-                style="
-                  width: 40px;
-                  position: sticky;
-                  left: 0px;
-                  z-index: 2;
-                  border-left: none;
-                  border-bottom: none;
-                  display: flex;
-                  border-right: 1px dotted #c7c7c7;
-                  align-items: center;
-                "
-              >
-                <input type="checkbox" class="check-box" />
-              </td>
+              <td class="first__th" style="z-index: 2;"><input type="checkbox" class="check-box" /></td>
               <td style="border-left: none; text-align: center;">{{ cash.accountingDate | dateFormatDDMMYY}}</td>
               <td>{{ cash.receiptPaymentCode }}</td>
               <td>{{ cash.description }}</td>
               <td style="text-align: right;">{{ cash.totalAmount | formatMoney}}</td>
               <td>{{ cash.organizationUnitName }}</td>
               <td>{{ cash.reasonName }}</td>
-              <!-- <td>{{ cash.accountingDate }}</td> -->
               <td class="editclass" :style="{ 'z-index': 100 - index }">
                 <div class="btn-edit">
                   <button
@@ -136,7 +106,6 @@
                 <th style="min-width: 150px; text-align: right;">{{totalMoney | formatMoney}}</th>
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
-                <!-- <th style="min-width: 150px"></th> -->
                 <th style="min-width: 120px;"></th>
               </tr>
           </tfoot>
@@ -227,7 +196,6 @@
       </div>
     </div>
     <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cash="selectedCash" :flag="status"/>
-    <!-- :cash="selectedCash" -->
     <CashPopup     
       v-if="valuePopup"
       @hideCashPopupNotLoad="hideCashPopupNotLoad"
@@ -561,11 +529,12 @@ export default {
       this.valueSelect = !this.valueSelect;
     },
     //#endregion
-
+    /**
+     * Đỏng mở CashFilter
+     */
     onBtnFilterClick(){
       this.toggleFilter = !this.toggleFilter;
     },
-
 
     /* 
     Format dữ liệu ngày tháng năm theo định dạng yyyy-mm-dd
@@ -636,38 +605,6 @@ export default {
   justify-content: space-between;
 }
 
-.btn-edit {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.btn-btn {
-  padding: 0 16px;
-  border-radius: 30px;
-  color: #111;
-  height: 36px;
-  position: relative;
-  border: 1px solid #8d9096;
-  background-color: transparent;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  box-sizing: border-box;
-  background: 0 0;
-  overflow: visible;
-  outline: none;
-}
-.btn-btn-text {
-  font-weight: 600;
-  position: relative;
-  color: inherit;
-  display: inline-block;
-  transition: all 0.25s ease;
-  white-space: nowrap;
-  font-size: 13px;
-  line-height: 13px;
-  justify-content: center;
-  align-items: center;
-}
 .pr-4 {
   padding-right: 4px !important;
 }
@@ -707,7 +644,18 @@ export default {
   margin-left: 16px;
   margin-top: 5px;
 }
-
+.first__th {
+  width: 40px;
+  position: sticky;
+  left: 0px;
+  top: 0;
+  z-index: 3;
+  border-left: none;
+  border-bottom: none;
+  display: flex;
+  border-right: 1px solid #c7c7c7;
+  align-items: center;
+}
 .check-box {
   padding: 0;
 }
@@ -771,11 +719,7 @@ export default {
   padding: 6px 0 6px 12px;
   justify-content: space-around;
 }
-.btn-filter {
-  width: 23px;
-  height: 23px;
-  border: none;
-}
+
 .style {
   border: none;
   background-color: white;

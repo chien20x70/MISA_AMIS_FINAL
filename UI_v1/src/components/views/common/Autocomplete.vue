@@ -31,7 +31,7 @@
         v-for="(employee, index) in employees"
         :key="index"
         @click="onBtnEmployeeClick(employee ,index)"
-        :class="{ color: currentIndex == index }"
+        :class="{ color: currentIndex == index}"
       >
         <div class="scrollItem" >
           <div class="text-hidden">{{ employee.employeeCode }}</div>
@@ -102,6 +102,7 @@ export default {
         this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);
       }else{
         this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
+        this.$emit("sendDataEmployee", this.saveValueEmployeeName, this.employees[this.currentIndex].employeeId);
       }
     },
     
@@ -118,7 +119,7 @@ export default {
         this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);       
       }else{
         this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
-        this.$emit("sendDataEmployee", this.saveValueEmployeeName);
+        this.$emit("sendDataEmployee", this.saveValueEmployeeName, employee.employeeId);
       }
       
     },

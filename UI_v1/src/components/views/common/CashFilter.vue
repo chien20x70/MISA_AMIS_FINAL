@@ -138,26 +138,6 @@ export default {
     width: 100%;
     margin-top: 4px;
 }
-.btn-padding{
-    padding: 8px 20px;
-    line-height: 15px;
-    height: 36px;
-}
-.reset{
-    font-weight: 700;
-}
-.reset:hover{
-    background-color: #d2d3d6;
-}
-.success{
-    border: 1px solid transparent;
-    color: #fff;
-    background-color: #2ca01c;
-    font-weight: 700;
-}
-.success:hover{
-    background-color: #35bf22;
-}
 .style-input-date-lib {
   font-size: 13px;
   border: none;
