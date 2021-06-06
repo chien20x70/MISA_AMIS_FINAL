@@ -2,13 +2,22 @@
     <div class="popup">
         <div class="model"></div>
         <div class="popup-box">
-          <div class="popup-content">
-            <div class="icon icon-48 exclamation-warning-48"></div>           
+          <div class="popup-content" :class="{display: changeData}">
+            <div class="icon icon-48 exclamation-warning-48"></div>
             <div class="message">{{message}}</div>
           </div>
-          <div class="btn-footer">
+          <div class="btn-footer" :class="{display: changeData}">
             <button class="btn-No btn-yes" @click="onBtnNoClick">Không</button>
             <button class="btn-add btn-yes" @click="onBtnYesClick">Có</button>
+          </div>
+          <div class="popup-content" :class="{display: !changeData}">
+            <div class="icon icon-48 mi-exclamation-question-48"></div>           
+            <div class="message">{{message}}</div>
+          </div>
+          <div class="btn-footer" :class="{display: !changeData}">
+            <button class="btn-No btn-yes">Hủy</button>
+            <button class="btn-No btn-yes" style="margin-left: 130px;" @click="onBtnNoClick">Không</button>
+            <button class="btn-add btn-yes">Có</button>
           </div>
         </div>
     </div>
@@ -19,7 +28,8 @@ export default {
     props:{
       refId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
       message: {type: String, default: ''},                 // message thông báo lỗi được bind từ Dialog
-      formMode: {type: String, default: ''}
+      formMode: {type: String, default: ''},
+      changeData: {type: Boolean, default: false}
     },
   //#endregion
     
@@ -30,7 +40,13 @@ export default {
       CreatedBy: NXCHIEN 17/05/2021
        */
       onBtnNoClick(){
-        this.$emit("hideCashPopupNotLoad");
+        if (!this.changeData) {
+          this.$emit("hideCashPopupNotLoad");
+        }
+        if (this.changeData) {
+          this.$emit("hideCashPopupAndHideDialog");
+        }
+        
       },
       onBtnYesClick(){
         if (this.formMode == "CashDialog") {

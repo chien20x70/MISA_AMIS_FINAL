@@ -2,7 +2,7 @@
   <div class="cashbox">
     <div class="cashbox__header">
       <div class="icon icon-24 mi-recent-log"></div>
-      <div class="cashbox__title">Phiếu chi PC000000</div>
+      <div class="cashbox__title">Phiếu chi {{valueRefCode}}</div>
       <div class="cashbox__input">
         <div class="cashbox__input--size">
           <Autocomplete/>
@@ -21,7 +21,7 @@
           <div class="row__input">
             <div class="object">
               <span class="text">Đối tượng</span>             
-              <Autocomplete :value="cash.organizationUnitName" @sendNameToCashDialog="getNameData"/>
+              <Autocomplete :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData"/>
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
@@ -49,13 +49,13 @@
             </div>
             <div class="date__form">
               <span class="text">Số phiếu chi</span><br />
-              <input type="text" class="input--size" v-model="cash.receiptPaymentCode">
+              <input type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode">
             </div>
           </div>
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên</span>
-              <Autocomplete v-model="cash.fullName" @sendDataEmployee="getDataEmployee"/>
+              <Autocomplete v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee"/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
@@ -163,6 +163,8 @@
         :message="message"
         @hideCashPopupAndRemoveRow="hideCashPopupAndRemoveRow"
         :formMode="formMode"
+        :changeData="changeData"
+        @hideCashPopupAndHideDialog="hideCashPopupAndHideDialog"
       />
   </div>
 </template>
@@ -171,10 +173,11 @@ import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
-
+//TODO: dữ liệu thay đổi cần gán tất cả trường empty khi bind bằng btnAdd
 import {
   MES_ADD_SUCCESS,
   MES_EDIT_SUCCESS,
+  STR_DATA_CHANGE
 } from "../../../lang/validation.js";
 
 export default {
@@ -191,13 +194,17 @@ export default {
   },
   data() {
     return {
+      changeData: false,
+      detectChangeCash: {},
+      detectChangeDetail: '',
+      valueRefCode: null,
       formMode: '',
       valuePopup: false,
       message: '',
       rowIndex: null,
       listDetail: [],
       check: null,
-      employeeName: null,
+      recordName: null,
       recordCode: null,
       money: {
           decimal: ',',
@@ -209,55 +216,109 @@ export default {
   },
   
   methods: {
+    
+    //#region Cập nhật DatePicker
+    /**
+     * Cập nhật dữ liệu ngày tháng khi lấy từ component DatePicker
+     * CreatedBY: NXCHIEN 06/06/2021
+     */
     getAccountingDate(value){
       this.cash.accountingDate = value;
     },
     getRefDate(value){
       this.cash.refDate = value;
     },
+    //#endregion
+    
+    //#region Thao tác các dòng trong listDetail với CashPopup
+    /**
+     * Thao tác Thêm dòng, Xóa hết dòng listDetail với cashPopup
+     * CreatedBy: NXCHIEN 06/06/2021
+     */
     hideCashPopupNotLoad(){
       this.valuePopup = false;
     },
+    // Xóa hết dòng và call đến CashPopup
+    onBtnDeleteAllRow(){
+      this.valuePopup = true;
+      this.message = "Bạn có thực sự muốn xóa tất cả dòng đã nhập không?";
+      this.formMode = "CashDialog";
+    },
+    // Xóa hết dòng và focus vào ô detail.
     hideCashPopupAndRemoveRow(){
       this.valuePopup = false;
       let arrDetailAdd = [{"DescriptionDetail": ""}];
       this.listDetail = arrDetailAdd;
       this.$refs.focusDescriptionDetail[0].focus();
     },
-    onBtnDeleteAllRow(){
-      this.valuePopup = true;
-      this.message = "Bạn có thực sự muốn xóa tất cả dòng đã nhập không?";
-      this.formMode = "CashDialog";
-    },
+    // Xóa 1 dòng trong bảng listDetail
     onBtnDeleteRowClick(value){
       this.listDetail.pop(this.listDetail[value]);
     },
+    // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
       this.rowIndex += 1;
       this.listDetail.push(this.listDetail[this.rowIndex - 2]);
     },
+    //#endregion
+
+    // Hiển thị thông báo.
     showNotification(message) {
       this.$notification["success"]({
         message,
         duration: 1,
       });
     },
-    getDataId(valueCode, valueCheck, employeeName){
+
+    //#region cập nhật Autocomplete
+    /**
+     * Cập nhật giá trị khi lấy giá trị từ component Autocomplete
+     * CreatedBY: NXCHIEN 06/06/2021
+     */
+    getDataId(valueCode, valueCheck, valueName){  //List đối tượng trong bảng listDetail
       this.recordCode = valueCode;
       this.check = valueCheck;
-      this.employeeName = employeeName;
+      this.recordName = valueName;
     },
-    getNameData(valueName, valueAddress){
+    getNameData(valueName, valueAddress){ // Đôi tượng
       this.cash.organizationUnitName = valueName;
       this.cash.organizationUnitAddress = valueAddress;
     },
-    getDataEmployee(valueName, valueId){
+    getDataEmployee(valueName, valueId){  // Nhân viên
       this.cash.employeeId = valueId;
       this.cash.fullName = valueName;
     },
+    //#endregion
+    
+    compareObjectCash(obj1, obj2) {
+      for (let key in obj2) {
+        if (obj2[key] !== obj1[key]) {
+          return true;
+        }
+      }
+      return false;
+    },
+
+    //#region Đóng cashdialog
+    /**
+     * Đóng CashDialog và ko load lại data
+     * CreatedBy: NXCHIEN 06/06/2021
+     */
     onBtnCloseClick() {
+      let str = JSON.stringify(this.listDetail);
+      if (this.compareObjectCash(this.detectChangeCash, this.cash) || this.cash.receiptPaymentDetail !== str) {
+        this.message = STR_DATA_CHANGE;
+        this.valuePopup = true;
+        this.changeData = true;
+      } else {
+        this.$emit("hideCashDialogNotLoad");
+      }
+    },
+    hideCashPopupAndHideDialog(){
       this.$emit("hideCashDialogNotLoad");
     },
+    //#endregion
+
     convertListDetailtoJSON(){
       this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
       this.cash.totalAmount = this.totalMoney;
@@ -312,10 +373,10 @@ export default {
       return Promise.reject();
     },
 
-    /* 
-    Click Save nhân viên
-    CreatedBy: NXCHIEN 17/05/2021
-    */
+    /**
+     * Lưu thông tin ReceiptPayment
+     * CreatedBy: NXCHIEN 06/06/2021
+     */
     onBtnSaveClick() {
       this.validAndSave().then(() => {
         if (this.flag == "add") {
@@ -343,10 +404,22 @@ export default {
       });
     },
 
+    /**
+     * Cập nhật giá trị refCode khi thay đổi input refCode
+     * CreatedBY: NXCHIEN 06/06/2021
+     */
+    onChangeRefCode(event){
+      this.valueRefCode = event.target.value;
+    },
+
+    /**
+     * Cập nhật giá trị mảng listDetail khi chọn lại đối tượng trong bảng listDetail
+     * CreatedBy: NXCHIEN 06/06/2021
+     */
     onChangeArr(){
       for (var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
         if(this.check != null){
-          this.listDetail[this.check].OrganizationUnitName = this.employeeName; 
+          this.listDetail[this.check].OrganizationUnitName = this.recordName; 
           this.listDetail[this.check].OrganizationUnitCode = this.recordCode; 
           return this.listDetail;
         }  
@@ -355,6 +428,10 @@ export default {
     },
   },
   computed:{
+    /**
+     * Tính tổng tiền trong listDetail
+     * CreatedBy: NXCHIEN 06/06/2021
+     */
     totalMoney(){
       var total = 0;
       for ( var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
@@ -362,13 +439,23 @@ export default {
       }
       return total;      
     },
+
+    /**
+     * Cập nhật mảng listDetail
+     * CreatedBy: NXCHIEN 06/06/2021
+     */
     listDetailFilter(){    
       return this.onChangeArr();  
-    } 
+    },
   },
+
   mounted() {
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);
     this.rowIndex = this.listDetail.length;
+    this.valueRefCode = this.cash.receiptPaymentCode;
+
+    this.detectChangeCash = {...this.cash};
+    this.detectChangeDetail = this.cash.receiptPaymentDetail;
   },
 };
 </script>

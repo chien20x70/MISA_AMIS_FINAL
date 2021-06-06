@@ -331,9 +331,9 @@ export default {
     },
     //#endregion
 
-    //#region Đóng mở Popup
+    //#region Đóng mở CashPopup
     /* 
-    Hiển thị Popup được gọi từ (dropdownDuplicateAndDelete)
+    Hiển thị CashPopup được gọi từ (dropdownDuplicateAndDelete)
     CreatedBy: NXCHIEN 17/05/2021  
     */
     showCashPopup(receiptPaymentId, receiptPaymentCode) {
@@ -411,18 +411,18 @@ export default {
     },
     //#endregion
 
-    /* 
-    Click nút Sửa trong table
-    CreatedBy: NXCHIEN 17/05/2021  
-    */
+    /**
+      * Click nút Sửa trong table
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     onBtnEditClick(employeeClickId) {
       this.onRowTableDblClick(employeeClickId);
     },
 
-    /* 
-    Load lại dữ liệu khi click vào nút refresh
-    CreatedBy: NXCHIEN 17/05/2021  
-    */
+    /**
+      * Load lại dữ liệu khi click vào nút refresh
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     onBtnRefreshClick() {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() =>{
@@ -432,10 +432,10 @@ export default {
       }, 500);
     },
 
-    /* 
-    Lọc data bằng các tham số truyền vào
-    CreatedBy: NXCHIEN 17/05/2021  
-    */
+    /**
+      * Lọc data bằng các tham số truyền vào
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     filterData() {
       this.isBusy = true;
       this.axios
@@ -455,7 +455,6 @@ export default {
           if (response.data.data.totalMoney != undefined) {
             this.totalMoney = response.data.data.totalMoney;
           }
-          
         })
         .catch(() => {})
         .then(() => {
@@ -463,10 +462,10 @@ export default {
         });
     },
 
-    /* 
-    Kiểm tra giá trị input thay đổi thì lọc mảng ReceiptPayment bằng cách gọi tới API
-    CreatedBy: NXCHIEN 17/05/2021  
-    */
+    /**
+      * Kiểm tra giá trị input thay đổi thì lọc mảng ReceiptPayment bằng cách gọi tới API
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     onChangeInputEmployeeFilter(e) {
       let val = e.target.value;
       clearTimeout(this.timeOut);
@@ -481,11 +480,10 @@ export default {
       }, 500);
     },
 
-    /* 
-    Kiểm tra click thay đổi phân trang
-    - Lọc lại mảng ReceiptPayment khi click.
-    CreatedBy: NXCHIEN 17/05/2021  
-    */
+    /**
+      * Kiểm tra click thay đổi phân trang, Lọc lại mảng ReceiptPayment khi click.
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     onPageChange(page) {
       // Thay đổi trang khi click button phần phân trang
       this.pageIndex = page;
@@ -493,11 +491,10 @@ export default {
       this.filterData();
     },
 
-    /* 
-    Export data ra file excel
-    - mở 1 cửa số mới call đến API
-    CreatedBy: NXCHIEN 17/05/2021 
-    */
+    /**
+      * Export data ra file excel. //TODO: Chưa sửa export bên API.
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     onBtnExportClick() {
       // Mở 1 cửa số mới gọi API để tải về.
       window.open(
@@ -529,17 +526,18 @@ export default {
       this.valueSelect = !this.valueSelect;
     },
     //#endregion
+
     /**
-     * Đỏng mở CashFilter
+     * Đóng mở CashFilter
      */
     onBtnFilterClick(){
       this.toggleFilter = !this.toggleFilter;
     },
 
-    /* 
-    Format dữ liệu ngày tháng năm theo định dạng yyyy-mm-dd
-    CreatedBy: NXCHIEN 17/05/2021  
-    */
+    /**
+      * Format dữ liệu ngày tháng năm theo định dạng yyyy-mm-dd
+      * CreatedBy: NXCHIEN 06/06/2021
+      */
     dateFormatYYMMDD(date) {
       var newDate = new Date(date);
       var day = newDate.getDate();

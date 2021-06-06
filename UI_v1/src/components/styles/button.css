@@ -31,12 +31,12 @@ button{
 .btn-No{
     height: 36px;
     width: 84px;
-    border: 1px solid rgb(71, 71, 71);
+    border: 1px solid #8d9096;
     font-weight: 700;
-    line-height: 18px;
+    line-height: 12px;
 }
 .btn-No:hover{
-    background-color: rgb(202, 202, 202);
+    background-color: #d2d3d6;
 }
 
 .btn-btn {

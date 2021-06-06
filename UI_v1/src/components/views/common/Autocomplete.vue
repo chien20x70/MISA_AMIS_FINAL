@@ -21,11 +21,17 @@
       </div>
     </div>
     <div class="select-custom" :class="{ invisible: toggleAutocomplete }">
-      <div class="header-select">
-        <div class="text text-hidden">Mã nhân viên</div>
-        <div class="text scrollName text-hidden">Tên nhân viên</div>
-        <div class="text scrollName text-hidden">Đơn vị</div>
-        <div class="text scrollName text-hidden">Số điện thoại</div>
+      <div class="header-select" :class="{ visible: employee == 'employee'}">
+        <div class="text code--size text-hidden">Mã nhân viên</div>
+        <div class="text name--size text-hidden">Tên nhân viên</div>
+        <div class="text department--size text-hidden">Đơn vị</div>
+        <div class="text phone--size text-hidden">Số điện thoại</div>
+      </div>
+      <div class="header-select" :class="{ visible: object == 'object'}">
+        <div class="text code--size text-hidden">Đối tượng</div>
+        <div class="text name--size text-hidden">Tên đối tượng</div>
+        <div class="text department--size text-hidden">Đơn vị</div>
+        <div class="text phone--size text-hidden">Số điện thoại</div>
       </div>
       <div class="department-content" ref="positionDepartment" 
         v-for="(employee, index) in employees"
@@ -34,10 +40,10 @@
         :class="{ color: currentIndex == index}"
       >
         <div class="scrollItem" >
-          <div class="text-hidden">{{ employee.employeeCode }}</div>
-          <div class="scrollName text-hidden">{{ employee.fullName }}</div>
-          <div class="scrollName text-hidden">{{ employee.departmentName }}</div>
-          <div class="scrollName text-hidden">{{ employee.phoneNumber }}</div>
+          <div class="code--size text-hidden">{{ employee.employeeCode }}</div>
+          <div class="name--size text-hidden">{{ employee.fullName }}</div>
+          <div class="department--size text-hidden">{{ employee.departmentName }}</div>
+          <div class="phone--size text-hidden">{{ employee.phoneNumber }}</div>
         </div>
       </div>
     </div>
@@ -45,7 +51,7 @@
 </template>
 <script>
 export default {
-  props: ['value', 'code'],
+  props: ['value', 'code', 'object', 'employee'],
   data() {
     return {
       employees: [],
@@ -270,7 +276,7 @@ export default {
 .header-select {
   height: 32px;
   width: 100%;
-  display: flex;
+  display: none;
   align-items: center;
   background-color: #f4f5f8;
   padding: 0 14px 0 10px;
@@ -302,13 +308,18 @@ export default {
   white-space: nowrap;
   overflow: hidden;
 }
-.scrollItem .scrollName{
-  width: 30%;
-  padding-left: 60px;
+.header-select .code--size, .scrollItem .code--size{
+  width: 20%;
 }
-.header-select .scrollName{
-  width: 30%;
-  padding-left: 50px;
+
+.header-select .name--size, .scrollItem .name--size{
+  width: 35%;
+}
+.header-select .department--size, .scrollItem .department--size{
+  width: 25%;
+}
+.header-select .phone--size, .scrollItem .phone--size{
+  width: 20%;
 }
 .invisible {
   display: none;
@@ -316,5 +327,8 @@ export default {
 .color {
   background-color: #2ca01c;
   color: white;
+}
+.visible{
+  display: flex;
 }
 </style>
