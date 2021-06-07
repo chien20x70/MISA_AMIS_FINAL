@@ -220,8 +220,11 @@ import CashFilter from "../common/CashFilter.vue";
 
 const arrDetailAdd = [{
           "DescriptionDetail": "Chi tiền cho ",
+          "DebtAccount": "",
           "CreditAccount": "19008198",
-          "Amount": 0
+          "Amount": 0,
+          "OrganizationUnitCode": "",
+          "OrganizationUnitName": "",
         },       
       ];
 //#endregion
@@ -285,12 +288,27 @@ export default {
       this.selectedCash = {};
       // Gán code Max cho ô Mã ReceiptPayment và 1 số thuộc tính khác.
       this.selectedCash.receiptPaymentCode = response.data.data;
-      this.selectedCash.organizationUnitAddress = "";
-      this.selectedCash.organizationUnitName = "";
+      this.selectedCash.accountingDate = this.getCurrentDate();
       this.selectedCash.description = "Chi tiền cho ";
+      this.selectedCash.organizationUnitName = "";
+      this.selectedCash.organizationUnitAddress = "";
+      this.selectedCash.employeeId = "";
+      this.selectedCash.fullName = "";
+      this.selectedCash.receiver = "";
+      this.selectedCash.refDate = this.getCurrentDate();
+      this.selectedCash.refAttach = 0;
       this.selectedCash.receiptPaymentDetail = JSON.stringify(arrDetailAdd);
-    },
 
+    },
+    getCurrentDate(){
+      let currentDate = new Date();
+      var day = currentDate.getDate();
+      var month = currentDate.getMonth() + 1;
+      var year = currentDate.getFullYear();
+      day = day < 10 ? "0" + day : day;
+      month = month < 10 ? "0" + month : month;
+      return `${year}-${month}-${day}`;
+    },
     /**
      * Click thêm mới 1 ReceiptPayment
      * CreatedBy: NXCHIEN 17/05/2021
@@ -487,7 +505,6 @@ export default {
     onPageChange(page) {
       // Thay đổi trang khi click button phần phân trang
       this.pageIndex = page;
-      // Lọc dữ liệu.
       this.filterData();
     },
 
@@ -512,7 +529,6 @@ export default {
       // gán message thành message cần để hiển thị  "20 bản ghi trên 1 trang..."
       this.msgSelected = "";
       this.msgSelected = value + this.msgSelect;
-
       // số ReceiptPayment trên/ trang
       this.pageSize = value;
       // trang số 1
@@ -534,19 +550,6 @@ export default {
       this.toggleFilter = !this.toggleFilter;
     },
 
-    /**
-      * Format dữ liệu ngày tháng năm theo định dạng yyyy-mm-dd
-      * CreatedBy: NXCHIEN 06/06/2021
-      */
-    dateFormatYYMMDD(date) {
-      var newDate = new Date(date);
-      var day = newDate.getDate();
-      var month = newDate.getMonth() + 1;
-      var year = newDate.getFullYear();
-      day = day < 10 ? "0" + day : day;
-      month = month < 10 ? "0" + month : month;
-      return `${year}-${month}-${day}`;
-    },
   },
   //#endregion
   

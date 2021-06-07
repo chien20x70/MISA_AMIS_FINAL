@@ -1,16 +1,17 @@
 <template>
   <div>
-    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false}">
+    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false,'input-error': (messageRequired != '' || changeData == 'empty')}">
       <div class="selected-option">
         <input
           type="text"
-          ref="focusDepartment"
+          ref="focusInputAutocomplete"
           class="input-select"
           @keydown.up="up"
           @keydown.down="down"
           @keydown.enter="enter"
           v-model="showEmployeeName"
           @focus="focusInputKey"
+          @input="onChangeInputName"
         />
         <div class="icon-selected">
           <div
@@ -47,33 +48,55 @@
         </div>
       </div>
     </div>
+    <span v-if="messageRequired != ''" class="span">{{messageRequired}}</span>
+    <span v-if="changeData == 'empty'" class="span">Bắt buộc nhập trường này</span>
   </div>
 </template>
 <script>
+import {
+  MES_REQUIRED_ATTRIBUTE,
+} from "../../../lang/validation.js";
 export default {
-  props: ['value', 'code', 'object', 'employee'],
+  props: ['value', 'code', 'object', 'employee', 'changeData'],
   data() {
     return {
+      messageRequired: '',
       employees: [],
       toggleAutocomplete: true,
       currentIndex: 0,
-      saveValueEmployeeName: '',
+      saveValueEmployeeName: null,
       saveValueEmployeeCode: null,
       saveValueAddress: null,
       flag: true,
     };
   },
   methods: {
-    
+    focusInput(){
+      this.$refs.focusInputAutocomplete.focus();
+      console.log(this.$refs.focusInputAutocomplete);
+    },
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
       if (!this.toggleAutocomplete) {
-        this.$refs.focusDepartment.focus();
+        this.$refs.focusInputAutocomplete[0].focus();
       }
     },
 
     focusInputKey() {
-      this.toggleAutocomplete = false;
+      this.toggleAutocomplete = false;      
+    },
+
+    onChangeInputName(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (val !== "") {
+        this.messageRequired = "";       
+      } else if (val == "") {
+        this.messageRequired = MES_REQUIRED_ATTRIBUTE;
+      }
+      }, 200);  
+      // this.$emit("sendDataByInput", val);
     },
     /**
      * Click nút up cập nhật vị trí currentIndex
@@ -110,6 +133,7 @@ export default {
         this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
         this.$emit("sendDataEmployee", this.saveValueEmployeeName, this.employees[this.currentIndex].employeeId);
       }
+      this.messageRequired = '';
     },
     
     onBtnEmployeeClick(employee, index) {
@@ -127,17 +151,17 @@ export default {
         this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
         this.$emit("sendDataEmployee", this.saveValueEmployeeName, employee.employeeId);
       }
-      
+      this.messageRequired = '';
     },
   },
-  created(){
-    window.addEventListener("click", (e) => {
-      if (!this.$el.contains(e.target)) {
-        this.toggleAutocomplete = true;
-      }
-    });
+  // created(){
+  //   window.addEventListener("click", (e) => {
+  //     if (!this.$el.contains(e.target)) {
+  //       this.toggleAutocomplete = true;
+  //     }
+  //   });
     
-  },
+  // },
   mounted() {
     this.axios
       .get(
@@ -208,6 +232,8 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  border: none;
+  outline: none;
 }
 .input-select {
   background-color: transparent;
@@ -330,5 +356,12 @@ export default {
 }
 .visible{
   display: flex;
+}
+.input-error{
+  border: 1px solid red;
+}
+.span{
+  color: red; 
+  font-size: 12px;
 }
 </style>

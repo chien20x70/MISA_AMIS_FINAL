@@ -2,22 +2,32 @@
     <div class="popup">
         <div class="model"></div>
         <div class="popup-box">
-          <div class="popup-content" :class="{display: changeData}">
+          <div class="popup-content" :class="{display: changeData === ''}">
             <div class="icon icon-48 exclamation-warning-48"></div>
             <div class="message">{{message}}</div>
           </div>
-          <div class="btn-footer" :class="{display: changeData}">
+          <div class="btn-footer" :class="{display: changeData === ''}">
             <button class="btn-No btn-yes" @click="onBtnNoClick">Không</button>
             <button class="btn-add btn-yes" @click="onBtnYesClick">Có</button>
           </div>
-          <div class="popup-content" :class="{display: !changeData}">
+
+          <div class="popup-content" :class="{display: changeData === 'changeData'}">
             <div class="icon icon-48 mi-exclamation-question-48"></div>           
             <div class="message">{{message}}</div>
           </div>
-          <div class="btn-footer" :class="{display: !changeData}">
+          <div class="btn-footer" :class="{display: changeData === 'changeData'}">
             <button class="btn-No btn-yes">Hủy</button>
             <button class="btn-No btn-yes" style="margin-left: 130px;" @click="onBtnNoClick">Không</button>
             <button class="btn-add btn-yes">Có</button>
+          </div>
+
+          <div class="popup-content" :class="{display: (changeData === 'dataExist' || changeData == 'empty')}">
+            <div v-if="changeData == 'dataExist'" class="icon icon-48 exclamation-warning-48"></div>           
+            <div v-if="changeData == 'empty'" class="icon icon-48 mi-exclamation-error-48-2"></div>       
+            <div class="message">{{message}}</div>
+          </div>
+          <div class="btn-footer" :class="{display: (changeData === 'dataExist' || changeData == 'empty')}">
+            <button class="btn-add btn-yes btn-close" @click="onBtnNoClick">Đóng</button>
           </div>
         </div>
     </div>
@@ -29,7 +39,7 @@ export default {
       refId:{ type: String, selector: null},        // Giá trị EmployeeCode được bind từ EmployeeList
       message: {type: String, default: ''},                 // message thông báo lỗi được bind từ Dialog
       formMode: {type: String, default: ''},
-      changeData: {type: Boolean, default: false}
+      changeData: {type: String, default: ''},
     },
   //#endregion
     
@@ -40,11 +50,14 @@ export default {
       CreatedBy: NXCHIEN 17/05/2021
        */
       onBtnNoClick(){
-        if (!this.changeData) {
+        if (this.changeData == '' || this.changeData == 'dataExist') { //BTN Đóng, Không
           this.$emit("hideCashPopupNotLoad");
         }
-        if (this.changeData) {
+        if (this.changeData == 'changeData') {  //BTN Không
           this.$emit("hideCashPopupAndHideDialog");
+        }
+        if (this.changeData == 'empty') {
+          this.$emit("hideCashPopupAndValidate");
         }
         
       },
@@ -90,7 +103,7 @@ export default {
   z-index: 102;
 }
 .popup-content{
-  display: flex;
+  display: none;
   width: 100%;
   height: 82px;
   align-items: center;
@@ -107,7 +120,7 @@ export default {
   font-size: 13px;
 }
 .btn-footer{
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: space-between;
 }
@@ -124,7 +137,7 @@ export default {
   padding: 8px 20px;
 }
 .display{
-  display: none;
+  display: flex;
 }
 .mi-exclamation-error-48-2 {
     background-position: -24px -954px;

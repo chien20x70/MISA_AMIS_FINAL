@@ -20,12 +20,14 @@
         <div class="basic__form">
           <div class="row__input">
             <div class="object">
-              <span class="text">Đối tượng</span>             
-              <Autocomplete :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData"/>
+              <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
+              <Autocomplete ref="object" :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData" @sendDataByInput="getDataInput" :changeData="changeData"/>
+              <span style="color: red; font-size: 12px">{{messageObject}}</span>
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
-              <input type="text" class="input--size" v-model="cash.receiver"/>
+              <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/>
+              <span style="color: red; font-size: 12px">{{messageReceiver}}</span>
             </div>
             <div class="date__form">
               <span class="text">Ngày hạch toán</span><br />
@@ -48,14 +50,15 @@
               <input type="text" class="input--size" v-model="cash.description"/>
             </div>
             <div class="date__form">
-              <span class="text">Số phiếu chi</span><br />
-              <input type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode">
+              <span class="text">Số phiếu chi <p style="color: red; display: inline">*</p></span><br />
+              <input maxlength="50" type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode" :class="{ 'input-error': messageCode != ''}"><br/>
+              <span style="color: red; font-size: 12px">{{messageCode}}</span>
             </div>
           </div>
           <div class="row__input">
             <div class="employee">
-              <span class="text">Nhân viên</span>
-              <Autocomplete v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee"/>
+              <span class="text">Nhân viên <p style="color: red; display: inline">*</p></span>
+              <Autocomplete ref="employee" v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee" :changeData="changeData"/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
@@ -78,7 +81,7 @@
           <div class="hover">Hạch toán</div>
         </div>
         <div class="grid__height">
-          <table border="0">
+          <table border="0" width="100%">
             <thead>
               <tr>
                 <th class="first__th">#</th>
@@ -165,6 +168,7 @@
         :formMode="formMode"
         :changeData="changeData"
         @hideCashPopupAndHideDialog="hideCashPopupAndHideDialog"
+        @hideCashPopupAndValidate="hideCashPopupAndValidate"
       />
   </div>
 </template>
@@ -173,11 +177,15 @@ import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
-//TODO: dữ liệu thay đổi cần gán tất cả trường empty khi bind bằng btnAdd
 import {
   MES_ADD_SUCCESS,
   MES_EDIT_SUCCESS,
-  STR_DATA_CHANGE
+  STR_DATA_CHANGE,
+  MES_ERROR_SERVER,
+  MES_REQUIRED_ATTRIBUTE,
+  STR_EMPTY_RECEIPTPAYMENT_CODE,
+  STR_EMPTY_EMPLOYEEID,
+  STR_EMPTY_OBJECT
 } from "../../../lang/validation.js";
 
 export default {
@@ -194,7 +202,11 @@ export default {
   },
   data() {
     return {
-      changeData: false,
+      messageCode: '',
+      messageFullName: '',
+      messageObject: '',
+      messageReceiver: '',
+      changeData: '',
       detectChangeCash: {},
       detectChangeDetail: '',
       valueRefCode: null,
@@ -209,14 +221,44 @@ export default {
       money: {
           decimal: ',',
           thousands: '.',
-          precision: 1,
+          precision: 0,
           masked: false /* doesn't work with directive */
         },
     };
   },
   
   methods: {
-    
+    onChangeInputReceiver(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (val !== "") {
+          this.messageReceiver = "";
+        } else if (val == "") {
+          this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
+        }
+      }, 200);
+    },
+    hideCashPopupAndValidate(){
+      this.valuePopup = false;
+      this.changeData = 'code';
+      if (this.messageCode != '') {
+        this.messageObject = '';
+        this.messageReceiver = '';
+        this.messageFullName = '';     
+        // this.$refs.code.focusInput();
+      }else if(this.messageObject != ''){
+        this.messageReceiver = '';
+        this.messageFullName = '';
+        // console.log(this.$refs.object);
+        // this.$refs.object.focusInput();
+      }else if(this.messageReceiver != ''){
+        this.messageFullName = '';
+        this.$refs.focusReceiver.focus();
+      }else{
+        this.$refs.employee.focusInput();
+      }
+    },
     //#region Cập nhật DatePicker
     /**
      * Cập nhật dữ liệu ngày tháng khi lấy từ component DatePicker
@@ -288,16 +330,12 @@ export default {
       this.cash.employeeId = valueId;
       this.cash.fullName = valueName;
     },
+    getDataInput(value){
+      this.cash.organizationUnitName = value;
+    },
     //#endregion
     
-    compareObjectCash(obj1, obj2) {
-      for (let key in obj2) {
-        if (obj2[key] !== obj1[key]) {
-          return true;
-        }
-      }
-      return false;
-    },
+    
 
     //#region Đóng cashdialog
     /**
@@ -309,7 +347,7 @@ export default {
       if (this.compareObjectCash(this.detectChangeCash, this.cash) || this.cash.receiptPaymentDetail !== str) {
         this.message = STR_DATA_CHANGE;
         this.valuePopup = true;
-        this.changeData = true;
+        this.changeData = 'changeData';
       } else {
         this.$emit("hideCashDialogNotLoad");
       }
@@ -317,7 +355,29 @@ export default {
     hideCashPopupAndHideDialog(){
       this.$emit("hideCashDialogNotLoad");
     },
+    compareObjectCash(obj1, obj2) {
+      for (let key in obj2) {
+        if (obj2[key] !== obj1[key]) {
+          return true;
+        }
+      }
+      return false;
+    },
     //#endregion
+
+    /**
+     * Lấy data lỗi trả về từ server
+     * CreatedBY: NXCHIEN 30/05/2021
+     */
+    getResponseError(res){
+      if(res != undefined){
+        if(res.data.code == 500){
+          this.message = MES_ERROR_SERVER;
+          // show popup
+          this.valuePopup = true;
+        }
+      }
+    },
 
     convertListDetailtoJSON(){
       this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
@@ -325,7 +385,52 @@ export default {
       this.cash.reasonName = "Chi khác";
     },
 
+    /**
+     * Kiểm tra empty các trường code, name, departmentId
+     * CreatedBy:NXCHIEN 19/05/2021
+     */
+    checkEmptyAttribute() {
+      if (this.cash.receiptPaymentCode == "") {
+        this.messageCode = MES_REQUIRED_ATTRIBUTE;
+      }
+      if (this.cash.OrganizationUnitName == "") {
+        this.messageObject = MES_REQUIRED_ATTRIBUTE;
+      }
+      if (this.cash.receiver == "") {
+        this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
+      }         
+      if (this.cash.employeeId == "") {
+        this.messageFullName = MES_REQUIRED_ATTRIBUTE;
+      }    
+    },
+    /**
+     * Kiểm tra các trường bắt buộc nhập
+     * CreatedBy: NXCHIEN 19/05/2021
+     */
+    isCheckValidate() {
+      if (this.cash.receiptPaymentCode.trim() == "") {    
+        this.message = STR_EMPTY_RECEIPTPAYMENT_CODE;
+        this.changeData = 'empty';
+        return true;
+      }
+      if (this.cash.organizationUnitName.trim() == "") {    
+        this.message = STR_EMPTY_OBJECT;
+        this.changeData = 'empty';
+        return true;
+      }
+      if (this.cash.employeeId == "") {
+        this.message = STR_EMPTY_EMPLOYEEID;
+        this.changeData = 'empty';
+        return true;
+      }
+      return false;
+    },
     validAndSave() {
+      // Kiểm tra attribute empty
+      this.checkEmptyAttribute();
+      // Kiểm tra validate attribute
+      this.valuePopup = this.isCheckValidate();
+      if (!this.valuePopup)
         if (this.flag == "add") {
           this.convertListDetailtoJSON();
           return this.axios.post("/ReceiptPayments", this.cash)
@@ -336,9 +441,9 @@ export default {
               } else if (res.data.code == 400) {
                 // Lấy ra message lỗi
                 this.message = res.data.data;
-                console.log(this.message);
                 // show popup
-                // this.valuePopup = true;
+                this.valuePopup = true;
+                this.changeData = 'dataExist';
                 return Promise.reject();
               }
               return Promise.resolve();
@@ -353,14 +458,12 @@ export default {
           return this.axios.put("/ReceiptPayments/" + this.cash.receiptPaymentId, this.cash)
             .then((res) => {
               if (res.data.code == 200) {
-                // this.saveValueDepartment = null;
                 return Promise.resolve();
               } else if (res.data.code == 400) {
                 // Lấy ra message lỗi
                 this.message = res.data.data;
-                console.log(this.message);
                 // show popup
-                // this.valuePopup = true;
+                this.valuePopup = true;
                 return Promise.reject();
               }
               return Promise.resolve();
@@ -408,8 +511,17 @@ export default {
      * Cập nhật giá trị refCode khi thay đổi input refCode
      * CreatedBY: NXCHIEN 06/06/2021
      */
-    onChangeRefCode(event){
-      this.valueRefCode = event.target.value;
+    onChangeRefCode(e){
+      let val = e.target.value;
+      this.valueRefCode = val;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (val !== "") {
+          this.messageCode = "";
+        } else if (val == "") {
+          this.messageCode = MES_REQUIRED_ATTRIBUTE;
+        }
+      }, 200);
     },
 
     /**
@@ -631,7 +743,8 @@ export default {
 .grid__height {
   margin-left: 30px;
   overflow-x: auto;
-  width: calc(95% + 20px);
+  /* width: calc(95% + 20px); */
+  width: calc(100vw - 56px);
 }
 
 table tr {
@@ -708,5 +821,7 @@ table tfoot th {
   display: flex;
   align-items: center;
 }
-
+.input-error{
+  border: 1px solid red;
+}
 </style>
