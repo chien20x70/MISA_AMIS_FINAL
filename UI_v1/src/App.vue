@@ -130,12 +130,12 @@ export default {
   color: white !important;
   font-weight: 600 !important;
 }
-.ui.search.dropdown>.text{
+/* .ui.search.dropdown>.text{
   text-overflow: ellipsis;
   white-space: nowrap;
   display: block;
   overflow: hidden;
-}
+} */
 /* .vdpCell.selected .vdpCellContent {
     color: #fff;
     background: #7485c2;

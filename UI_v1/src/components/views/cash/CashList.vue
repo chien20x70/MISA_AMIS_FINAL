@@ -195,7 +195,7 @@
         </div>
       </div>
     </div>
-    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cash="selectedCash" :flag="status"/>
+    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cash="selectedCash" :flag="status" @sendData="getData"/>
     <CashPopup     
       v-if="valuePopup"
       @hideCashPopupNotLoad="hideCashPopupNotLoad"
@@ -276,6 +276,11 @@ export default {
 
   //#region METHODS
   methods: {
+    getData(valueName, valueAddress){
+      this.selectedCash.organizationUnitName = valueName;
+      this.selectedCash.organizationUnitAddress = valueAddress;
+      this.selectedCash.receiver = valueName;
+    },
     //#region BtnAddClick
     /**
      * Gán selectedCash khi click BtnAdd.

@@ -5,7 +5,8 @@
       <div class="cashbox__title">Phiếu chi {{valueRefCode}}</div>
       <div class="cashbox__input">
         <div class="cashbox__input--size">
-          <Autocomplete/>
+          <!-- <Autocomplete/> -->
+          <model-select/>
         </div>
       </div>
       <div class="cashbox__icon icon icon-24 mi-setting__detail"></div>
@@ -19,15 +20,16 @@
       <div class="content__information">
         <div class="basic__form">
           <div class="row__input">
-            <div class="object">
-              <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
-              <Autocomplete ref="object" :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData" @sendDataByInput="getDataInput" :changeData="changeData"/>
-              <span style="color: red; font-size: 12px">{{messageObject}}</span>
-            </div>
-            <div class="receive">
-              <span class="text">Người nhận</span>
-              <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/>
-              <span style="color: red; font-size: 12px">{{messageReceiver}}</span>
+            <div class="row__input__first">
+              <div class="object">
+                <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
+                <Autocomplete ref="object" v-model="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData" @sendDataByInput="getDataInput" :messageObject="messageObject" :messageFullName="messageFullName" :messageCode="messageCode"/>
+              </div>
+              <div class="receive">
+                <span class="text">Người nhận</span>
+                <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/>
+                <span style="color: red; font-size: 12px">{{messageReceiver}}</span>
+              </div>
             </div>
             <div class="date__form">
               <span class="text">Ngày hạch toán</span><br />
@@ -58,7 +60,7 @@
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên <p style="color: red; display: inline">*</p></span>
-              <Autocomplete ref="employee" v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee" :changeData="changeData"/>
+              <Autocomplete ref="employee" v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee" :messageCode="messageCode" :messageFullName="messageFullName" :messageObject="messageObject"/>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
@@ -105,7 +107,7 @@
                 <td style="text-align: right">
                   <money style="width: 100%; text-align: right;" v-model="list.Amount" v-bind="money"/>
                 </td>
-                <td><Autocomplete v-model="list.OrganizationUnitCode" :code="index" @sendIdToCashDialog="getDataId"/></td>
+                <td><Autocomplete v-model="list.OrganizationUnitCode" :code="index" :employeeCode="'employeeCode'" @sendIdToCashDialog="getDataId" :messageCode="messageCode" :messageFullName="messageFullName" :messageObject="messageObject"/></td>
                 <td><input type="text" style="width: 100%; cursor: pointer;" v-model="list.OrganizationUnitName" readonly/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete" @click="onBtnDeleteRowClick(index)"></div>
@@ -187,6 +189,7 @@ import {
   STR_EMPTY_EMPLOYEEID,
   STR_EMPTY_OBJECT
 } from "../../../lang/validation.js";
+import ModelSelect from '../common/ModelSelect.vue';
 
 export default {
   directives: {money: VMoney},
@@ -194,7 +197,8 @@ export default {
     Autocomplete,
     Money, 
     CashPopup,
-    DatePicker
+    DatePicker,
+    ModelSelect
   },
   props:{
     cash: {type: Object, default: null},
@@ -246,16 +250,15 @@ export default {
         this.messageObject = '';
         this.messageReceiver = '';
         this.messageFullName = '';     
-        // this.$refs.code.focusInput();
+        this.$refs.code.focusInput();
       }else if(this.messageObject != ''){
         this.messageReceiver = '';
         this.messageFullName = '';
-        // console.log(this.$refs.object);
-        // this.$refs.object.focusInput();
+        this.$refs.object.focusInput();
       }else if(this.messageReceiver != ''){
         this.messageFullName = '';
         this.$refs.focusReceiver.focus();
-      }else{
+      }else if(this.messageFullName != ''){
         this.$refs.employee.focusInput();
       }
     },
@@ -323,15 +326,22 @@ export default {
       this.recordName = valueName;
     },
     getNameData(valueName, valueAddress){ // Đôi tượng
-      this.cash.organizationUnitName = valueName;
-      this.cash.organizationUnitAddress = valueAddress;
+      // this.cash.organizationUnitName = valueName;
+      // this.cash.organizationUnitAddress = valueAddress;
+      // this.cash.receiver = valueName;
+      this.$emit("sendData", valueName, valueAddress);
     },
     getDataEmployee(valueName, valueId){  // Nhân viên
       this.cash.employeeId = valueId;
       this.cash.fullName = valueName;
     },
-    getDataInput(value){
-      this.cash.organizationUnitName = value;
+    getDataInput(value, val){
+      // this.cash.organizationUnitName = val;
+      if (val == 'object') {
+        this.messageObject = value;
+      }else if(val == 'employee'){
+        this.messageFullName = value;
+      }    
     },
     //#endregion
     
@@ -393,7 +403,7 @@ export default {
       if (this.cash.receiptPaymentCode == "") {
         this.messageCode = MES_REQUIRED_ATTRIBUTE;
       }
-      if (this.cash.OrganizationUnitName == "") {
+      if (this.cash.organizationUnitName == "") {
         this.messageObject = MES_REQUIRED_ATTRIBUTE;
       }
       if (this.cash.receiver == "") {
@@ -650,13 +660,16 @@ export default {
   height: 70px;
   display: flex;
 }
+.row__input__first{
+  width: 79%;
+  display: flex;
+}
 .object {
-  width: 34%;
+  width: 44%;
 }
 .receive {
-  padding: 0 11px 0 12px;
-  width: 44%;
-  margin-right: 11px;
+  padding: 0 0 0 12px;
+  width: 55%;
 }
 .date__form {
   width: 22%;
@@ -679,7 +692,7 @@ export default {
   font-size: 12px;
 }
 .receive .input--size {
-  width: calc(100% + 5px);
+  width: calc(97% + 5px);
   /* width: 100%; */
   margin-top: 4px;
 }

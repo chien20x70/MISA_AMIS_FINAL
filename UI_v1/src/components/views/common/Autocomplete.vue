@@ -1,10 +1,36 @@
 <template>
   <div>
-    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false,'input-error': (messageRequired != '' || changeData == 'empty')}">
+    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false, 'input-error': (messageObject != '')}">
       <div class="selected-option">
         <input
+        v-if="object == 'object'"
+
           type="text"
-          ref="focusInputAutocomplete"
+          ref="focusInputAutocomplete1"
+          class="input-select"
+          @keydown.up="up"
+          @keydown.down="down"
+          @keydown.enter="enter"
+          v-model="showEmployeeName"
+          @focus="focusInputKey"
+          @input="onChangeInputName"
+        />
+        <input
+        v-if="employee == 'employee'"
+          type="text"
+          ref="focusInputAutocomplete2"
+          class="input-select"
+          @keydown.up="up"
+          @keydown.down="down"
+          @keydown.enter="enter"
+          v-model="showEmployeeName"
+          @focus="focusInputKey"
+          @input="onChangeInputName"
+        />
+        <input
+        v-if="employeeCode == 'employeeCode'"
+          type="text"
+          ref="focusInputAutocomplete3"
           class="input-select"
           @keydown.up="up"
           @keydown.down="down"
@@ -34,6 +60,12 @@
         <div class="text department--size text-hidden">Đơn vị</div>
         <div class="text phone--size text-hidden">Số điện thoại</div>
       </div>
+      <div class="header-select" :class="{ visible: employeeCode == 'employeeCode'}">
+        <div class="text code--size text-hidden">Đối tượng</div>
+        <div class="text name--size text-hidden">Tên đối tượng</div>
+        <div class="text department--size text-hidden">Đơn vị</div>
+        <div class="text phone--size text-hidden">Số điện thoại</div>
+      </div>
       <div class="department-content" ref="positionDepartment" 
         v-for="(employee, index) in employees"
         :key="index"
@@ -48,8 +80,8 @@
         </div>
       </div>
     </div>
-    <span v-if="messageRequired != ''" class="span">{{messageRequired}}</span>
-    <span v-if="changeData == 'empty'" class="span">Bắt buộc nhập trường này</span>
+    <span v-if="object == 'object'" class="span">{{messageObject}}</span>
+    <span v-if="employee == 'employee'" class="span">{{messageFullName}}</span>
   </div>
 </template>
 <script>
@@ -57,7 +89,7 @@ import {
   MES_REQUIRED_ATTRIBUTE,
 } from "../../../lang/validation.js";
 export default {
-  props: ['value', 'code', 'object', 'employee', 'changeData'],
+  props: ['value', 'code', 'object', 'employee', 'employeeCode', 'messageObject', 'messageFullName'],
   data() {
     return {
       messageRequired: '',
@@ -72,14 +104,17 @@ export default {
   },
   methods: {
     focusInput(){
-      this.$refs.focusInputAutocomplete.focus();
-      console.log(this.$refs.focusInputAutocomplete);
+      if (this.object == 'object') {
+        this.$refs.focusInputAutocomplete1.focus();
+      }else if(this.employee == 'employee'){
+        this.$refs.focusInputAutocomplete2.focus();
+      }else if(this.employeeCode == 'employeeCode'){
+        this.$refs.focusInputAutocomplete3.focus();
+      }
+      
     },
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
-      if (!this.toggleAutocomplete) {
-        this.$refs.focusInputAutocomplete[0].focus();
-      }
     },
 
     focusInputKey() {
@@ -91,12 +126,22 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         if (val !== "") {
-        this.messageRequired = "";       
-      } else if (val == "") {
-        this.messageRequired = MES_REQUIRED_ATTRIBUTE;
-      }
+          this.messageRequired = "";
+          if (this.object == 'object') {
+            this.$emit("sendDataByInput", this.messageRequired, 'object');
+          }else if(this.employee == 'employee'){
+            this.$emit("sendDataByInput", this.messageRequired, 'employee');
+          }              
+        } else if (val == "") {
+          this.messageRequired = MES_REQUIRED_ATTRIBUTE;
+          if (this.object == 'object') {
+            this.$emit("sendDataByInput", this.messageRequired, 'object');
+          }else if(this.employee == 'employee'){
+            this.$emit("sendDataByInput", this.messageRequired, 'employee');
+          }    
+        }
       }, 200);  
-      // this.$emit("sendDataByInput", val);
+      
     },
     /**
      * Click nút up cập nhật vị trí currentIndex
@@ -134,6 +179,11 @@ export default {
         this.$emit("sendDataEmployee", this.saveValueEmployeeName, this.employees[this.currentIndex].employeeId);
       }
       this.messageRequired = '';
+      if (this.object == 'object') {
+        this.$emit("sendDataByInput", this.messageRequired, 'object');
+      }else if(this.employee == 'employee'){
+        this.$emit("sendDataByInput", this.messageRequired, 'employee');
+      }   
     },
     
     onBtnEmployeeClick(employee, index) {
@@ -152,16 +202,20 @@ export default {
         this.$emit("sendDataEmployee", this.saveValueEmployeeName, employee.employeeId);
       }
       this.messageRequired = '';
+      if (this.object == 'object') {
+        this.$emit("sendDataByInput", this.messageRequired, 'object');
+      }else if(this.employee == 'employee'){
+        this.$emit("sendDataByInput", this.messageRequired, 'employee');
+      }   
     },
   },
-  // created(){
-  //   window.addEventListener("click", (e) => {
-  //     if (!this.$el.contains(e.target)) {
-  //       this.toggleAutocomplete = true;
-  //     }
-  //   });
-    
-  // },
+  created(){
+    window.addEventListener("click", (e) => {
+      if (!this.$el.contains(e.target)) {
+        this.toggleAutocomplete = true;
+      }
+    });   
+  },
   mounted() {
     this.axios
       .get(
@@ -215,6 +269,16 @@ export default {
   outline: none;
   width: 100%;
   margin-top: 4px;
+}
+.department-box-4 {
+  height: 32px;
+  display: flex;
+  min-height: 32px;
+  border: 1px solid #babec5;
+  border-radius: 2px;
+  background-color: #fff;
+  outline: none;
+  width: 100%;
 }
 .department-content {
   display: flex;
