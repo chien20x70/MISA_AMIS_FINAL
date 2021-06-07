@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.AMIS.Core.CustomAttribute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Mã ref số chứng từ
         /// </summary>
+        [MISARequired("")]
         public string ReceiptPaymentCode { get; set; }
 
         /// <summary>
@@ -36,6 +38,7 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Tên đối tượng
         /// </summary>
+        [MISARequired("")]
         public string OrganizationUnitName { get; set; }
 
         /// <summary>
@@ -51,6 +54,7 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Tên nhân viên
         /// </summary>
+        [MISARequired("")]
         public Guid EmployeeId { get; set; }
         public string FullName { get; set; }
         /// <summary>

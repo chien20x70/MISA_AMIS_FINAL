@@ -129,7 +129,13 @@
   <data name="Msg_EmployeeCode" xml:space="preserve">
     <value>Mã nhân viên</value>
   </data>
+  <data name="Msg_ReceiptPaymentCode" xml:space="preserve">
+    <value>Số chứng từ</value>
+  </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>PhoneNumber</value>
+  </data>
+  <data name="ReceiptPaymentCode" xml:space="preserve">
+    <value>ReceiptPaymentCode</value>
   </data>
 </root>

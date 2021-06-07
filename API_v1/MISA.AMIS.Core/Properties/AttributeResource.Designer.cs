@@ -97,11 +97,29 @@ namespace MISA.AMIS.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Số chứng từ.
+        /// </summary>
+        internal static string Msg_ReceiptPaymentCode {
+            get {
+                return ResourceManager.GetString("Msg_ReceiptPaymentCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PhoneNumber.
         /// </summary>
         internal static string PhoneNumber {
             get {
                 return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ReceiptPaymentCode.
+        /// </summary>
+        internal static string ReceiptPaymentCode {
+            get {
+                return ResourceManager.GetString("ReceiptPaymentCode", resourceCulture);
             }
         }
     }

@@ -85,22 +85,30 @@ namespace MISA.AMIS.Core.Service
             return _serviceResult;
         }
 
-        //public ServiceResult GetAllReceiptPayment()
-        //{
-        //    var receiptPayments = _receiptPaymentRepository.GetAll();
-        //    decimal totalMoney = 0;
-        //    //for (int i = 0; i < receiptPayments.Count(); i++)
-        //    //{
-        //    //    totalMoney += receiptPayments.t
-        //    //}
-        //    foreach (var item in receiptPayments)
-        //    {
-        //        totalMoney += item.TotalAmount;
-        //    }
-
-        //    OnStateServiceResult(receiptPayments, StatusCode.Success, MISACode.Success);
-
-        //    return _serviceResult;
-        //}
+        /// <summary>
+        /// Validate dữ liệu riêng từng đối tượng
+        /// </summary>
+        /// <param name="entity">đối tượng cần validate</param>
+        /// <param name="http">Phương thức POST hay PUT</param>
+        /// Created By: NXCHIEN 17/05/2021
+        protected override ServiceResult CustomValidate(ReceiptPayment entity, HTTPType http)
+        {
+            // Check trùng mã code
+            // Khởi tạo giá trị
+            var receiptPaymentCode = entity.ReceiptPaymentCode;
+            var receiptPaymentId = entity.ReceiptPaymentId;
+            var checkCodeExist = _receiptPaymentRepository.CheckReceiptPaymentAttributeExist(Properties.AttributeResource.ReceiptPaymentCode, receiptPaymentId, http, receiptPaymentCode);
+            // Kiểm tra trùng hay không
+            if (checkCodeExist)
+            {
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Error,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.AttributeResource.Msg_ReceiptPaymentCode + $" <{receiptPaymentCode}>" + Properties.Resources.Msg_Code_Exist,
+                };
+            }
+            return null;
+        }
     }
 }

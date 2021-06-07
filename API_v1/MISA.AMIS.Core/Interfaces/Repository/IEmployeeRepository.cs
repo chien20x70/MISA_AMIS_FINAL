@@ -19,7 +19,7 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         /// <param name="attributeValue">Giá trị của attribute</param>
         /// <returns>TRUE hoặc FALSE</returns>
         /// Created By: NXCHIEN 17/05/2021
-        public bool CheckEmployeeAttributeExist(string employeeCode, Guid? employeeId, HTTPType http, string attributeValue);
+        public bool CheckEmployeeAttributeExist(string attribute, Guid? employeeId, HTTPType http, string attributeValue);
 
         /// <summary>
         /// Lấy ra EmployeeCode lớn nhất trong DB
