@@ -4,6 +4,7 @@ export const STR_EMPTY_NAME = "Tên không được để trống.";
 export const STR_EMPTY_DEPARTMENT = "Vui lòng chọn Đơn vị!";
 export const STR_EMPTY_OBJECT = "Đối tượng không được để trống.";
 export const STR_EMPTY_EMPLOYEEID = "Mã định danh nhân viên không được để trống.";
+export const STR_EMPTY_RECEIVER = "Người nhận không được để trống.";
 export const STR_EMPTY_EMAIL = "Vui lòng nhập Email!";
 export const STR_ERROR_EMAIL = "Email Không đúng định dạng!";
 export const STR_ERROR_PHONE = "Số điện thoại phải là số!";

@@ -66,7 +66,7 @@
               <td class="first__th" style="z-index: 2;"><input type="checkbox" class="check-box" /></td>
               <td style="border-left: none; text-align: center;">{{ cash.accountingDate | dateFormatDDMMYY}}</td>
               <td>{{ cash.receiptPaymentCode }}</td>
-              <td>{{ cash.description }}</td>
+              <td style="max-width: 320px">{{ cash.description }}</td>
               <td style="text-align: right;">{{ cash.totalAmount | formatMoney}}</td>
               <td>{{ cash.organizationUnitName }}</td>
               <td>{{ cash.reasonName }}</td>
@@ -106,7 +106,7 @@
                 <th style="min-width: 150px; text-align: right;">{{totalMoney | formatMoney}}</th>
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
-                <th style="min-width: 120px;"></th>
+                <th style="min-width: 120px; z-index: 100;"></th>
               </tr>
           </tfoot>
         </table>        
@@ -785,6 +785,9 @@ export default {
   }
   tbody tr td{
     border-left: 1px dotted #bbb;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .editclass{
     min-width: 120px; 

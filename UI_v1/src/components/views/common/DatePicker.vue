@@ -5,7 +5,7 @@
     :displayFormat="displayFormat"
     :inputAttributes="{
       class: 'style-input-date-lib',
-      placeholder: displayFormat,
+      placeholder: '__/__/____',
       style: 'margin-top: 4px; width: 167px;',
     }"
     :weekdays="localeDatePicker.weekdays"

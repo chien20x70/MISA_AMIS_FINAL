@@ -268,7 +268,7 @@ import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
 
-import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, MES_REQUIRED_ATTRIBUTE, STR_EMPTY_RECEIPTPAYMENT_CODE, STR_EMPTY_EMPLOYEEID, STR_EMPTY_OBJECT
+import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, MES_REQUIRED_ATTRIBUTE, STR_EMPTY_RECEIPTPAYMENT_CODE, STR_EMPTY_EMPLOYEEID, STR_EMPTY_OBJECT, STR_EMPTY_RECEIVER
 } from "../../../lang/validation.js";
 
 import {STR_CASHDIALOG, DELETEALLROW, STR_REASONNAME, CHANGEDATA, EMPTYDATA, EXISTDATA, FORMMODE_EDIT, FORMMODE_ADD} from "../../../lang/masterDetail.js"
@@ -450,7 +450,7 @@ export default {
         }
       }, 200);
     },
-    
+
     hideCashPopupAndValidate(){
       this.valuePopup = false;
       if (this.messageCode != '') {
@@ -495,18 +495,26 @@ export default {
       this.valuePopup = true;
       this.message = DELETEALLROW;
       this.formMode = STR_CASHDIALOG;
+      
     },
     // Xóa hết dòng và focus vào ô detail.
     hideCashPopupAndRemoveRow(){
       this.valuePopup = false;
-      let arrDetailAdd = [{"descriptionDetail": ""}];
+      let arrDetailAdd = [{"descriptionDetail": "",
+                            "debtAccountDetail": "",
+                            "creditAccountDetail": "",
+                            "amountDetail": 0,
+                            "organizationUnitCodeDetail": "",
+                            "organizationUnitNameDetail": "",}];
       this.listDetail = arrDetailAdd;
       this.$refs.focusDescriptionDetail[0].focus();
+      this.rowIndex = this.listDetail.length;
     },
     // Xóa 1 dòng trong bảng listDetail
     onBtnDeleteRowClick(value){
       this.listDetail.pop(this.listDetail[value]);
       this.rowIndex = this.listDetail.length;
+      //TODO: lỗi xóa hết dòng ----- Thê, Validate Ngày ko được bỏ trống
     },
     // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
@@ -519,7 +527,7 @@ export default {
     showNotification(message) {
       this.$notification["success"]({
         message,
-        duration: 1,
+        duration: 2,
       });
     },
     
@@ -575,13 +583,13 @@ export default {
      * CreatedBy:NXCHIEN 19/05/2021
      */
     checkEmptyAttribute() {
-      if (this.cash.receiptPaymentCode == "") {
+      if (this.cash.receiptPaymentCode.trim() == "") {
         this.messageCode = MES_REQUIRED_ATTRIBUTE;
       }
-      if (this.cash.organizationUnitName == "") {
+      if (this.cash.organizationUnitName.trim() == "") {
         this.messageObject = MES_REQUIRED_ATTRIBUTE;
       }
-      if (this.cash.receiver == "") {
+      if (this.cash.receiver.trim() == "") {
         this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
       }         
       if (this.cash.employeeId == "") {
@@ -600,6 +608,11 @@ export default {
       }
       if (this.cash.organizationUnitName.trim() == "") {    
         this.message = STR_EMPTY_OBJECT;
+        this.changeData = EMPTYDATA;
+        return true;
+      }
+      if (this.cash.receiver.trim() == "") {    
+        this.message = STR_EMPTY_RECEIVER;
         this.changeData = EMPTYDATA;
         return true;
       }
