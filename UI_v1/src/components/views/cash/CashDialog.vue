@@ -267,16 +267,11 @@ import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
-import {
-  MES_ADD_SUCCESS,
-  MES_EDIT_SUCCESS,
-  STR_DATA_CHANGE,
-  MES_ERROR_SERVER,
-  MES_REQUIRED_ATTRIBUTE,
-  STR_EMPTY_RECEIPTPAYMENT_CODE,
-  STR_EMPTY_EMPLOYEEID,
-  STR_EMPTY_OBJECT
+
+import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, MES_REQUIRED_ATTRIBUTE, STR_EMPTY_RECEIPTPAYMENT_CODE, STR_EMPTY_EMPLOYEEID, STR_EMPTY_OBJECT
 } from "../../../lang/validation.js";
+
+import {STR_CASHDIALOG, DELETEALLROW, STR_REASONNAME, CHANGEDATA, EMPTYDATA, EXISTDATA, FORMMODE_EDIT, FORMMODE_ADD} from "../../../lang/masterDetail.js"
 
 export default {
   directives: {money: VMoney},
@@ -314,9 +309,6 @@ export default {
       message: '',
       rowIndex: null,
       listDetail: [],
-      check: null,
-      recordName: null,
-      recordCode: null,
       money: {
           decimal: ',',
           thousands: '.',
@@ -458,6 +450,7 @@ export default {
         }
       }, 200);
     },
+    
     hideCashPopupAndValidate(){
       this.valuePopup = false;
       if (this.messageCode != '') {
@@ -500,8 +493,8 @@ export default {
     // Xóa hết dòng và call đến CashPopup
     onBtnDeleteAllRow(){
       this.valuePopup = true;
-      this.message = "Bạn có thực sự muốn xóa tất cả dòng đã nhập không?";
-      this.formMode = "CashDialog";
+      this.message = DELETEALLROW;
+      this.formMode = STR_CASHDIALOG;
     },
     // Xóa hết dòng và focus vào ô detail.
     hideCashPopupAndRemoveRow(){
@@ -540,7 +533,7 @@ export default {
       if (this.compareObjectCash(this.detectChangeCash, this.cash) || this.cash.receiptPaymentDetail !== str) {
         this.message = STR_DATA_CHANGE;
         this.valuePopup = true;
-        this.changeData = 'changeData';
+        this.changeData = CHANGEDATA;
       } else {
         this.$emit("hideCashDialogNotLoad");
       }
@@ -574,7 +567,7 @@ export default {
     convertListDetailtoJSON(){
       this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
       this.cash.totalAmount = this.totalMoney;
-      this.cash.reasonName = "Chi khác";
+      this.cash.reasonName = STR_REASONNAME;
     },
 
     /**
@@ -602,17 +595,17 @@ export default {
     isCheckValidate() {
       if (this.cash.receiptPaymentCode.trim() == "") {    
         this.message = STR_EMPTY_RECEIPTPAYMENT_CODE;
-        this.changeData = 'empty';
+        this.changeData = EMPTYDATA;
         return true;
       }
       if (this.cash.organizationUnitName.trim() == "") {    
         this.message = STR_EMPTY_OBJECT;
-        this.changeData = 'empty';
+        this.changeData = EMPTYDATA;
         return true;
       }
       if (this.cash.employeeId == "") {
         this.message = STR_EMPTY_EMPLOYEEID;
-        this.changeData = 'empty';
+        this.changeData = EMPTYDATA;
         return true;
       }
       return false;
@@ -623,7 +616,7 @@ export default {
       // Kiểm tra validate attribute
       this.valuePopup = this.isCheckValidate();
       if (!this.valuePopup)
-        if (this.flag == "add") {
+        if (this.flag == FORMMODE_ADD) {
           this.convertListDetailtoJSON();
           return this.axios.post("/ReceiptPayments", this.cash)
             .then((res) => {            
@@ -635,7 +628,7 @@ export default {
                 this.message = res.data.data;
                 // show popup
                 this.valuePopup = true;
-                this.changeData = 'dataExist';
+                this.changeData = EXISTDATA;
                 return Promise.reject();
               }
               return Promise.resolve();
@@ -645,7 +638,7 @@ export default {
               return Promise.reject();
             });
         }// Kiểm tra nút Thêm hay Sửa       
-        else if (this.flag == "edit") {
+        else if (this.flag == FORMMODE_EDIT) {
           this.convertListDetailtoJSON();
           return this.axios.put("/ReceiptPayments/" + this.cash.receiptPaymentId, this.cash)
             .then((res) => {
@@ -674,7 +667,7 @@ export default {
      */
     onBtnSaveClick() {
       this.validAndSave().then(() => {
-        if (this.flag == "add") {
+        if (this.flag == FORMMODE_ADD) {
           this.showNotification(MES_ADD_SUCCESS);
         } else {
           this.showNotification(MES_EDIT_SUCCESS);
@@ -689,7 +682,7 @@ export default {
      */
     onBtnSaveAndAddClick() {
       this.validAndSave().then(() => {
-        if (this.flag == "add") {
+        if (this.flag == FORMMODE_ADD) {
           this.showNotification(MES_ADD_SUCCESS);
         } else {
           this.showNotification(MES_EDIT_SUCCESS);

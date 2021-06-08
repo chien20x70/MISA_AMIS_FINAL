@@ -218,15 +218,7 @@ import CashPopup from "../common/CashPopup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
 import CashFilter from "../common/CashFilter.vue";
 
-const arrDetailAdd = [{
-          "descriptionDetail": "Chi tiền cho ",
-          "debtAccountDetail": "",
-          "creditAccountDetail": "19008198",
-          "amountDetail": 0,
-          "organizationUnitCodeDetail": "",
-          "organizationUnitNameDetail": "",
-        },       
-      ];
+import {arrDetailAdd, STR_DESCRIPTION_DETAIL, STR_DELETE_RP, STR_CONTINUE, STR_CASHLIST, FORMMODE_ADD, FORMMODE_EDIT} from "../../../lang/masterDetail.js"
 //#endregion
 export default {
   //#region Khai báo
@@ -289,7 +281,7 @@ export default {
       // Gán code Max cho ô Mã ReceiptPayment và 1 số thuộc tính khác.
       this.selectedCash.receiptPaymentCode = response.data.data;
       this.selectedCash.accountingDate = this.getCurrentDate();
-      this.selectedCash.description = "Chi tiền cho ";
+      this.selectedCash.description = STR_DESCRIPTION_DETAIL;
       this.selectedCash.organizationUnitName = "";
       this.selectedCash.organizationUnitAddress = "";
       this.selectedCash.employeeId = "";
@@ -320,7 +312,7 @@ export default {
         .then((response) => {
          
           // Gán giá trị là nút Thêm mới
-          this.status = "add";
+          this.status = FORMMODE_ADD;
           // Gán tất cả các ô data của dialog rỗng
           this.onBtnAddAssignSelectedCash(response);
         })
@@ -357,8 +349,8 @@ export default {
     showCashPopup(receiptPaymentId, receiptPaymentCode) {
 
       this.valuePopup = true;
-      this.formMode = "CashList";
-      this.message = `Bạn có muốn xóa chứng từ <${receiptPaymentCode}> không?`;
+      this.formMode = STR_CASHLIST;
+      this.message = STR_DELETE_RP +`${receiptPaymentCode}` + STR_CONTINUE;
       // Lưu giá trị Id khi click vào nút sửa trên bảng.
       this.recordId = receiptPaymentId;
     },
@@ -407,7 +399,7 @@ export default {
         .then((response) => {
 
           // gán cờ thành nút sửa
-          this.status = "edit";
+          this.status = FORMMODE_EDIT;
 
           this.onShowDialogAndAssignSelectedCash(response);
         })
@@ -420,7 +412,7 @@ export default {
         .get("/ReceiptPayments/ReceiptPaymentCopy?id=" + value)
         .then((response) => {
           // gán cờ thành nút thêm mới
-          this.status = "add";
+          this.status = FORMMODE_ADD;
           
           this.onShowDialogAndAssignSelectedCash(response);
         })
