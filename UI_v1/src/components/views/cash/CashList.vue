@@ -49,11 +49,11 @@
             <tr>
               <th class="first__th"><input type="checkbox" class="check-box" /></th>
               <th style="min-width: 147px; border-left: none; text-align: center;">NGÀY HOẠCH TOÁN</th>
-              <th style="min-width: 125px"> <div class="resize">SỐ CHỨNG TỪ</div></th>
+              <th style="min-width: 125px">SỐ CHỨNG TỪ</th>
               <th style="min-width: 320px">DIỄN GIẢI</th>
               <th style="min-width: 150px; text-align: right;">SỐ TIỀN</th>
               <th style="min-width: 228px">ĐỐI TƯỢNG</th>
-              <th style="min-width: 323px"><div class="resize">LÝ DO THU/CHI</div></th>
+              <th style="min-width: 323px">LÝ DO THU/CHI</th>
               <th style="min-width: 120px; z-index: 101;">CHỨC NĂNG</th>
             </tr>
           </thead>

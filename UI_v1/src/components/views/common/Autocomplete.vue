@@ -60,6 +60,9 @@ export default {
   methods: {
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
+      if (!this.toggleAutocomplete) {
+        this.$refs.focusInputAutocomplete.focus();
+      }
     },
 
     focusInputKey() {

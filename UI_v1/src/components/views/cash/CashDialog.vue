@@ -37,7 +37,7 @@
                   />
                   <div class="icon-selected">
                     <div
-                      class="icon icon-30 arrow-dropdown tranform-again"
+                      class="icon icon-30 arrow-dropdown"
                       :class="{ tranform: toggleObject == false }"
                       @click="onBtnDropdownClick('object')"
                     ></div>
@@ -69,13 +69,13 @@
               <span class="span">{{messageObject}}</span>
             </div>
             <div class="receive">
-              <span class="text">Người nhận</span>
+              <span class="text">Người nhận <p style="color: red; display: inline">*</p></span>
               <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/>
               <span class="span">{{messageReceiver}}</span>
             </div>
             <div class="date__form">
-              <span class="text">Ngày hạch toán</span><br />
-              <DatePicker v-model="cash.accountingDate" :accountingDate="'accountingDate'"  @sendAccountingDate="getAccountingDate"/>
+              <span class="text">Ngày hạch toán <p style="color: red; display: inline">*</p></span><br />
+              <DatePicker v-model="cash.accountingDate" :accountingDate="'accountingDate'" @sendAccountingDate="getAccountingDate"/>
             </div>
           </div>
           <div class="row__input">
@@ -84,7 +84,7 @@
               <input type="text" class="input--size" v-model="cash.organizationUnitAddress"/>
             </div>
             <div class="date__form">
-              <span class="text">Ngày phiếu chi</span><br />
+              <span class="text">Ngày phiếu chi <p style="color: red; display: inline">*</p></span><br />
               <DatePicker v-model="cash.refDate" :refDate="'refDate'" @sendRefDate="getRefDate"/>
             </div>
           </div>
@@ -118,7 +118,7 @@
                   />
                   <div class="icon-selected">
                     <div
-                      class="icon icon-30 arrow-dropdown tranform-again"
+                      class="icon icon-30 arrow-dropdown"
                       :class="{ tranform: toggleEmployee == false }"
                       @click="onBtnDropdownClick('employee')"
                     ></div>
@@ -136,7 +136,7 @@
                   v-for="(employee, index) in employees"
                   :key="index"
                   @click="onBtnEmployeeClick(employee ,index, 'employee')"
-                  :class="{ color: currentIndex == index}"
+                  :class="{ color: currentIndexE == index}"
                 >
                   <div class="scrollItem" >
                     <div class="code--size text-hidden">{{ employee.employeeCode }}</div>
@@ -263,6 +263,7 @@
   </div>
 </template>
 <script>
+// import $ from 'jquery'
 import Autocomplete from "../common/Autocomplete.vue";
 import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
@@ -324,19 +325,25 @@ export default {
       this.listDetail[index].organizationUnitCodeDetail = code;
     },
     onBtnDropdownClick(value) {
-      if (value == 'object') {
+      if (value === 'object') {
         this.toggleObject = !this.toggleObject;
+        if (!this.toggleObject) {
+          this.$refs.focusInputObject.focus();
+        }
       }
-      if (value == 'employee') {
+      if (value === 'employee') {
         this.toggleEmployee = !this.toggleEmployee;
+        if (!this.toggleEmployee) {
+          this.$refs.focusInputEmployee.focus();
+        }
       }
     },
 
     focusInputKey(value) {
-      if (value == 'object') {
+      if (value === 'object') {
         this.toggleObject = false;
       }
-      if (value == 'employee') {
+      if (value === 'employee') {
         this.toggleEmployee = false;
       }     
     },
@@ -365,10 +372,10 @@ export default {
     },
 
     up(value) {
-      if (value == 'object') {
+      if (value === 'object') {
         if (this.currentIndex > 0) this.currentIndex--;
       }
-      if (value == 'employee') {
+      if (value === 'employee') {
         if (this.currentIndexE > 0) this.currentIndexE--;
       }
     },
@@ -378,13 +385,13 @@ export default {
      * CreatedBY:NXCHIEN 19/05/2021
      */
     down(value) {
-      if (value == 'object') {
+      if (value === 'object') {
         if (this.toggleObject) {
           this.toggleObject = false;
         }
         if (this.currentIndex < this.employees.length - 1) this.currentIndex++;
       }
-      if (value == 'employee') {
+      if (value === 'employee') {
         if (this.toggleEmployee) {
           this.toggleEmployee = false;
         }
@@ -397,7 +404,7 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter(value) {
-      if (value == 'object') {
+      if (value === 'object') {
         this.saveValueObject = this.employees[this.currentIndex].fullName;
         this.cash.receiver = this.saveValueObject;
         this.cash.organizationUnitAddress = this.employees[this.currentIndex].address;
@@ -406,7 +413,7 @@ export default {
         this.messageObject = "";
         this.modeObject = false;
       }
-      if (value == 'employee') {
+      if (value === 'employee') {
         this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
         this.cash.employeeId = this.employees[this.currentIndex].employeeId;
         this.cash.fullName = this.saveValueEmployeeName;
@@ -418,7 +425,7 @@ export default {
     },
     
     onBtnEmployeeClick(employee, index, value) {
-      if (value == 'object') {
+      if (value === 'object') {
         this.saveValueObject = employee.fullName;
         this.cash.receiver = this.saveValueObject;
         this.cash.organizationUnitAddress = employee.address;
@@ -428,7 +435,7 @@ export default {
         this.currentIndex = index;
         this.modeObject = false;
       }
-      if (value == 'employee') {
+      if (value === 'employee') {
         this.saveValueEmployeeName = employee.fullName;
         this.cash.employeeId = employee.employeeId;
         this.cash.fullName = this.saveValueEmployeeName;
@@ -445,7 +452,7 @@ export default {
       this.timeOut = setTimeout(() => {
         if (val !== "") {
           this.messageReceiver = "";
-        } else if (val == "") {
+        } else if (val === "") {
           this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
         }
       }, 200);
@@ -495,17 +502,11 @@ export default {
       this.valuePopup = true;
       this.message = DELETEALLROW;
       this.formMode = STR_CASHDIALOG;
-      
     },
     // Xóa hết dòng và focus vào ô detail.
     hideCashPopupAndRemoveRow(){
       this.valuePopup = false;
-      let arrDetailAdd = [{"descriptionDetail": "",
-                            "debtAccountDetail": "",
-                            "creditAccountDetail": "",
-                            "amountDetail": 0,
-                            "organizationUnitCodeDetail": "",
-                            "organizationUnitNameDetail": "",}];
+      let arrDetailAdd = [{"descriptionDetail": ""}];
       this.listDetail = arrDetailAdd;
       this.$refs.focusDescriptionDetail[0].focus();
       this.rowIndex = this.listDetail.length;
@@ -514,12 +515,35 @@ export default {
     onBtnDeleteRowClick(value){
       this.listDetail.pop(this.listDetail[value]);
       this.rowIndex = this.listDetail.length;
-      //TODO: lỗi xóa hết dòng ----- Thê, Validate Ngày ko được bỏ trống
+      if(this.rowIndex != 0){
+        clearTimeout(this.timeOut);
+        this.timeOut = setTimeout(() =>{
+          this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
+        }, 100)
+      }
+      
+      //TODO: lỗi xóa hết dòng tổng tiền thành NaN ----- Thêm Validate Ngày ko được bỏ trống  ---- Lỗi lên xuống autocomplete
     },
     // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
-      this.rowIndex += 1;
-      this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
+      if (this.listDetail.length == 0) {
+        let arrDetailAdd = [{"descriptionDetail": ""}];
+        this.listDetail = arrDetailAdd;
+        clearTimeout(this.timeOut);
+        this.timeOut = setTimeout(() =>{
+          this.$refs.focusDescriptionDetail[0].focus();
+        }, 100)
+        this.rowIndex = this.listDetail.length;
+        // 
+      }else{
+        this.rowIndex += 1;
+        this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
+        clearTimeout(this.timeOut);
+        this.timeOut = setTimeout(() =>{
+          this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
+        }, 100)
+      }
+      
     },
     //#endregion
 
@@ -776,6 +800,20 @@ export default {
         this.employees = response.data.data.data;
       })
       .catch(() => {});
+
+      // $(document).click(function(e) {
+      //   // if(!$(".object").contains(e.target)){
+      //   //   this.toggleObject = true;
+      //   //   // alert('clicked inside');
+      //   // }
+      //   if($('.object').className !== e.target.className){
+      //     clearTimeout(this.timeOut);
+      //     this.timeOut = setTimeout(() => {
+      //       this.toggleObject = true;
+      //     }, 200);
+          
+    //     }
+    // });
   },
 };
 </script>
@@ -1068,7 +1106,7 @@ table tfoot th {
   padding: 5px 0 5px 10px;
   height: 32px;
   border: none;
-  width: 77%;
+  width: 84%;
 }
 .input-focus{
   border-color: #2ca01c;

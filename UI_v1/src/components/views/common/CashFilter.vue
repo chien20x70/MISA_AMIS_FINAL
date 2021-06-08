@@ -114,6 +114,8 @@ export default {
     padding: 16px 20px 20px;
     z-index: 4;
     border: 1px solid #babec5;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
 }
 .row-input{
     height: 70px;
