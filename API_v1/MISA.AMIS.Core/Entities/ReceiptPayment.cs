@@ -52,14 +52,20 @@ namespace MISA.AMIS.Core.Entities
         public string OrganizationUnitAddress { get; set; }
 
         /// <summary>
-        /// Tên nhân viên
+        /// Mã định danh nhân viên
         /// </summary>
         [MISARequired("")]
         public Guid EmployeeId { get; set; }
+
+        /// <summary>
+        /// Tên nhân viên
+        /// </summary>
         public string FullName { get; set; }
+
         /// <summary>
         /// Người nhận
         /// </summary>
+        [MISARequired("")]
         public string Receiver { get; set; }
 
         /// <summary>
