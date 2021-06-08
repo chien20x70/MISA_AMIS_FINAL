@@ -56,6 +56,6 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
-        public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter);
+        public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate);
     } 
 }

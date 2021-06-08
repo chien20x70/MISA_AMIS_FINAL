@@ -54,6 +54,6 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <param name="employeeFilter">Bộ lọc nhân viên</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
-        public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter);
+        public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate);
     }
 }

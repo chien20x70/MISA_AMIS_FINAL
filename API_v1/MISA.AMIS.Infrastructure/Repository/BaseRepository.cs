@@ -124,7 +124,7 @@ namespace MISA.AMIS.Infrastructure.Repository
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (09/05/2021)
-        public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter)
+        public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
         {
             var res = new Paging<MISAEntity>()
             {
@@ -147,6 +147,8 @@ namespace MISA.AMIS.Infrastructure.Repository
                 dynamicParameters.Add("@pageIndex", pageIndex);
                 dynamicParameters.Add("@pageSize", pageSize);
                 dynamicParameters.Add("@filter", filter);
+                dynamicParameters.Add("@startDate", startDate);
+                dynamicParameters.Add("@endDate", endDate);
                 if (typeof(MISAEntity).Name.Equals("ReceiptPayment"))
                 {
                     int? totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoney", dynamicParameters, commandType: CommandType.StoredProcedure);
