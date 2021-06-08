@@ -154,6 +154,7 @@ namespace MISA.AMIS.Infrastructure.Repository
                     int? totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoney", dynamicParameters, commandType: CommandType.StoredProcedure);
                     if (totalMoney == null)
                     {
+                        res.TotalMoney = 0;
                         return res;
                     }
                     res.TotalMoney = totalMoney;
