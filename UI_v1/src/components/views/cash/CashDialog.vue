@@ -37,9 +37,11 @@
                   />
                   <div class="icon-selected">
                     <div
-                      class="icon icon-30 arrow-dropdown"
+                      class="icon icon-30 arrow-dropdown tranform-again"
+                      :class="{ tranform: toggleObject == false }"
                       @click="onBtnDropdownClick('object')"
                     ></div>
+                    <!-- tranform-again -->
                   </div>
                 </div>
               </div>
@@ -116,7 +118,8 @@
                   />
                   <div class="icon-selected">
                     <div
-                      class="icon icon-30 arrow-dropdown"
+                      class="icon icon-30 arrow-dropdown tranform-again"
+                      :class="{ tranform: toggleEmployee == false }"
                       @click="onBtnDropdownClick('employee')"
                     ></div>
                   </div>
@@ -510,11 +513,12 @@ export default {
     // Xóa 1 dòng trong bảng listDetail
     onBtnDeleteRowClick(value){
       this.listDetail.pop(this.listDetail[value]);
+      this.rowIndex = this.listDetail.length;
     },
     // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
       this.rowIndex += 1;
-      this.listDetail.push(this.listDetail[this.rowIndex - 2]);
+      this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
     },
     //#endregion
 
@@ -1074,10 +1078,10 @@ table tfoot th {
 .arrow-dropdown {
   background-position: -552px -352px;
 }
-.tranform {
+/* .tranform {
   transform: rotate(180deg);
   transition: transform 0.15s linear;
-}
+} */
 .select-custom {
   position: absolute;
   overflow-y: auto;
@@ -1180,5 +1184,13 @@ table tfoot th {
 .span{
   color: red; 
   font-size: 12px;
+}
+.tranform {
+  transform: rotate(180deg);
+  transition: transform 0.15s linear;
+}
+.tranform-again {
+  transform: rotate(0deg);
+  transition: transform 0.15s linear;
 }
 </style>

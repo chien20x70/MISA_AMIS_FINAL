@@ -586,228 +586,228 @@ export default {
 </script>
 <style scoped>
 .content .box {
-  padding: 20px 0px 16px 0px;
-}
-.box .content-item {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-}
-.content-item .content-item-text {
-  font-size: 24px;
-  color: black;
-  background-size: contain;
-  background-position: center;
-  font-weight: bold;
-}
-.component-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.pr-4 {
-  padding-right: 4px !important;
-}
-
-.flex {
-  display: flex !important;
-}
-
-.border {
-  border-radius: 0 30px 30px 0;
-  border: none;
-}
-
-.content .content-table {
-  background-color: white !important;
-  width: 100%;
-  height: calc(100% - 81px);
-}
-.content-table .item {
-  padding: 16px 16px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.item .item-right {
-  display: flex;
-  align-items: center;
-  width: 310px;
-  justify-content: space-between;
-}
-.content-table .content-table-height {
-  height: calc(100% - 70px);
-  overflow-y: auto;
-  overflow-x: auto;
-  width: calc(100% - 41px);
-  display: flex;
-  margin-left: 16px;
-  margin-top: 5px;
-}
-.first__th {
-  width: 40px;
-  position: sticky;
-  left: 0px;
-  top: 0;
-  z-index: 3;
-  border-left: none;
-  border-bottom: none;
-  display: flex;
-  border-right: 1px solid #c7c7c7;
-  align-items: center;
-}
-.check-box {
-  padding: 0;
-}
-.content-navpage {
-  position: absolute;
-  bottom: 10px;
-  width: calc(100% - 253px);
-  height: 51px;
-  background-color: white;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  z-index: 100;
-}
-
-.content-navpage .content-navpage-text-left {
-  margin-left: 18px;
-}
-.content-navpage .content-navpage-button {
-  display: flex;
-}
-.content-navpage .content-navpage-text-right {
-  margin-right: 10px;
-}
-
-.hover {
-  border: none;
-  padding: 6px 0px 6px 16px;
-}
-
-.fa-3x {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.footer-complete {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 40px;
-}
-.autocomplete {
-  display: flex;
-  min-height: 32px;
-  border: 1px solid #babec5;
-  border-radius: 2px;
-  background-color: #fff;
-  height: 32px;
-  width: 200px;
-}
-.selected-option {
-  display: flex;
-  flex-basis: 100%;
-  flex-grow: 1;
-  flex-wrap: wrap;
-  width: calc(100% - 32px);
-  align-items: center;
-  padding: 6px 0 6px 12px;
-  justify-content: space-around;
-}
-
-.style {
-  border: none;
-  background-color: white;
-}
-.margin {
-  margin-left: 10px;
-}
-.disable {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-.active {
-  font-weight: 800;
-  border: 1px solid #bbb;
-}
-.message {
-  height: 191px;
-  width: 100% !important;
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.img-report {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-.nodata-img {
-  position: sticky;
-  margin: 50px 50px 30px;
-  width: 132px;
-  height: 74px;
-  left: 45%;
-}
-.input-select {
-  background-color: transparent;
-  display: flex;
-  padding: 0;
-  height: 19px;
-  width: 154px;
-  border: none;
-}
-.icon-selected {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.icon-selected:hover {
-  background-color: #bbb;
-}
-
-.tranform {
-  transform: rotate(180deg);
-  transition: transform 0.15s linear;
-}
-
-.display {
-  display: none;
-}
-table tr{
-  border-bottom: 1px solid #bbb;
-}
-table th, td {
-  border-bottom: 1px solid #c7c7c7;
-  border-left: 1px solid #c7c7c7;
-  box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7;  
-}
-tbody tr td{
-  border-left: 1px dotted #bbb;
-}
-.editclass{
-  min-width: 120px; 
-  border-left: 1px dotted #c7c7c7; 
-  text-align: center;
-}
-.btn-utilities {
-  display: flex;
-  margin-right: 12px;
-  align-items: center;
-}
-.check--all{
-  padding: 13px 12px;
-}
-.filter:hover{
-  background-color: #d2d3d6;
-}
+    padding: 20px 0px 16px 0px;
+  }
+  .box .content-item {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+  .content-item .content-item-text {
+    font-size: 24px;
+    color: black;
+    background-size: contain;
+    background-position: center;
+    font-weight: bold;
+  }
+  .component-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .pr-4 {
+    padding-right: 4px !important;
+  }
+  
+  .flex {
+    display: flex !important;
+  }
+  
+  .border {
+    border-radius: 0 30px 30px 0;
+    border: none;
+  }
+  
+  .content .content-table {
+    background-color: white !important;
+    width: 100%;
+    height: calc(100% - 81px);
+  }
+  .content-table .item {
+    padding: 16px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .item .item-right {
+    display: flex;
+    align-items: center;
+    width: 310px;
+    justify-content: space-between;
+  }
+  .content-table .content-table-height {
+    height: calc(100% - 70px);
+    overflow-y: auto;
+    overflow-x: auto;
+    width: calc(100% - 41px);
+    display: flex;
+    margin-left: 16px;
+    margin-top: 5px;
+  }
+  .first__th {
+    width: 40px;
+    position: sticky;
+    left: 0px;
+    top: 0;
+    z-index: 3;
+    border-left: none;
+    border-bottom: none;
+    display: flex;
+    border-right: 1px solid #c7c7c7;
+    align-items: center;
+  }
+  .check-box {
+    padding: 0;
+  }
+  .content-navpage {
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 253px);
+    height: 51px;
+    background-color: white;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    z-index: 100;
+  }
+  
+  .content-navpage .content-navpage-text-left {
+    margin-left: 18px;
+  }
+  .content-navpage .content-navpage-button {
+    display: flex;
+  }
+  .content-navpage .content-navpage-text-right {
+    margin-right: 10px;
+  }
+  
+  .hover {
+    border: none;
+    padding: 6px 0px 6px 16px;
+  }
+  
+  .fa-3x {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .footer-complete {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 40px;
+  }
+  .autocomplete {
+    display: flex;
+    min-height: 32px;
+    border: 1px solid #babec5;
+    border-radius: 2px;
+    background-color: #fff;
+    height: 32px;
+    width: 200px;
+  }
+  .selected-option {
+    display: flex;
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    width: calc(100% - 32px);
+    align-items: center;
+    padding: 6px 0 6px 12px;
+    justify-content: space-around;
+  }
+  
+  .style {
+    border: none;
+    background-color: white;
+  }
+  .margin {
+    margin-left: 10px;
+  }
+  .disable {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .active {
+    font-weight: 800;
+    border: 1px solid #bbb;
+  }
+  .message {
+    height: 191px;
+    width: 100% !important;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .img-report {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .nodata-img {
+    position: sticky;
+    margin: 50px 50px 30px;
+    width: 132px;
+    height: 74px;
+    left: 45%;
+  }
+  .input-select {
+    background-color: transparent;
+    display: flex;
+    padding: 0;
+    height: 19px;
+    width: 154px;
+    border: none;
+  }
+  .icon-selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-selected:hover {
+    background-color: #bbb;
+  }
+  
+  .tranform {
+    transform: rotate(180deg);
+    transition: transform 0.15s linear;
+  }
+  
+  .display {
+    display: none;
+  }
+  table tr{
+    border-bottom: 1px solid #bbb;
+  }
+  table th, td {
+    border-bottom: 1px solid #c7c7c7;
+    border-left: 1px solid #c7c7c7;
+    box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7;  
+  }
+  tbody tr td{
+    border-left: 1px dotted #bbb;
+  }
+  .editclass{
+    min-width: 120px; 
+    border-left: 1px dotted #c7c7c7; 
+    text-align: center;
+  }
+  .btn-utilities {
+    display: flex;
+    margin-right: 12px;
+    align-items: center;
+  }
+  .check--all{
+    padding: 13px 12px;
+  }
+  .filter:hover{
+    background-color: #d2d3d6;
+  }
 </style>

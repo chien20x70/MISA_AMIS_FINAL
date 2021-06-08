@@ -14,7 +14,8 @@
         />
         <div class="icon-selected">
           <div
-            class="icon icon-30 arrow-dropdown"
+            class="icon icon-30 arrow-dropdown tranform-again"
+            :class="{ tranform: toggleAutocomplete == false }"
             @click="onBtnDropdownClick"
           ></div>
         </div>
@@ -211,6 +212,10 @@ export default {
   transform: rotate(180deg);
   transition: transform 0.15s linear;
 }
+.tranform-again {
+  transform: rotate(0deg);
+  transition: transform 0.15s linear;
+}
 .select-custom {
   position: absolute;
   overflow-y: auto;
@@ -314,4 +319,8 @@ export default {
   color: red; 
   font-size: 12px;
 }
+.tranform {
+    transform: rotate(180deg);
+    transition: transform 0.15s linear;
+  }
 </style>
