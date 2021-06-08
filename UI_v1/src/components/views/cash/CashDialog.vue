@@ -5,7 +5,7 @@
       <div class="cashbox__title">Phiếu chi {{valueRefCode}}</div>
       <div class="cashbox__input">
         <div class="cashbox__input--size">
-          <Autocomplete/>
+          <!-- <Autocomplete/> -->
         </div>
       </div>
       <div class="cashbox__icon icon icon-24 mi-setting__detail"></div>
@@ -21,13 +21,55 @@
           <div class="row__input">
             <div class="object">
               <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
-              <Autocomplete ref="object" :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData" @sendDataByInput="getDataInput" :changeData="changeData"/>
-              <span style="color: red; font-size: 12px">{{messageObject}}</span>
+              <!-- <Autocomplete ref="object" :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData" @sendDataByInput="getDataInput" :changeData="changeData"/> -->
+              <div class="department-box" :class="{'input-focus': toggleObject == false,'input-error': (messageObject != '')}">
+                <div class="selected-option">
+                  <input
+                    type="text"
+                    ref="focusInputObject"
+                    class="input-select"
+                    @keydown.up="up('object')"
+                    @keydown.down="down('object')"
+                    @keydown.enter="enter('object')"
+                    v-model="showObject"
+                    @focus="focusInputKey('object')"
+                    @input="onChangeInputObject"
+                  />
+                  <div class="icon-selected">
+                    <div
+                      class="icon icon-30 arrow-dropdown"
+                      @click="onBtnDropdownClick('object')"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="select-custom" :class="{ invisible: toggleObject }">
+                <div class="header-select">
+                  <div class="text code--size text-hidden">Đối tượng</div>
+                  <div class="text name--size text-hidden">Tên đối tượng</div>
+                  <div class="text department--size text-hidden">Đơn vị</div>
+                  <div class="text phone--size text-hidden">Số điện thoại</div>
+                </div>
+                <div class="department-content" ref="positionDepartment" 
+                  v-for="(employee, index) in employees"
+                  :key="index"
+                  @click="onBtnEmployeeClick(employee ,index, 'object')"
+                  :class="{ color: currentIndex == index}"
+                >
+                  <div class="scrollItem" >
+                    <div class="code--size text-hidden">{{ employee.employeeCode }}</div>
+                    <div class="name--size text-hidden">{{ employee.fullName }}</div>
+                    <div class="department--size text-hidden">{{ employee.departmentName }}</div>
+                    <div class="phone--size text-hidden">{{ employee.phoneNumber }}</div>
+                  </div>
+                </div>
+              </div>
+              <span class="span">{{messageObject}}</span>
             </div>
             <div class="receive">
               <span class="text">Người nhận</span>
               <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/>
-              <span style="color: red; font-size: 12px">{{messageReceiver}}</span>
+              <span class="span">{{messageReceiver}}</span>
             </div>
             <div class="date__form">
               <span class="text">Ngày hạch toán</span><br />
@@ -51,14 +93,57 @@
             </div>
             <div class="date__form">
               <span class="text">Số phiếu chi <p style="color: red; display: inline">*</p></span><br />
-              <input maxlength="50" type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode" :class="{ 'input-error': messageCode != ''}"><br/>
+              <input maxlength="50" ref="focusRefCode" type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode" :class="{ 'input-error': messageCode != ''}"><br/>
               <span style="color: red; font-size: 12px">{{messageCode}}</span>
             </div>
           </div>
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên <p style="color: red; display: inline">*</p></span>
-              <Autocomplete ref="employee" v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee" :changeData="changeData"/>
+              <!-- <Autocomplete ref="employee" v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee" :changeData="changeData"/> -->
+              <div class="department-box" :class="{'input-focus': toggleEmployee == false,'input-error': (messageFullName != '')}">
+                <div class="selected-option">
+                  <input
+                    type="text"
+                    ref="focusInputEmployee"
+                    class="input-select"
+                    @keydown.up="up('employee')"
+                    @keydown.down="down('employee')"
+                    @keydown.enter="enter('employee')"
+                    v-model="showEmployeeName"
+                    @focus="focusInputKey('employee')"
+                    @input="onChangeInputEmployee"
+                  />
+                  <div class="icon-selected">
+                    <div
+                      class="icon icon-30 arrow-dropdown"
+                      @click="onBtnDropdownClick('employee')"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="select-custom" :class="{ invisible: toggleEmployee }">
+                <div class="header-select">
+                  <div class="text code--size text-hidden">Mã nhân viên</div>
+                  <div class="text name--size text-hidden">Tên nhân viên</div>
+                  <div class="text department--size text-hidden">Đơn vị</div>
+                  <div class="text phone--size text-hidden">Số điện thoại</div>
+                </div>
+                <div class="department-content" ref="positionDepartment" 
+                  v-for="(employee, index) in employees"
+                  :key="index"
+                  @click="onBtnEmployeeClick(employee ,index, 'employee')"
+                  :class="{ color: currentIndex == index}"
+                >
+                  <div class="scrollItem" >
+                    <div class="code--size text-hidden">{{ employee.employeeCode }}</div>
+                    <div class="name--size text-hidden">{{ employee.fullName }}</div>
+                    <div class="department--size text-hidden">{{ employee.departmentName }}</div>
+                    <div class="phone--size text-hidden">{{ employee.phoneNumber }}</div>
+                  </div>
+                </div>
+              </div>
+              <span class="span">{{messageFullName}}</span>
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
@@ -95,18 +180,20 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(list, index) in listDetailFilter" :key="index">
+              <tr v-for="(list, index) in listDetail" :key="index">
                 <td class="first__th">{{index}}</td>
                 <td style="border-left: none">
-                  <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.DescriptionDetail"/>
+                  <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.descriptionDetail"/>
                 </td>
-                <td><input type="text" style="width: 100%" v-model="list.DebtAccount"/></td>
-                <td><input type="text" style="width: 100%" v-model="list.CreditAccount"/></td>
+                <td><input type="text" style="width: 100%" v-model="list.debtAccountDetail"/></td>
+                <td><input type="text" style="width: 100%" v-model="list.creditAccountDetail"/></td>
                 <td style="text-align: right">
-                  <money style="width: 100%; text-align: right;" v-model="list.Amount" v-bind="money"/>
+                  <money style="width: 100%; text-align: right;" v-model="list.amountDetail" v-bind="money"/>
                 </td>
-                <td><Autocomplete v-model="list.OrganizationUnitCode" :code="index" @sendIdToCashDialog="getDataId"/></td>
-                <td><input type="text" style="width: 100%; cursor: pointer;" v-model="list.OrganizationUnitName" readonly/></td>
+                <td>
+                  <Autocomplete v-model="list.organizationUnitCodeDetail" :code="index" @sendIdToCashDialog="getDataId"/>
+                </td>
+                <td><input type="text" style="width: 100%; cursor: not-allowed; background: rgb(224 224 224);" v-model="list.organizationUnitNameDetail" readonly/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete" @click="onBtnDeleteRowClick(index)"></div>
                 </td>
@@ -202,6 +289,15 @@ export default {
   },
   data() {
     return {
+      saveValueEmployeeName: null,
+      saveValueObject: null,
+      modeObject: true,
+      modeEmployee: true,
+      currentIndex: 0,
+      currentIndexE: 0,
+      toggleObject: true,
+      toggleEmployee: true,
+      employees: [],
       messageCode: '',
       messageFullName: '',
       messageObject: '',
@@ -228,6 +324,126 @@ export default {
   },
   
   methods: {
+    getDataId(code, index, name){
+      this.listDetail[index].organizationUnitNameDetail = name;
+      this.listDetail[index].organizationUnitCodeDetail = code;
+    },
+    onBtnDropdownClick(value) {
+      if (value == 'object') {
+        this.toggleObject = !this.toggleObject;
+      }
+      if (value == 'employee') {
+        this.toggleEmployee = !this.toggleEmployee;
+      }
+    },
+
+    focusInputKey(value) {
+      if (value == 'object') {
+        this.toggleObject = false;
+      }
+      if (value == 'employee') {
+        this.toggleEmployee = false;
+      }     
+    },
+
+    onChangeInputObject(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (val !== "") {
+        this.messageObject = "";       
+      } else if (val == "") {
+        this.messageObject = MES_REQUIRED_ATTRIBUTE;
+      }
+      }, 200);
+    },
+    onChangeInputEmployee(e){
+      let val = e.target.value;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        if (val !== "") {
+        this.messageFullName = "";       
+      } else if (val == "") {
+        this.messageFullName = MES_REQUIRED_ATTRIBUTE;
+      }
+      }, 200);
+    },
+
+    up(value) {
+      if (value == 'object') {
+        if (this.currentIndex > 0) this.currentIndex--;
+      }
+      if (value == 'employee') {
+        if (this.currentIndexE > 0) this.currentIndexE--;
+      }
+    },
+
+    /**
+     * Click nút up cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
+     * CreatedBY:NXCHIEN 19/05/2021
+     */
+    down(value) {
+      if (value == 'object') {
+        if (this.toggleObject) {
+          this.toggleObject = false;
+        }
+        if (this.currentIndex < this.employees.length - 1) this.currentIndex++;
+      }
+      if (value == 'employee') {
+        if (this.toggleEmployee) {
+          this.toggleEmployee = false;
+        }
+        if (this.currentIndexE < this.employees.length - 1) this.currentIndexE++;
+      }
+    },
+
+    /**
+     * Click enter cập nhật các giá trị để bind lên input chứa giá trị tên phòng ban/ đơn vị
+     * CreatedBy: NXCHIEN 19/05/2021
+     */
+    enter(value) {
+      if (value == 'object') {
+        this.saveValueObject = this.employees[this.currentIndex].fullName;
+        this.cash.receiver = this.saveValueObject;
+        this.cash.organizationUnitAddress = this.employees[this.currentIndex].address;
+        this.cash.organizationUnitName = this.saveValueObject;
+        this.toggleObject = true;
+        this.messageObject = "";
+        this.modeObject = false;
+      }
+      if (value == 'employee') {
+        this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
+        this.cash.employeeId = this.employees[this.currentIndex].employeeId;
+        this.cash.fullName = this.saveValueEmployeeName;
+        this.toggleEmployee = true;
+        this.messageFullName = "";
+        this.modeEmployee = false;
+      }
+      
+    },
+    
+    onBtnEmployeeClick(employee, index, value) {
+      if (value == 'object') {
+        this.saveValueObject = employee.fullName;
+        this.cash.receiver = this.saveValueObject;
+        this.cash.organizationUnitAddress = employee.address;
+        this.cash.organizationUnitName = this.saveValueObject;
+        this.toggleObject = true;
+        this.messageObject = "";
+        this.currentIndex = index;
+        this.modeObject = false;
+      }
+      if (value == 'employee') {
+        this.saveValueEmployeeName = employee.fullName;
+        this.cash.employeeId = employee.employeeId;
+        this.cash.fullName = this.saveValueEmployeeName;
+        this.toggleEmployee = true;
+        this.messageFullName = "";
+        this.currentIndexE = index;
+        this.modeEmployee = false;
+      }
+    },
+
     onChangeInputReceiver(e){
       let val = e.target.value;
       clearTimeout(this.timeOut);
@@ -241,22 +457,20 @@ export default {
     },
     hideCashPopupAndValidate(){
       this.valuePopup = false;
-      this.changeData = 'code';
       if (this.messageCode != '') {
         this.messageObject = '';
         this.messageReceiver = '';
         this.messageFullName = '';     
-        // this.$refs.code.focusInput();
+        this.$refs.focusRefCode.focus();
       }else if(this.messageObject != ''){
         this.messageReceiver = '';
         this.messageFullName = '';
-        // console.log(this.$refs.object);
-        // this.$refs.object.focusInput();
+        this.$refs.focusInputObject.focus();
       }else if(this.messageReceiver != ''){
         this.messageFullName = '';
         this.$refs.focusReceiver.focus();
-      }else{
-        this.$refs.employee.focusInput();
+      }else if(this.messageFullName != ''){
+        this.$refs.focusInputEmployee.focus();
       }
     },
     //#region Cập nhật DatePicker
@@ -289,7 +503,7 @@ export default {
     // Xóa hết dòng và focus vào ô detail.
     hideCashPopupAndRemoveRow(){
       this.valuePopup = false;
-      let arrDetailAdd = [{"DescriptionDetail": ""}];
+      let arrDetailAdd = [{"descriptionDetail": ""}];
       this.listDetail = arrDetailAdd;
       this.$refs.focusDescriptionDetail[0].focus();
     },
@@ -311,32 +525,7 @@ export default {
         duration: 1,
       });
     },
-
-    //#region cập nhật Autocomplete
-    /**
-     * Cập nhật giá trị khi lấy giá trị từ component Autocomplete
-     * CreatedBY: NXCHIEN 06/06/2021
-     */
-    getDataId(valueCode, valueCheck, valueName){  //List đối tượng trong bảng listDetail
-      this.recordCode = valueCode;
-      this.check = valueCheck;
-      this.recordName = valueName;
-    },
-    getNameData(valueName, valueAddress){ // Đôi tượng
-      this.cash.organizationUnitName = valueName;
-      this.cash.organizationUnitAddress = valueAddress;
-    },
-    getDataEmployee(valueName, valueId){  // Nhân viên
-      this.cash.employeeId = valueId;
-      this.cash.fullName = valueName;
-    },
-    getDataInput(value){
-      this.cash.organizationUnitName = value;
-    },
-    //#endregion
     
-    
-
     //#region Đóng cashdialog
     /**
      * Đóng CashDialog và ko load lại data
@@ -373,7 +562,6 @@ export default {
       if(res != undefined){
         if(res.data.code == 500){
           this.message = MES_ERROR_SERVER;
-          // show popup
           this.valuePopup = true;
         }
       }
@@ -393,7 +581,7 @@ export default {
       if (this.cash.receiptPaymentCode == "") {
         this.messageCode = MES_REQUIRED_ATTRIBUTE;
       }
-      if (this.cash.OrganizationUnitName == "") {
+      if (this.cash.organizationUnitName == "") {
         this.messageObject = MES_REQUIRED_ATTRIBUTE;
       }
       if (this.cash.receiver == "") {
@@ -523,21 +711,6 @@ export default {
         }
       }, 200);
     },
-
-    /**
-     * Cập nhật giá trị mảng listDetail khi chọn lại đối tượng trong bảng listDetail
-     * CreatedBy: NXCHIEN 06/06/2021
-     */
-    onChangeArr(){
-      for (var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
-        if(this.check != null){
-          this.listDetail[this.check].OrganizationUnitName = this.recordName; 
-          this.listDetail[this.check].OrganizationUnitCode = this.recordCode; 
-          return this.listDetail;
-        }  
-      }
-      return this.listDetail;
-    },
   },
   computed:{
     /**
@@ -547,17 +720,34 @@ export default {
     totalMoney(){
       var total = 0;
       for ( var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
-        total += this.listDetail[i].Amount;
+        total += this.listDetail[i].amountDetail;
       }
-      return total;      
+      if (total == 0) {
+        return 0;
+      }
+      return total;    
     },
-
-    /**
-     * Cập nhật mảng listDetail
-     * CreatedBy: NXCHIEN 06/06/2021
-     */
-    listDetailFilter(){    
-      return this.onChangeArr();  
+    showObject:{
+      get(){
+        if(this.modeObject){
+          return this.cash.organizationUnitName;
+        }
+        return this.saveValueObject;
+      },
+      set(val) {
+        this.value = val;
+      },
+    },
+    showEmployeeName: {
+      get(){
+        if(this.modeEmployee){
+          return this.cash.fullName;
+        }
+        return this.saveValueEmployeeName;
+      },
+      set(val) {
+        this.value = val;
+      },
     },
   },
 
@@ -568,6 +758,14 @@ export default {
 
     this.detectChangeCash = {...this.cash};
     this.detectChangeDetail = this.cash.receiptPaymentDetail;
+    this.axios
+      .get(
+        `/Employees/Filter?pageSize=20&pageIndex=2&filter=`
+      )
+      .then((response) => {
+        this.employees = response.data.data.data;
+      })
+      .catch(() => {});
   },
 };
 </script>
@@ -823,5 +1021,164 @@ table tfoot th {
 }
 .input-error{
   border: 1px solid red;
+}
+.department-box {
+  height: 32px;
+  display: flex;
+  min-height: 32px;
+  border: 1px solid #babec5;
+  border-radius: 2px;
+  background-color: #fff;
+  outline: none;
+  width: 100%;
+  margin-top: 4px;
+}
+.department-content {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  cursor: pointer;
+}
+.department-content:hover {
+  color: #35bf22;
+  font-weight: 600;
+  background-color: #f4f5f8;
+}
+.selected-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+.input-select {
+  background-color: transparent;
+  display: flex;
+  padding: 5px 0 5px 10px;
+  height: 32px;
+  border: none;
+  width: 77%;
+}
+.input-focus{
+  border-color: #2ca01c;
+}
+.icon-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-selected:hover {
+  background-color: #bbb;
+}
+.arrow-dropdown {
+  background-position: -552px -352px;
+}
+.tranform {
+  transform: rotate(180deg);
+  transition: transform 0.15s linear;
+}
+.select-custom {
+  position: absolute;
+  overflow-y: auto;
+  min-width: 200px;
+  max-height: 160px;
+  background-color: white;
+  border: 1px solid #bbb;
+}
+.object .select-custom {
+  width: calc(55% + 13px);
+  top: 65px;
+}
+.employee .select-custom {
+  width: 40%;
+  top: 275px;
+  min-width: 200px;
+  z-index: 4;
+}
+.cashbox__input--size .select-custom {
+  top: 43px;
+  z-index: 10;
+  width: 28%;
+}
+.grid__height .department-box{
+  margin-top: 0;
+}
+.grid__height .select-custom{
+  /* top: 475px; */
+  top: 280px;
+  width: 60%;
+  z-index: 1;
+  left: 390px;
+}
+.reason .select-custom {
+  top: 213px;
+  width: 20%;
+  z-index: 5;
+}
+.header-select {
+  height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #f4f5f8;
+  padding: 0 14px 0 10px;
+  position: sticky;
+  top: 0;
+}
+.text{
+  font-weight: 700;
+  color: #111111;
+  font-size: 12px;
+}
+.select-custom .scrollItem {
+  height: 32px;
+  width: 100%;
+  padding: 0 14px 0 10px;
+  text-align: left;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+.scrollItem:hover {
+  color: #2ca01c;
+  background-color: rgb(219, 219, 219);
+}
+.text-hidden{
+  text-overflow: ellipsis;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.header-select .code--size, .scrollItem .code--size{
+  width: 20%;
+}
+
+.header-select .name--size, .scrollItem .name--size{
+  width: 35%;
+}
+.header-select .department--size, .scrollItem .department--size{
+  width: 25%;
+}
+.header-select .phone--size, .scrollItem .phone--size{
+  width: 20%;
+}
+.invisible {
+  display: none;
+}
+.color {
+  background-color: #2ca01c;
+  color: white;
+}
+.visible{
+  display: flex;
+}
+.input-error{
+  border: 1px solid red;
+}
+.span{
+  color: red; 
+  font-size: 12px;
 }
 </style>

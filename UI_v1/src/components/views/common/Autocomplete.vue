@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false,'input-error': (messageRequired != '' || changeData == 'empty')}">
+    <div class="department-box" :class="{'input-focus': toggleAutocomplete == false}">
       <div class="selected-option">
         <input
           type="text"
@@ -11,7 +11,6 @@
           @keydown.enter="enter"
           v-model="showEmployeeName"
           @focus="focusInputKey"
-          @input="onChangeInputName"
         />
         <div class="icon-selected">
           <div
@@ -22,13 +21,7 @@
       </div>
     </div>
     <div class="select-custom" :class="{ invisible: toggleAutocomplete }">
-      <div class="header-select" :class="{ visible: employee == 'employee'}">
-        <div class="text code--size text-hidden">Mã nhân viên</div>
-        <div class="text name--size text-hidden">Tên nhân viên</div>
-        <div class="text department--size text-hidden">Đơn vị</div>
-        <div class="text phone--size text-hidden">Số điện thoại</div>
-      </div>
-      <div class="header-select" :class="{ visible: object == 'object'}">
+      <div class="header-select">
         <div class="text code--size text-hidden">Đối tượng</div>
         <div class="text name--size text-hidden">Tên đối tượng</div>
         <div class="text department--size text-hidden">Đơn vị</div>
@@ -48,55 +41,28 @@
         </div>
       </div>
     </div>
-    <span v-if="messageRequired != ''" class="span">{{messageRequired}}</span>
-    <span v-if="changeData == 'empty'" class="span">Bắt buộc nhập trường này</span>
   </div>
 </template>
 <script>
-import {
-  MES_REQUIRED_ATTRIBUTE,
-} from "../../../lang/validation.js";
 export default {
-  props: ['value', 'code', 'object', 'employee', 'changeData'],
+  props: ['value', 'code'],
   data() {
     return {
-      messageRequired: '',
       employees: [],
       toggleAutocomplete: true,
       currentIndex: 0,
       saveValueEmployeeName: null,
       saveValueEmployeeCode: null,
-      saveValueAddress: null,
       flag: true,
     };
   },
   methods: {
-    focusInput(){
-      this.$refs.focusInputAutocomplete.focus();
-      console.log(this.$refs.focusInputAutocomplete);
-    },
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
-      if (!this.toggleAutocomplete) {
-        this.$refs.focusInputAutocomplete[0].focus();
-      }
     },
 
     focusInputKey() {
       this.toggleAutocomplete = false;      
-    },
-
-    onChangeInputName(e){
-      let val = e.target.value;
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        if (val !== "") {
-        this.messageRequired = "";       
-      } else if (val == "") {
-        this.messageRequired = MES_REQUIRED_ATTRIBUTE;
-      }
-      }, 200);  
-      // this.$emit("sendDataByInput", val);
     },
     /**
      * Click nút up cập nhật vị trí currentIndex
@@ -124,44 +90,31 @@ export default {
     enter() {
       this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
       this.saveValueEmployeeCode = this.employees[this.currentIndex].employeeCode;
-      this.saveValueAddress = this.employees[this.currentIndex].address;
       this.toggleAutocomplete = true;
       this.flag = false;
       if (this.code != undefined) {
         this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);
-      }else{
-        this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
-        this.$emit("sendDataEmployee", this.saveValueEmployeeName, this.employees[this.currentIndex].employeeId);
       }
-      this.messageRequired = '';
     },
     
-    onBtnEmployeeClick(employee, index) {
-      
+    onBtnEmployeeClick(employee, index) { 
       this.saveValueEmployeeName = employee.fullName;
       this.saveValueEmployeeCode = employee.employeeCode;
-      this.saveValueAddress = employee.address;
       this.toggleAutocomplete = true;
-
       this.currentIndex = index;
       this.flag = false;
       if (this.code != undefined) {
         this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);       
-      }else{
-        this.$emit("sendNameToCashDialog", this.saveValueEmployeeName, this.saveValueAddress);
-        this.$emit("sendDataEmployee", this.saveValueEmployeeName, employee.employeeId);
       }
-      this.messageRequired = '';
     },
   },
-  // created(){
-  //   window.addEventListener("click", (e) => {
-  //     if (!this.$el.contains(e.target)) {
-  //       this.toggleAutocomplete = true;
-  //     }
-  //   });
-    
-  // },
+  created(){
+    window.addEventListener("click", (e) => {
+      if (!this.$el.contains(e.target)) {
+        this.toggleAutocomplete = true;
+      }
+    });
+  },
   mounted() {
     this.axios
       .get(
@@ -177,11 +130,8 @@ export default {
       get(){
         if(this.flag){
           return this.value;
-        }else if(this.code != undefined){
-          return this.saveValueEmployeeCode;
-        }else{
-          return this.saveValueEmployeeName;
         }
+        return this.saveValueEmployeeCode; 
       },
       set(val) {
         this.value = val;
@@ -302,7 +252,7 @@ export default {
 .header-select {
   height: 32px;
   width: 100%;
-  display: none;
+  display: flex;
   align-items: center;
   background-color: #f4f5f8;
   padding: 0 14px 0 10px;

@@ -219,12 +219,12 @@ import ComboboxFilter from "../common/ComboboxFilter.vue";
 import CashFilter from "../common/CashFilter.vue";
 
 const arrDetailAdd = [{
-          "DescriptionDetail": "Chi tiền cho ",
-          "DebtAccount": "",
-          "CreditAccount": "19008198",
-          "Amount": 0,
-          "OrganizationUnitCode": "",
-          "OrganizationUnitName": "",
+          "descriptionDetail": "Chi tiền cho ",
+          "debtAccountDetail": "",
+          "creditAccountDetail": "19008198",
+          "amountDetail": 0,
+          "organizationUnitCodeDetail": "",
+          "organizationUnitNameDetail": "",
         },       
       ];
 //#endregion
