@@ -267,7 +267,7 @@
 <script>
 // import $ from 'jquery'
 import Autocomplete from "../common/Autocomplete.vue";
-import {VMoney, Money} from 'v-money'
+import {Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
 
@@ -277,7 +277,6 @@ import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, M
 import {STR_CASHDIALOG, DELETEALLROW, STR_REASONNAME, CHANGEDATA, EMPTYDATA, EXISTDATA, FORMMODE_EDIT, FORMMODE_ADD} from "../../../lang/masterDetail.js"
 
 export default {
-  directives: {money: VMoney},
   components: {
     Autocomplete,
     Money, 
@@ -290,47 +289,64 @@ export default {
   },
   data() {
     return {
-      saveValueEmployeeName: null,
-      saveValueObject: null,
-      modeObject: true,
-      modeEmployee: true,
-      currentIndex: 0,
-      currentIndexE: 0,
-      toggleObject: true,
-      toggleEmployee: true,
-      employees: [],
-      //----------message lỗi
+      //#region Dữ liệu thao tác với Object Đối tượng (Autocomplete)
+      saveValueEmployeeName: null,  // Lưu tên nhân viên
+      saveValueObject: null,        // Tên đối tượng
+      modeObject: true,             // ModeObject để check giá trị hiển thị trong computed
+      modeEmployee: true,           // ModeEmployee để check giá trị hiển thị trong computed
+      currentIndex: 0,              // Vị trí khi click up down Object
+      currentIndexE: 0,             // Vị trí khi click up down Employee
+      toggleObject: true,           // Hiển thị đối tượng
+      toggleEmployee: true,         // Hiển thị nhân viên
+      employees: [],                // mảng nhân viên dùng chung cho cả đối tượng.
+      //#endregion
+      
+      //#region message lỗi Validate
       messageCode: '',
       messageFullName: '',
       messageObject: '',
       messageReceiver: '',
       messageAccountingDate: '',
       messageRefDate: '',
-      //---------------------
-      debtAccountError: false,
-      changeData: '',
-      detectChangeCash: {},
-      detectChangeDetail: '',
-      valueRefCode: null,
-      formMode: '',
-      valuePopup: false,
-      message: '',
-      rowIndex: null,
-      listDetail: [],
-      money: {
-          decimal: ',',
-          thousands: '.',
-          precision: 0,
-          masked: false /* doesn't work with directive */
-        },
+      //#endregion
+      
+      debtAccountError: false,      // check trống khi không nhập Tài khoản nợ
+
+      //#region Phát hiện sự thay đối dữ liệu khi click đóng form CashDialog
+      changeData: '',           // Biến check changeData: trống, trùng, tồn tại
+      detectChangeCash: {},     // Mảng sao chép Object Cash
+      detectChangeDetail: '',   // Mảng sao chép listDetail
+      //#endregion
+
+      valueRefCode: null, // Giá trị RefCode bindding lên phiếu chi đầu trang
+      formMode: '',       // Giá trị CashDialog hay CashList
+      valuePopup: false,  // Giá trị hiển thị CashPopup
+      message: '',        // Lưu trữ giá trị message lỗi bindding qua CashPopup
+      rowIndex: null,     // Lưu độ dài mảng listDetail phần thêm và xóa dòng
+      listDetail: [],     // Mảng chưa chi tiết Phiếu chi
+      money: {            // Format tiền bằng v-money
+        decimal: ',',
+        thousands: '.',
+        precision: 0,
+        masked: false /* doesn't work with directive */
+      },
     };
   },
   
   methods: {
+    /**
+     * Cập nhật dữ liệu Cash lấy từ Autocomplete dưới bảng detail
+     * CreatedBY: NXCHIEN 09/06/2021
+     */
     getDataId(code, index, name){
       this.listDetail[index].organizationUnitNameDetail = name;
       this.listDetail[index].organizationUnitCodeDetail = code;
     },
+
+    /**
+     * Dropdown Click của Nhân viên và Đối tượng
+     * CreateBy: NXCHIEN 09/06/2021
+     */
     onBtnDropdownClick(value) {
       if (value === 'object') {
         this.toggleObject = !this.toggleObject;
@@ -346,6 +362,10 @@ export default {
       }
     },
 
+    /**
+     * focus vào Nhân viên hoặc Đối tượng thì xổ ra danh sách
+     * CreateBy: NXCHIEN 09/06/2021
+     */
     focusInputKey(value) {
       if (value === 'object') {
         this.toggleObject = false;
@@ -355,29 +375,10 @@ export default {
       }     
     },
 
-    onChangeInputObject(e){
-      let val = e.target.value;
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        if (val !== "") {
-        this.messageObject = "";       
-      } else if (val == "") {
-        this.messageObject = MES_REQUIRED_ATTRIBUTE;
-      }
-      }, 200);
-    },
-    onChangeInputEmployee(e){
-      let val = e.target.value;
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        if (val !== "") {
-        this.messageFullName = "";       
-      } else if (val == "") {
-        this.messageFullName = MES_REQUIRED_ATTRIBUTE;
-      }
-      }, 200);
-    },
-
+    /**
+     * Click nút up cập nhật vị trí Index
+     * CreatedBY:NXCHIEN 09/06/2021
+     */
     up(value) {
       if (value === 'object') {
         if (this.currentIndex > 0) this.currentIndex--;
@@ -388,8 +389,8 @@ export default {
     },
 
     /**
-     * Click nút up cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
-     * CreatedBY:NXCHIEN 19/05/2021
+     * Click nút down cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
+     * CreatedBY:NXCHIEN 09/06/2021
      */
     down(value) {
       if (value === 'object') {
@@ -407,7 +408,7 @@ export default {
     },
 
     /**
-     * Click enter cập nhật các giá trị để bind lên input chứa giá trị tên phòng ban/ đơn vị
+     * Click enter cập nhật các giá trị để bind lên Input
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter(value) {
@@ -431,6 +432,10 @@ export default {
       
     },
     
+    /**
+     * Click dòng trong danh sách nhân viên lấy ra nhân viên
+     * CreatedBY: NXCHIEN 09/06/2021
+     */
     onBtnEmployeeClick(employee, index, value) {
       if (value === 'object') {
         this.saveValueObject = employee.fullName;
@@ -453,58 +458,60 @@ export default {
       }
     },
 
+    //#region Check OnchangeInput
+    /**
+     * Cập nhật giá trị refCode khi thay đổi input refCode
+     * CreatedBY: NXCHIEN 06/06/2021
+     */
+    onChangeRefCode(e){
+      let val = e.target.value;
+      this.valueRefCode = val;
+      if (val !== "") {
+        this.messageCode = "";
+      } else if (val == "") {
+        this.messageCode = MES_REQUIRED_ATTRIBUTE;
+      }
+    },
+
+    /**
+     * InputObject rỗng thì hiển thị lỗi
+     * CreateBy: NXCHIEN 09/06/2021
+     */
+    onChangeInputObject(e){
+      let val = e.target.value;
+      if (val !== "") {
+        this.messageObject = "";       
+      } else if (val == "") {
+        this.messageObject = MES_REQUIRED_ATTRIBUTE;
+      }
+    },
+
+    /**
+     * InputEmployee rỗng thì hiển thị lỗi
+     * CreateBy: NXCHIEN 09/06/2021
+     */
+    onChangeInputEmployee(e){
+      let val = e.target.value;
+      if (val !== "") {
+        this.messageFullName = "";       
+      } else if (val == "") {
+        this.messageFullName = MES_REQUIRED_ATTRIBUTE;
+      }
+    },
+    /**
+     * InputReceiver rỗng thì hiển thị lỗi
+     * CreateBy: NXCHIEN 09/06/2021
+     */
     onChangeInputReceiver(e){
       let val = e.target.value;
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        if (val !== "") {
-          this.messageReceiver = "";
-        } else if (val === "") {
-          this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
-        }
-      }, 200);
-    },
-
-    hideCashPopupAndValidate(){
-      this.valuePopup = false;
-      if (this.messageCode != '') {
-        this.messageObject = '';
-        this.messageReceiver = '';
-        this.messageAccountingDate = '';
-        this.messageRefDate= '';
-        this.messageFullName = '';     
-        this.$refs.focusRefCode.focus();
-      }else if(this.messageObject != ''){
-        this.messageReceiver = '';
-        this.messageAccountingDate = '';
-        this.messageRefDate= '';
-        this.messageFullName = '';
-        this.$refs.focusInputObject.focus();
-      }else if(this.messageReceiver != ''){
-        this.messageAccountingDate = '';
-        this.messageRefDate= '';
-        this.messageFullName = '';
-        this.$refs.focusReceiver.focus();
-      }else if(this.messageAccountingDate != ''){
-        this.messageRefDate= '';
-        this.messageFullName = '';
-        this.$refs.accountingDate.$refs.reference.$refs.accountingDate.focus();        
-      }else if(this.messageRefDate != ''){
-        this.messageFullName = '';
-        this.$refs.refDate.$refs.reference.$refs.refDate.focus();
-      }else if(this.messageFullName != ''){
-        this.$refs.focusInputEmployee.focus();
-      }
-
-      if(this.debtAccountError){
-        this.$refs.focusDebt[this.rowIndex - 1].focus();
-        this.debtAccountError = false;
-      }
-      if(this.message.includes(REF_CODE)){
-        this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
-        this.$refs.focusRefCode.focus();
+      if (val !== "") {
+        this.messageReceiver = "";
+      } else if (val === "") {
+        this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
       }
     },
+    //#endregion
+
     //#region Cập nhật DatePicker
     /**
      * Cập nhật dữ liệu ngày tháng khi lấy từ component DatePicker
@@ -561,7 +568,7 @@ export default {
         }, 100)
       }
       
-      //TODO: lỗi xóa hết dòng tổng tiền thành NaN -----  Chưa focus vào Mã khi trùng ---- validate Tài khoản nợ
+      //TODO: lỗi xóa hết dòng tổng tiền thành NaN ----- validate Tài khoản nợ đã xong nhưng boder đỏ hết
     },
     // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
@@ -640,9 +647,10 @@ export default {
       this.cash.reasonName = STR_REASONNAME;
     },
 
+    //#region Validate Click Save
     /**
-     * Kiểm tra empty các trường code, name, departmentId
-     * CreatedBy:NXCHIEN 19/05/2021
+     * Kiểm tra empty các trường
+     * CreatedBy: NXCHIEN 09/06/2021
      */
     checkEmptyAttribute() {
       if (this.cash.receiptPaymentCode.trim() == "") {
@@ -711,6 +719,9 @@ export default {
       }
       return false;
     },
+    //#endregion
+    
+    //#region Click Save and SaveAndAdd
     validAndSave() {
       // Kiểm tra attribute empty
       this.checkEmptyAttribute();
@@ -722,7 +733,6 @@ export default {
           return this.axios.post("/ReceiptPayments", this.cash)
             .then((res) => {            
               if (res.data.code == 200) {
-                // this.saveValueDepartment = null;
                 return Promise.resolve();
               } else if (res.data.code == 400) {
                 // Lấy ra message lỗi
@@ -790,26 +800,52 @@ export default {
           this.showNotification(MES_EDIT_SUCCESS);
         }
         this.$emit("saveAndAdd");
-        
       });
     },
+    //#endregion
 
-    /**
-     * Cập nhật giá trị refCode khi thay đổi input refCode
-     * CreatedBY: NXCHIEN 06/06/2021
-     */
-    onChangeRefCode(e){
-      let val = e.target.value;
-      this.valueRefCode = val;
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        if (val !== "") {
-          this.messageCode = "";
-        } else if (val == "") {
-          this.messageCode = MES_REQUIRED_ATTRIBUTE;
-        }
-      }, 200);
+    // ĐÓng CashPopup và kiểm tra message lỗi để focus
+    hideCashPopupAndValidate(){
+      this.valuePopup = false;
+      if (this.messageCode != '') {
+        this.messageObject = '';
+        this.messageReceiver = '';
+        this.messageAccountingDate = '';
+        this.messageRefDate= '';
+        this.messageFullName = '';     
+        this.$refs.focusRefCode.focus();
+      }else if(this.messageObject != ''){
+        this.messageReceiver = '';
+        this.messageAccountingDate = '';
+        this.messageRefDate= '';
+        this.messageFullName = '';
+        this.$refs.focusInputObject.focus();
+      }else if(this.messageReceiver != ''){
+        this.messageAccountingDate = '';
+        this.messageRefDate= '';
+        this.messageFullName = '';
+        this.$refs.focusReceiver.focus();
+      }else if(this.messageAccountingDate != ''){
+        this.messageRefDate= '';
+        this.messageFullName = '';
+        this.$refs.accountingDate.$refs.reference.$refs.accountingDate.focus();        
+      }else if(this.messageRefDate != ''){
+        this.messageFullName = '';
+        this.$refs.refDate.$refs.reference.$refs.refDate.focus();
+      }else if(this.messageFullName != ''){
+        this.$refs.focusInputEmployee.focus();
+      }
+
+      if(this.debtAccountError){
+        this.$refs.focusDebt[this.rowIndex - 1].focus();
+        this.debtAccountError = false;
+      }
+      if(this.message.includes(REF_CODE)){
+        this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
+        this.$refs.focusRefCode.focus();
+      }
     },
+
   },
   computed:{
     /**
@@ -826,6 +862,7 @@ export default {
       }
       return total;    
     },
+    // Giá trị hiển thị Object
     showObject:{
       get(){
         if(this.modeObject){
@@ -837,6 +874,7 @@ export default {
         this.value = val;
       },
     },
+    // Giá trị hiên thị nhân viên
     showEmployeeName: {
       get(){
         if(this.modeEmployee){
@@ -851,32 +889,21 @@ export default {
   },
 
   mounted() {
-    this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);
-    this.rowIndex = this.listDetail.length;
-    this.valueRefCode = this.cash.receiptPaymentCode;
+    this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);     // Khởi tạo giá trị listDetail
+    this.rowIndex = this.listDetail.length;                           // Khởi tạo rowIndex
+    this.valueRefCode = this.cash.receiptPaymentCode;                 // Khởi tạo giá trị Phiếu chi góc trái trên màn hình
 
-    this.detectChangeCash = {...this.cash};
-    this.detectChangeDetail = this.cash.receiptPaymentDetail;
-    this.axios
-      .get(
-        `/Employees/Filter?pageSize=20&pageIndex=2&filter=`
-      )
-      .then((response) => {
-        this.employees = response.data.data.data;
-      })
-      .catch(() => {});
+    this.detectChangeCash = {...this.cash};                           // Sao chép object để so sánh
+    this.detectChangeDetail = this.cash.receiptPaymentDetail;         // sao chép mảng để so sánh
+    this.axios.get(`/Employees`).then((response) => {                 // Khởi tạo mảng nhân viên
+      this.employees = response.data.data;
+    }).catch(() => {});
 
-      // $(document).click(function(e) {
-      //   // if(!$(".object").contains(e.target)){
-      //   //   this.toggleObject = true;
-      //   //   // alert('clicked inside');
-      //   // }
-      //   if($('.object').className !== e.target.className){
-      //     clearTimeout(this.timeOut);
-      //     this.timeOut = setTimeout(() => {
-      //       this.toggleObject = true;
-      //     }, 200);
-          
+    // $(document).click(function(e) {
+    //   // if(!$(".object").contains(e.target)){
+    //   //   this.toggleObject = true;
+    //   //   // alert('clicked inside');
+    //   // } 
     //     }
     // });
   },
@@ -987,14 +1014,8 @@ export default {
 .attach {
   width: 16%;
 }
-.text {
-  font-weight: 700;
-  color: #111111;
-  font-size: 12px;
-}
 .receive .input--size {
   width: calc(97% + 5px);
-  /* width: 100%; */
   margin-top: 4px;
 }
 .address .input--size {
@@ -1057,7 +1078,6 @@ export default {
 .grid__height {
   margin-left: 30px;
   overflow-x: auto;
-  /* width: calc(95% + 20px); */
   width: calc(100vw - 56px);
 }
 
@@ -1217,7 +1237,6 @@ table tfoot th {
   margin-top: 0;
 }
 .grid__height .select-custom{
-  /* top: 475px; */
   top: 280px;
   width: 60%;
   z-index: 1;
@@ -1286,9 +1305,6 @@ table tfoot th {
 .visible{
   display: flex;
 }
-.input-error{
-  border: 1px solid red;
-}
 .span{
   color: red; 
   font-size: 12px;
@@ -1298,10 +1314,6 @@ table tfoot th {
 }
 .tranform {
   transform: rotate(180deg);
-  transition: transform 0.15s linear;
-}
-.tranform-again {
-  transform: rotate(0deg);
   transition: transform 0.15s linear;
 }
 </style>

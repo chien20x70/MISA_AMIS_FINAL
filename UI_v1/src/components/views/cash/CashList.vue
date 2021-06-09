@@ -43,7 +43,7 @@
           <thead>
             <tr>
               <th class="first__th"><input type="checkbox" class="check-box" /></th>
-              <th style="min-width: 147px; border-left: none; text-align: center;">NGÀY HOẠCH TOÁN</th>
+              <th style="min-width: 147px; border-left: none; text-align: center;">NGÀY HẠCH TOÁN</th>
               <th style="min-width: 125px">SỐ CHỨNG TỪ</th>
               <th style="min-width: 320px">DIỄN GIẢI</th>
               <th style="min-width: 150px; text-align: right;">SỐ TIỀN</th>
@@ -286,8 +286,8 @@ export default {
       this.selectedCash.refDate = this.getCurrentDate();
       this.selectedCash.refAttach = 0;
       this.selectedCash.receiptPaymentDetail = JSON.stringify(arrDetailAdd);
-
     },
+    // Lấy ra ngày hiện tại
     getCurrentDate(){
       let currentDate = new Date();
       var day = currentDate.getDate();
@@ -371,7 +371,7 @@ export default {
     },
     //#endregion
 
-    //#region Nhân bản và dbClick
+    //#region Nhân bản và dbClick và nút Sửa
     /**
      * Hàm dùng chung khi click nhân bản và dblClick 1 dòng trong bảng
      * CreatedBy: NXCHIEN 17/05/2021
@@ -389,41 +389,36 @@ export default {
     CreatedBy: NXCHIEN 17/05/2021  
     */
     onRowTableDblClick(eId) {
-
       this.axios
         .get("/ReceiptPayments/" + eId)
         .then((response) => {
-
           // gán cờ thành nút sửa
           this.status = FORMMODE_EDIT;
-
           this.onShowDialogAndAssignSelectedCash(response);
         })
         .catch(() => {});
     },
 
     duplicateClick(value) {
-      
       this.axios
         .get("/ReceiptPayments/ReceiptPaymentCopy?id=" + value)
         .then((response) => {
           // gán cờ thành nút thêm mới
           this.status = FORMMODE_ADD;
-          
           this.onShowDialogAndAssignSelectedCash(response);
         })
         .catch(() => {});
-
     },
-    //#endregion
-
     /**
       * Click nút Sửa trong table
       * CreatedBy: NXCHIEN 06/06/2021
       */
-    onBtnEditClick(employeeClickId) {
-      this.onRowTableDblClick(employeeClickId);
+    onBtnEditClick(receiptPaymentId) {
+      this.onRowTableDblClick(receiptPaymentId);
     },
+    //#endregion
+
+    
 
     /**
       * Load lại dữ liệu khi click vào nút refresh
@@ -438,11 +433,17 @@ export default {
       }, 500);
     },
 
+    /**
+     * Lọc theo ngày hạch toán //TODO: chưa hoàn thành-------Cần thêm API
+     * CreatedBY: NXCHIEN 09/06/2021
+     */
     onBtnCashFilterClick(startDate, endDate){
       this.startDate = startDate;
       this.endDate = endDate;
       this.filterData();
     },
+
+    //#region Lọc dữ liệu: ChangeInput + Phân trang và Export excel //TODO: Chưa hoàn thành ExportExcel
     /**
       * Lọc data bằng các tham số truyền vào
       * CreatedBy: NXCHIEN 06/06/2021
@@ -505,13 +506,14 @@ export default {
       * Export data ra file excel. //TODO: Chưa sửa export bên API.
       * CreatedBy: NXCHIEN 06/06/2021
       */
-    onBtnExportClick() {
+    onBtnExportClick() {  
       // Mở 1 cửa số mới gọi API để tải về.
       window.open(
         `https://localhost:44314/api/v1/cashs/ExportingExcel`,
         "_blank"
       );
     },
+    //#endregion
 
     //#region Lấy dữ liệu và đóng mở form phần lọc bản ghi / trang
     /**

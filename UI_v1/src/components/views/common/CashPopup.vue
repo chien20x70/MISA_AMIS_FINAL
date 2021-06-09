@@ -33,6 +33,7 @@
     </div>
 </template>
 <script>
+import { CHANGEDATA, EMPTYDATA, EXISTDATA, STR_CASHDIALOG, STR_CASHLIST } from "../../../lang/masterDetail.js"
 export default {
   //#region Khai báo Props
     props:{
@@ -50,22 +51,22 @@ export default {
       CreatedBy: NXCHIEN 17/05/2021
        */
       onBtnNoClick(){
-        if (this.changeData == '' || this.changeData == 'dataExist') { //BTN Đóng, Không
+        if (this.changeData == '' || this.changeData == EXISTDATA) { //BTN Đóng, Không
           this.$emit("hideCashPopupNotLoad");
         }
-        if (this.changeData == 'changeData') {  //BTN Không
+        if (this.changeData == CHANGEDATA) {  //BTN Không
           this.$emit("hideCashPopupAndHideDialog");
         }
-        if (this.changeData == 'empty') {
+        if (this.changeData == EMPTYDATA || this.changeData == EXISTDATA) {
           this.$emit("hideCashPopupAndValidate");
         }
         
       },
       onBtnYesClick(){
-        if (this.formMode == "CashDialog") {
+        if (this.formMode == STR_CASHDIALOG) {
             this.$emit("hideCashPopupAndRemoveRow");
         }
-        if(this.formMode == "CashList"){
+        if(this.formMode == STR_CASHLIST){
             this.axios.delete("/ReceiptPayments/"+ this.refId).then(() =>{
                 this.$emit("hideCashPopup");
             }).catch(() =>{})

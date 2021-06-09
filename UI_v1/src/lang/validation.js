@@ -23,6 +23,6 @@ export const EMPLOYEE_EMAIL_EXIST = "Email đã tồn tại";
 export const EMPLOYEE_IDENTIFY_EXIST = "Số chứng minh thư đã tồn tại";
 export const EMPLOYEE_PHONE_EXIST = "Số điện thoại đã tồn tại";
 export const EMPLOYEE_CODE = "Mã nhân viên";
-export const REF_CODE = "Số chứng từ đã";
+export const REF_CODE = "đã tồn tại";
 export const RECEIPTPAYMENT_CODE_EXIST = "Số chứng từ đã tồn tại";
 

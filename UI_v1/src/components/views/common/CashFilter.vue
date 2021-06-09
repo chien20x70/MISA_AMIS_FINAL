@@ -56,10 +56,10 @@ export default {
   },
   data() {
     return {
-      contentSelect: null,
-      startDate: null,
-      endDate: null,
-      toggleFilter: false,
+      firstDateOfYear: '2021/01/01',      // Ngày đầu tiên của năm
+      startDate: null,                    // Ngày bắt đầu để lọc
+      endDate: null,                      // Ngày kết thúc
+      toggleFilter: false,                // Đóng mở CashFilter
       options: [
         { value: "1", text: "Tùy chọn" },
         { value: "2", text: "Năm sau" },
@@ -70,13 +70,22 @@ export default {
     };
   },
   methods: {
+    /**
+     * Đóng mở CashFilter binđing ngày bđ và ngày kết thúc
+     * CreatedBy: NXCHIEN 09/06/2021
+     */
     onBtnFilterClick() {
       this.toggleFilter = !this.toggleFilter;
       this.endDate = this.getCurrentDate();
       this.startDate = this.getFisrtDateOfYear();
     },
+
+    //#region Lấy ngày lần đầu
+    /**
+     * Lấy ngày đầu tiên của năm
+     */
     getFisrtDateOfYear(){
-      let currentDate = new Date("2021/01/01");
+      let currentDate = new Date(this.firstDateOfYear);
       var day = currentDate.getDate();
       var month = currentDate.getMonth() + 1;
       var year = currentDate.getFullYear();
@@ -84,6 +93,9 @@ export default {
       month = month < 10 ? "0" + month : month;
       return `${year}-${month}-${day}`;
     },
+    /**
+     * Lấy ngày hiện tại
+     */
     getCurrentDate(){
       let currentDate = new Date();
       var day = currentDate.getDate();
@@ -93,15 +105,24 @@ export default {
       month = month < 10 ? "0" + month : month;
       return `${year}-${month}-${day}`;
     },
-    onBtnCashFilterClick(){
-      this.$emit("onBtnCashFilterClick", this.startDate, this.endDate);
-    },
+    //#endregion
+
+    //#region  Cập nhật ngày từ DatePicker khi chọn
     getStartDate(value){
       this.startDate = value;
     },
     getEndDate(value){
       this.endDate = value;
     },
+    //#endregion
+
+    // Truyền giá trị cần lọc sang CashList để lọc
+    onBtnCashFilterClick(){
+      this.$emit("onBtnCashFilterClick", this.startDate, this.endDate);
+    },
+
+    
+  
   },
   created() {
     window.addEventListener("click", (e) => {
@@ -113,11 +134,6 @@ export default {
   mounted() {
     this.options.text = this.options[4].value;
   },
-  // computed:{
-  //   contentSelectAA(){
-
-  //   }
-  // }
 };
 </script>
 <style scoped>

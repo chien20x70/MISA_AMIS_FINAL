@@ -30,8 +30,6 @@ export default {
         CreatedBy: NXCHIEN 17/05/2021
         */
         btnSelectClick(value){
-            // Gọi đến EmployeeList
-            // this.valueInput = this.lists[1].content;
             this.$emit('passValueToSelect', value);
             this.saveValue = value;
         },
