@@ -178,16 +178,14 @@ namespace MISA.AMIS.API.Controllers
         /// <param name="pageSize">số lượng nhân viên / trang</param>
         /// <param name="pageIndex">trang số bao nhiêu</param>
         /// <param name="filter">chuỗi để lọc</param>
-        /// <param name="startDate">ngày bđ</param>
-        /// <param name="endDate">ngày kết thúc</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
         [HttpGet("Filter")]
-        public IActionResult GetMISAEntities([FromQuery] int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
+        public IActionResult GetMISAEntities([FromQuery] int pageSize, int pageIndex, string filter)
         {
             try
             {
-                _serviceResult = _baseService.GetMISAEntities(pageSize, pageIndex, filter, startDate, endDate);
+                _serviceResult = _baseService.GetMISAEntities(pageSize, pageIndex, filter);
             }
             catch (Exception ex)
             {

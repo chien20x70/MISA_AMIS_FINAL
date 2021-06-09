@@ -301,7 +301,7 @@ namespace MISA.AMIS.Core.Service
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
-        public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
+        public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter)
         {
             // Nếu nhập pageIndex <= 0 hoặc pageSize <= 0 thì trả về lỗi ServiceResult.
             if (pageIndex <= 0 || pageSize <= 0)
@@ -315,7 +315,7 @@ namespace MISA.AMIS.Core.Service
             }
 
             // Lấy ra danh sách đối tượng
-            var entities = _baseRepository.GetMISAEntities(pageSize, pageIndex, filter, startDate, endDate);
+            var entities = _baseRepository.GetMISAEntities(pageSize, pageIndex, filter);
             // Kiểm tra đối tượng ko null thì trả về Success còn null thì Erorr (hoặc Success nhưng NOContent).
             if (entities.Data.Any() && entities.TotalRecord != null)
             {
