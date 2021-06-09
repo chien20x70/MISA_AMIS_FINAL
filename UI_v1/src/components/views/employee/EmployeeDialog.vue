@@ -141,7 +141,7 @@
             <div class="row-1">
               <div class="dateofbirth">
                 <span class="text">Ngày sinh</span>
-                <DatePicker v-model="employee.dateOfBirth" :dateOfBirth="'dateOfBirth'" @sendDateOfBirth="getDateOfBirth"/>
+                <DatePicker v-model="employee.dateOfBirth" :type="'dateOfBirth'" @sendDateOfBirth="getDateOfBirth"/>
               </div>
               <div class="gender">
                 <span class="text">Giới tính</span>
@@ -189,7 +189,7 @@
               </div>
               <div class="dateofbirth" style="padding-left: 5px">
                 <span class="text">Ngày cấp</span>
-                <DatePicker v-model="employee.dateOfIN" :dateOfIN="'dateOfIN'" @sendDateOfIN="getDateOfIN"/>
+                <DatePicker v-model="employee.dateOfIN" :type="'dateOfIN'" @sendDateOfIN="getDateOfIN"/>
               </div>
             </div>
             <div class="row-1">

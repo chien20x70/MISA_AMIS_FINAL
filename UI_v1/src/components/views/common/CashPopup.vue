@@ -16,9 +16,9 @@
             <div class="message">{{message}}</div>
           </div>
           <div class="btn-footer" :class="{display: changeData === 'changeData'}">
-            <button class="btn-No btn-yes">Hủy</button>
+            <button class="btn-No btn-yes" @click="onBtnCancelClick">Hủy</button>
             <button class="btn-No btn-yes" style="margin-left: 130px;" @click="onBtnNoClick">Không</button>
-            <button class="btn-add btn-yes">Có</button>
+            <button class="btn-add btn-yes" @click="onBtnChangeDataClick">Có</button>
           </div>
 
           <div class="popup-content" :class="{display: (changeData === 'dataExist' || changeData == 'empty')}">
@@ -71,6 +71,12 @@ export default {
             }).catch(() =>{})
         }
       },
+      onBtnCancelClick(){
+        this.$emit("hideCashPopupNotLoad");
+      },
+      onBtnChangeDataClick(){
+        this.$emit("saveChangeData");
+      }
     }
   //#endregion
 }

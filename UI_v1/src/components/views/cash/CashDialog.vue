@@ -19,63 +19,64 @@
       <div class="content__information">
         <div class="basic__form">
           <div class="row__input">
-            <div class="object">
-              <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
-              <!-- <Autocomplete ref="object" :value="cash.organizationUnitName" :object="'object'" @sendNameToCashDialog="getNameData" @sendDataByInput="getDataInput" :changeData="changeData"/> -->
-              <div class="department-box" :class="{'input-focus': toggleObject == false,'input-error': (messageObject != '')}">
-                <div class="selected-option">
-                  <input
-                    type="text"
-                    ref="focusInputObject"
-                    class="input-select"
-                    @keydown.up="up('object')"
-                    @keydown.down="down('object')"
-                    @keydown.enter="enter('object')"
-                    v-model="showObject"
-                    @focus="focusInputKey('object')"
-                    @input="onChangeInputObject"
-                  />
-                  <div class="icon-selected">
-                    <div
-                      class="icon icon-30 arrow-dropdown"
-                      :class="{ tranform: toggleObject == false }"
-                      @click="onBtnDropdownClick('object')"
-                    ></div>
-                    <!-- tranform-again -->
+            <div class="row__input__first">
+              <div class="object">
+                <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
+                <div class="department-box" :class="{'input-focus': toggleObject == false,'input-error': (messageObject != '')}">
+                  <div class="selected-option">
+                    <input
+                      type="text"
+                      ref="focusInputObject"
+                      class="input-select"
+                      @keydown.up="up('object')"
+                      @keydown.down="down('object')"
+                      @keydown.enter="enter('object')"
+                      v-model="showObject"
+                      @focus="focusInputKey('object')"
+                      @input="onChangeInputObject"
+                    />
+                    <div class="icon-selected">
+                      <div
+                        class="icon icon-30 arrow-dropdown"
+                        :class="{ tranform: toggleObject == false }"
+                        @click="onBtnDropdownClick('object')"
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="select-custom" :class="{ invisible: toggleObject }">
-                <div class="header-select">
-                  <div class="text code--size text-hidden">Đối tượng</div>
-                  <div class="text name--size text-hidden">Tên đối tượng</div>
-                  <div class="text department--size text-hidden">Đơn vị</div>
-                  <div class="text phone--size text-hidden">Số điện thoại</div>
-                </div>
-                <div class="department-content" ref="positionDepartment" 
-                  v-for="(employee, index) in employees"
-                  :key="index"
-                  @click="onBtnEmployeeClick(employee ,index, 'object')"
-                  :class="{ color: currentIndex == index}"
-                >
-                  <div class="scrollItem" >
-                    <div class="code--size text-hidden">{{ employee.employeeCode }}</div>
-                    <div class="name--size text-hidden">{{ employee.fullName }}</div>
-                    <div class="department--size text-hidden">{{ employee.departmentName }}</div>
-                    <div class="phone--size text-hidden">{{ employee.phoneNumber }}</div>
+                <div class="select-custom" :class="{ invisible: toggleObject }">
+                  <div class="header-select">
+                    <div class="text code--size text-hidden">Đối tượng</div>
+                    <div class="text name--size text-hidden">Tên đối tượng</div>
+                    <div class="text department--size text-hidden">Đơn vị</div>
+                    <div class="text phone--size text-hidden">Số điện thoại</div>
+                  </div>
+                  <div class="department-content" ref="positionDepartment" 
+                    v-for="(employee, index) in employees"
+                    :key="index"
+                    @click="onBtnEmployeeClick(employee ,index, 'object')"
+                    :class="{ color: currentIndex == index}"
+                  >
+                    <div class="scrollItem" >
+                      <div class="code--size text-hidden">{{ employee.employeeCode }}</div>
+                      <div class="name--size text-hidden">{{ employee.fullName }}</div>
+                      <div class="department--size text-hidden">{{ employee.departmentName }}</div>
+                      <div class="phone--size text-hidden">{{ employee.phoneNumber }}</div>
+                    </div>
                   </div>
                 </div>
+                <span class="span">{{messageObject}}</span>
               </div>
-              <span class="span">{{messageObject}}</span>
-            </div>
-            <div class="receive">
-              <span class="text">Người nhận <p style="color: red; display: inline">*</p></span>
-              <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/>
-              <span class="span">{{messageReceiver}}</span>
+              <div class="receive">
+                <span class="text">Người nhận <p style="color: red; display: inline">*</p></span>
+                <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/><br/>
+                <span class="span">{{messageReceiver}}</span>
+              </div>
             </div>
             <div class="date__form">
               <span class="text">Ngày hạch toán <p style="color: red; display: inline">*</p></span><br />
-              <DatePicker v-model="cash.accountingDate" :accountingDate="'accountingDate'" @sendAccountingDate="getAccountingDate"/>
+              <DatePicker ref="accountingDate" v-model="cash.accountingDate" :type="'accountingDate'" @sendAccountingDate="getAccountingDate"/><br/>
+              <span class="span">{{messageAccountingDate}}</span>
             </div>
           </div>
           <div class="row__input">
@@ -85,7 +86,8 @@
             </div>
             <div class="date__form">
               <span class="text">Ngày phiếu chi <p style="color: red; display: inline">*</p></span><br />
-              <DatePicker v-model="cash.refDate" :refDate="'refDate'" @sendRefDate="getRefDate"/>
+              <DatePicker ref="refDate" v-model="cash.refDate" :type="'refDate'" @sendRefDate="getRefDate"/>
+              <span class="span">{{messageRefDate}}</span>
             </div>
           </div>
           <div class="row__input">
@@ -94,7 +96,7 @@
               <input type="text" class="input--size" v-model="cash.description"/>
             </div>
             <div class="date__form">
-              <span class="text">Số phiếu chi <p style="color: red; display: inline">*</p></span><br />
+              <span class="text">Số chứng từ <p style="color: red; display: inline">*</p></span><br />
               <input maxlength="50" ref="focusRefCode" type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode" :class="{ 'input-error': messageCode != ''}"><br/>
               <span style="color: red; font-size: 12px">{{messageCode}}</span>
             </div>
@@ -102,7 +104,6 @@
           <div class="row__input">
             <div class="employee">
               <span class="text">Nhân viên <p style="color: red; display: inline">*</p></span>
-              <!-- <Autocomplete ref="employee" v-model="cash.fullName" :employee="'employee'" @sendDataEmployee="getDataEmployee" :changeData="changeData"/> -->
               <div class="department-box" :class="{'input-focus': toggleEmployee == false,'input-error': (messageFullName != '')}">
                 <div class="selected-option">
                   <input
@@ -188,7 +189,7 @@
                 <td style="border-left: none">
                   <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.descriptionDetail"/>
                 </td>
-                <td><input type="text" style="width: 100%" v-model="list.debtAccountDetail"/></td>
+                <td><input ref="focusDebt" type="text" :class="{'input-error': debtAccountError == true}" style="width: 100%" v-model="list.debtAccountDetail"/></td>
                 <td><input type="text" style="width: 100%" v-model="list.creditAccountDetail"/></td>
                 <td style="text-align: right">
                   <money style="width: 100%; text-align: right;" v-model="list.amountDetail" v-bind="money"/>
@@ -259,6 +260,7 @@
         :changeData="changeData"
         @hideCashPopupAndHideDialog="hideCashPopupAndHideDialog"
         @hideCashPopupAndValidate="hideCashPopupAndValidate"
+        @saveChangeData="onBtnSaveClick"
       />
   </div>
 </template>
@@ -269,7 +271,7 @@ import {VMoney, Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
 
-import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, MES_REQUIRED_ATTRIBUTE, STR_EMPTY_RECEIPTPAYMENT_CODE, STR_EMPTY_EMPLOYEEID, STR_EMPTY_OBJECT, STR_EMPTY_RECEIVER
+import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, MES_REQUIRED_ATTRIBUTE, STR_EMPTY_RECEIPTPAYMENT_CODE, STR_EMPTY_EMPLOYEEID, STR_EMPTY_OBJECT, STR_EMPTY_RECEIVER, STR_EMPTY_ACCOUNTINGDATE, STR_EMPTY_REFDATE, REF_CODE, RECEIPTPAYMENT_CODE_EXIST, STR_EMPTY_DEBTACCOUNT
 } from "../../../lang/validation.js";
 
 import {STR_CASHDIALOG, DELETEALLROW, STR_REASONNAME, CHANGEDATA, EMPTYDATA, EXISTDATA, FORMMODE_EDIT, FORMMODE_ADD} from "../../../lang/masterDetail.js"
@@ -297,10 +299,15 @@ export default {
       toggleObject: true,
       toggleEmployee: true,
       employees: [],
+      //----------message lỗi
       messageCode: '',
       messageFullName: '',
       messageObject: '',
       messageReceiver: '',
+      messageAccountingDate: '',
+      messageRefDate: '',
+      //---------------------
+      debtAccountError: false,
       changeData: '',
       detectChangeCash: {},
       detectChangeDetail: '',
@@ -463,17 +470,39 @@ export default {
       if (this.messageCode != '') {
         this.messageObject = '';
         this.messageReceiver = '';
+        this.messageAccountingDate = '';
+        this.messageRefDate= '';
         this.messageFullName = '';     
         this.$refs.focusRefCode.focus();
       }else if(this.messageObject != ''){
         this.messageReceiver = '';
+        this.messageAccountingDate = '';
+        this.messageRefDate= '';
         this.messageFullName = '';
         this.$refs.focusInputObject.focus();
       }else if(this.messageReceiver != ''){
+        this.messageAccountingDate = '';
+        this.messageRefDate= '';
         this.messageFullName = '';
         this.$refs.focusReceiver.focus();
+      }else if(this.messageAccountingDate != ''){
+        this.messageRefDate= '';
+        this.messageFullName = '';
+        this.$refs.accountingDate.$refs.reference.$refs.accountingDate.focus();        
+      }else if(this.messageRefDate != ''){
+        this.messageFullName = '';
+        this.$refs.refDate.$refs.reference.$refs.refDate.focus();
       }else if(this.messageFullName != ''){
         this.$refs.focusInputEmployee.focus();
+      }
+
+      if(this.debtAccountError){
+        this.$refs.focusDebt[this.rowIndex - 1].focus();
+        this.debtAccountError = false;
+      }
+      if(this.message.includes(REF_CODE)){
+        this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
+        this.$refs.focusRefCode.focus();
       }
     },
     //#region Cập nhật DatePicker
@@ -483,9 +512,19 @@ export default {
      */
     getAccountingDate(value){
       this.cash.accountingDate = value;
+      if (value == '') {
+        this.messageAccountingDate = MES_REQUIRED_ATTRIBUTE;
+      }else{
+        this.messageAccountingDate = "";
+      }
     },
     getRefDate(value){
       this.cash.refDate = value;
+      if (value == '') {
+        this.messageRefDate = MES_REQUIRED_ATTRIBUTE;
+      }else{
+        this.messageRefDate = "";
+      }
     },
     //#endregion
     
@@ -522,7 +561,7 @@ export default {
         }, 100)
       }
       
-      //TODO: lỗi xóa hết dòng tổng tiền thành NaN ----- Thêm Validate Ngày ko được bỏ trống  ---- Lỗi lên xuống autocomplete
+      //TODO: lỗi xóa hết dòng tổng tiền thành NaN -----  Chưa focus vào Mã khi trùng ---- validate Tài khoản nợ
     },
     // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
@@ -534,7 +573,6 @@ export default {
           this.$refs.focusDescriptionDetail[0].focus();
         }, 100)
         this.rowIndex = this.listDetail.length;
-        // 
       }else{
         this.rowIndex += 1;
         this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
@@ -555,7 +593,7 @@ export default {
       });
     },
     
-    //#region Đóng cashdialog
+    //#region Đóng Cashdialog
     /**
      * Đóng CashDialog và ko load lại data
      * CreatedBy: NXCHIEN 06/06/2021
@@ -616,6 +654,12 @@ export default {
       if (this.cash.receiver.trim() == "") {
         this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
       }         
+      if (this.cash.accountingDate.trim() == "") {
+        this.messageAccountingDate = MES_REQUIRED_ATTRIBUTE;
+      }         
+      if (this.cash.refDate.trim() == "") {
+        this.messageRefDate = MES_REQUIRED_ATTRIBUTE;
+      }         
       if (this.cash.employeeId == "") {
         this.messageFullName = MES_REQUIRED_ATTRIBUTE;
       }    
@@ -640,10 +684,30 @@ export default {
         this.changeData = EMPTYDATA;
         return true;
       }
+      if (this.cash.accountingDate.trim() == "") {    
+        this.message = STR_EMPTY_ACCOUNTINGDATE;
+        this.changeData = EMPTYDATA;
+        return true;
+      }
+      if (this.cash.refDate.trim() == "") {    
+        this.message = STR_EMPTY_REFDATE;
+        this.changeData = EMPTYDATA;
+        return true;
+      }
       if (this.cash.employeeId == "") {
         this.message = STR_EMPTY_EMPLOYEEID;
         this.changeData = EMPTYDATA;
         return true;
+      }
+      for (let i = 0; i < this.listDetail.length; i++) {
+        if (this.listDetail[i].debtAccountDetail == '') {
+          this.debtAccountError = true;
+          this.message = STR_EMPTY_DEBTACCOUNT;
+          this.changeData = EMPTYDATA;
+          this.listDetail.length = i + 1;
+          this.rowIndex = i + 1; 
+          return true;
+        }
       }
       return false;
     },
@@ -686,6 +750,7 @@ export default {
                 this.message = res.data.data;
                 // show popup
                 this.valuePopup = true;
+                this.changeData = EXISTDATA;
                 return Promise.reject();
               }
               return Promise.resolve();
@@ -896,21 +961,24 @@ export default {
   height: 70px;
   display: flex;
 }
+.row__input__first{
+  width: 75%;
+  display: flex;
+}
 .object {
-  width: 34%;
+  width: 44%;
 }
 .receive {
-  padding: 0 11px 0 12px;
-  width: 44%;
-  margin-right: 11px;
+  padding: 0 0px 0 12px;
+  width: 55%;
 }
 .date__form {
-  width: 22%;
+  width: 23%;
   padding: 0 0 12px 16px;
   border-left: 1px solid #d4d7dc;
 }
 .address {
-  width: 79%;
+  width: 75%;
 }
 .employee {
   width: 34%;
@@ -925,7 +993,7 @@ export default {
   font-size: 12px;
 }
 .receive .input--size {
-  width: calc(100% + 5px);
+  width: calc(97% + 5px);
   /* width: 100%; */
   margin-top: 4px;
 }
@@ -1228,6 +1296,9 @@ table tfoot th {
 .span{
   color: red; 
   font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .tranform {
   transform: rotate(180deg);

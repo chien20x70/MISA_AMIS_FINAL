@@ -23,12 +23,7 @@
               <div class="icon icon-16 arrow-up--black" style="opacity: 0.5"></div>
             </div>
           </button>
-          <button class="btn-btn filter" style="border: 2px solid; margin-left: 10px;" @click="onBtnFilterClick">
-            <div class="flex btn-btn-text">
-              <span class="pr-4">Lọc</span>
-              <div class="icon icon-16 arrow-up--black"></div>
-            </div>
-          </button>
+          <CashFilter />
         </div>
         <div class="item-right">
           <input
@@ -207,7 +202,7 @@
     <div class="fa-3x" v-if="isBusy">
       <i class="fas fa-spinner fa-spin" style="color: green"></i>
     </div>
-    <CashFilter v-if="toggleFilter"/>
+    
   </div>
 </template>
 <script>
@@ -249,7 +244,6 @@ export default {
 
       //TODO: Validate --------------- and ChangeData.
       //#region data cho CashDialog
-      toggleFilter: false,
       totalMoney: 0,
       formMode: "",
       message: '',
@@ -534,14 +528,6 @@ export default {
       this.valueSelect = !this.valueSelect;
     },
     //#endregion
-
-    /**
-     * Đóng mở CashFilter
-     */
-    onBtnFilterClick(){
-      this.toggleFilter = !this.toggleFilter;
-    },
-
   },
   //#endregion
   

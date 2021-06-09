@@ -5,6 +5,9 @@ export const STR_EMPTY_DEPARTMENT = "Vui lòng chọn Đơn vị!";
 export const STR_EMPTY_OBJECT = "Đối tượng không được để trống.";
 export const STR_EMPTY_EMPLOYEEID = "Mã định danh nhân viên không được để trống.";
 export const STR_EMPTY_RECEIVER = "Người nhận không được để trống.";
+export const STR_EMPTY_ACCOUNTINGDATE = "Ngày hạch toán không được để trống.";
+export const STR_EMPTY_REFDATE= "Ngày phiếu chi không được để trống.";
+export const STR_EMPTY_DEBTACCOUNT= "Tài khoản nợ không được để trống.";
 export const STR_EMPTY_EMAIL = "Vui lòng nhập Email!";
 export const STR_ERROR_EMAIL = "Email Không đúng định dạng!";
 export const STR_ERROR_PHONE = "Số điện thoại phải là số!";
@@ -20,5 +23,6 @@ export const EMPLOYEE_EMAIL_EXIST = "Email đã tồn tại";
 export const EMPLOYEE_IDENTIFY_EXIST = "Số chứng minh thư đã tồn tại";
 export const EMPLOYEE_PHONE_EXIST = "Số điện thoại đã tồn tại";
 export const EMPLOYEE_CODE = "Mã nhân viên";
+export const REF_CODE = "Số chứng từ đã";
 export const RECEIPTPAYMENT_CODE_EXIST = "Số chứng từ đã tồn tại";
 

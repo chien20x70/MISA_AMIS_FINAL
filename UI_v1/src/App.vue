@@ -120,25 +120,12 @@ export default {
     color: #fff !important;
 }
 
-.vdpCell.selectable .vdpCellContent:hover {
-  background-color: #2ca01c !important;
-  color: white !important;
-  font-weight: 600 !important;
-}
-.vdpCell.selected .vdpCellContent{
-  background-color: #2ca01c !important;
-  color: white !important;
-  font-weight: 600 !important;
-}
 .ui.search.dropdown>.text{
   text-overflow: ellipsis;
   white-space: nowrap;
   display: block;
   overflow: hidden;
 }
-/* .vdpCell.selected .vdpCellContent {
-    color: #fff;
-    background: #7485c2;
-} */
+
 /**-------------------------end-lib */
 </style>

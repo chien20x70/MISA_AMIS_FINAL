@@ -1,40 +1,41 @@
 <template>
   <date-pick
+    ref="reference"
     v-model="content"
     @input="handleInput"
     :displayFormat="displayFormat"
     :inputAttributes="{
       class: 'style-input-date-lib',
       placeholder: '__/__/____',
-      style: 'margin-top: 4px; width: 167px;',
+      style: `margin-top: 4px; ${(type == 'startDate' || type == 'endDate') ? 'width: 120px;' : 'width: 167px;'} ${content == '' ? 'border-color: red' : ''}`,
+      ref: `${type}`
     }"
     :weekdays="localeDatePicker.weekdays"
     :months="localeDatePicker.months"
   ></date-pick>
 </template>
 <script>
-
 import DatePick from "vue-date-pick";
 import "vue-date-pick/dist/vueDatePick.css";
 export default {
   name: "DatePicker",
-  props: ['value', 'accountingDate', 'refDate','dateOfIN', 'dateOfBirth'],
+  props: ['value', 'type'],
   components: {
     DatePick,
   },
   methods: {
     handleInput (value) {
       this.content = value;
-      if(this.accountingDate == 'accountingDate'){
+      if(this.type == 'accountingDate'){
         this.$emit('sendAccountingDate', this.content);
       } 
-      if (this.refDate == 'refDate') {
+      if (this.type == 'refDate') {
         this.$emit('sendRefDate', this.content);
       }
-      if (this.dateOfIN == 'dateOfIN') {
+      if (this.type == 'dateOfIN') {
         this.$emit('sendDateOfIN', this.content);
       }
-      if (this.dateOfBirth == 'dateOfBirth') {
+      if (this.type == 'dateOfBirth') {
         this.$emit('sendDateOfBirth', this.content);
       }
     }
@@ -75,7 +76,6 @@ export default {
   height: 32px;
   color: #000000;
   padding: 6px 10px;
-  border: 1px solid #babec5;
   font-family: NotoSans-Regular;
   outline: none;
 }
