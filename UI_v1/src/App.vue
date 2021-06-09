@@ -126,6 +126,24 @@ export default {
   display: block;
   overflow: hidden;
 }
+.vdpClearInput:before {
+    content: "" !important;
+    background: url("./assets/Sprites.5f05e81f.svg") no-repeat;
+    cursor: pointer; 
+    min-width: 30px;
+    min-height: 30px;
+    height: 30px !important;
+    width: 30px !important;
+    background-position: -128px -306px;
+    margin: -14px 0 0 -10px !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0% !important;
+}
+.vdpClearInput:hover:before {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
 
 /**-------------------------end-lib */
 </style>

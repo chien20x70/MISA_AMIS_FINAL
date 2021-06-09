@@ -1190,10 +1190,6 @@ table tfoot th {
 .arrow-dropdown {
   background-position: -552px -352px;
 }
-/* .tranform {
-  transform: rotate(180deg);
-  transition: transform 0.15s linear;
-} */
 .select-custom {
   position: absolute;
   overflow-y: auto;
@@ -1203,7 +1199,7 @@ table tfoot th {
   border: 1px solid #bbb;
 }
 .object .select-custom {
-  width: calc(55% + 13px);
+  width: calc(53% + 13px);
   top: 65px;
 }
 .employee .select-custom {

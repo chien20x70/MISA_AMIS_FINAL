@@ -31,31 +31,11 @@
         </div>
         <div class="reason--time">
           <span class="text">Từ ngày</span><br />
-          <!-- <date-pick
-            :displayFormat="STR_DISPLAY_FORMAT"
-            :inputAttributes="{
-              class: 'style-input-date-lib',
-              placeholder: STR_DISPLAY_FORMAT,
-              style: 'margin-top: 4px; width: 133px;',
-            }"
-            :weekdays="localeDatePicker.weekdays"
-            :months="localeDatePicker.months"
-          ></date-pick> -->
-          <DatePicker :type="'startDate'"/>
+          <DatePicker v-model="startDate" :type="'startDate'"/>
         </div>
         <div class="reason--time" style="padding-right: 0;">
           <span class="text">Đến ngày</span><br />
-          <!-- <date-pick
-            :displayFormat="STR_DISPLAY_FORMAT"
-            :inputAttributes="{
-              class: 'style-input-date-lib',
-              placeholder: STR_DISPLAY_FORMAT,
-              style: 'margin-top: 4px; width: 134px;',
-            }"
-            :weekdays="localeDatePicker.weekdays"
-            :months="localeDatePicker.months"
-          ></date-pick> -->
-          <DatePicker :type="'endDate'"/>
+          <DatePicker v-model="endDate" :type="'endDate'"/>
         </div>
       </div>
       <div class="btn-footer" style="margin-top: 20px">
@@ -66,36 +46,18 @@
   </div>
 </template>
 <script>
-// import DatePick from "vue-date-pick";
 import DatePicker from './DatePicker.vue'
 import { ModelSelect } from "vue-search-select";
 export default {
   components: {
-    // DatePick,
     ModelSelect,
     DatePicker
   },
   data() {
     return {
+      startDate: null,
+      endDate: null,
       toggleFilter: false,
-      STR_DISPLAY_FORMAT: "DD/MM/YYYY",
-      localeDatePicker: {
-        weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
-        months: [
-          "Tháng 1",
-          "Tháng 2",
-          "Tháng 3",
-          "Tháng 4",
-          "Tháng 5",
-          "Tháng 6",
-          "Tháng 7",
-          "Tháng 8",
-          "Tháng 9",
-          "Tháng 10",
-          "Tháng 11",
-          "Tháng 12",
-        ],
-      },
       options: [
         { value: "1", text: "Tùy chọn" },
         { value: "2", text: "Năm sau" },
@@ -108,11 +70,31 @@ export default {
   methods: {
     onBtnFilterClick() {
       this.toggleFilter = !this.toggleFilter;
+      this.endDate = this.getCurrentDate();
+      this.startDate = this.getFisrtDateOfYear();
+    },
+    getFisrtDateOfYear(){
+      let currentDate = new Date("2021/01/01");
+      var day = currentDate.getDate();
+      var month = currentDate.getMonth() + 1;
+      var year = currentDate.getFullYear();
+      day = day < 10 ? "0" + day : day;
+      month = month < 10 ? "0" + month : month;
+      return `${year}-${month}-${day}`;
+    },
+    getCurrentDate(){
+      let currentDate = new Date();
+      var day = currentDate.getDate();
+      var month = currentDate.getMonth() + 1;
+      var year = currentDate.getFullYear();
+      day = day < 10 ? "0" + day : day;
+      month = month < 10 ? "0" + month : month;
+      return `${year}-${month}-${day}`;
     },
   },
   created() {
     window.addEventListener("click", (e) => {
-      if (!this.$el.contains(e.target)) {
+      if (!this.$el.contains(e.target) && e.target.className != 'vdpClearInput') {
         this.toggleFilter = false;
       }
     });

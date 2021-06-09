@@ -41,7 +41,10 @@ export default {
     }
   },
   mounted() {
-    this.content = this.value;
+    clearTimeout(this.timeOut);
+    this.timeOut = setTimeout(() =>{
+      this.content = this.value;
+    }, 100)
   },
   data() {
     return {
