@@ -13,34 +13,35 @@
     <div class="filter__box" :class="{ visible: toggleFilter }">
       <div class="row-input">
         <span class="text">Lý do thu, chi</span><br />
-        <input type="text" style="width: 414px" />
+        <input type="text" style="width: 414px; cursor: not-allowed; background: rgb(224 224 224);" placeholder="Tất cả" readonly/>
       </div>
       <div class="row-input">
         <span class="text">Trạng thái ghi sổ</span><br />
-        <input type="text" style="width: 414px" />
+        <input type="text" style="width: 414px; cursor: not-allowed; background: rgb(224 224 224);" placeholder="Tất cả" readonly/>
       </div>
       <div class="btn-footer">
         <div class="reason">
           <span class="text">Thời gian</span><br />
-          <model-select
+          <model-select           
             v-model="options.text"
             :options="options"
+            :isDisabled="true"
             style="margin-top: 4px; border: 1px solid #babec5; height: 32px"
           >
           </model-select>
         </div>
         <div class="reason--time">
           <span class="text">Từ ngày</span><br />
-          <DatePicker v-model="startDate" :type="'startDate'"/>
+          <DatePicker v-if="toggleFilter == true" v-model="startDate" :type="'startDate'" @sendStartDate="getStartDate"/>
         </div>
         <div class="reason--time" style="padding-right: 0;">
           <span class="text">Đến ngày</span><br />
-          <DatePicker v-model="endDate" :type="'endDate'"/>
+          <DatePicker v-if="toggleFilter == true" v-model="endDate" :type="'endDate'" @sendEndDate="getEndDate"/>
         </div>
       </div>
       <div class="btn-footer" style="margin-top: 20px">
         <button class="btn-padding reset">Đặt lại</button>
-        <button class="btn-padding success">Lọc</button>
+        <button class="btn-padding success" @click="onBtnCashFilterClick">Lọc</button>
       </div>
     </div>
   </div>
@@ -55,6 +56,7 @@ export default {
   },
   data() {
     return {
+      contentSelect: null,
       startDate: null,
       endDate: null,
       toggleFilter: false,
@@ -91,6 +93,15 @@ export default {
       month = month < 10 ? "0" + month : month;
       return `${year}-${month}-${day}`;
     },
+    onBtnCashFilterClick(){
+      this.$emit("onBtnCashFilterClick", this.startDate, this.endDate);
+    },
+    getStartDate(value){
+      this.startDate = value;
+    },
+    getEndDate(value){
+      this.endDate = value;
+    },
   },
   created() {
     window.addEventListener("click", (e) => {
@@ -99,6 +110,14 @@ export default {
       }
     });
   },
+  mounted() {
+    this.options.text = this.options[4].value;
+  },
+  // computed:{
+  //   contentSelectAA(){
+
+  //   }
+  // }
 };
 </script>
 <style scoped>

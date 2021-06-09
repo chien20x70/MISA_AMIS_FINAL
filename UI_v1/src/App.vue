@@ -125,6 +125,7 @@ export default {
   white-space: nowrap;
   display: block;
   overflow: hidden;
+  width: 109px;
 }
 .vdpClearInput:before {
     content: "" !important;

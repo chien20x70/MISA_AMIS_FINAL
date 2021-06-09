@@ -23,7 +23,7 @@
               <div class="icon icon-16 arrow-up--black" style="opacity: 0.5"></div>
             </div>
           </button>
-          <CashFilter />
+          <CashFilter @onBtnCashFilterClick="onBtnCashFilterClick"/>
         </div>
         <div class="item-right">
           <input
@@ -247,6 +247,8 @@ export default {
       totalMoney: 0,
       formMode: "",
       message: '',
+      startDate: "",
+      endDate: "",
       //#endregion
     };
   },
@@ -436,6 +438,11 @@ export default {
       }, 500);
     },
 
+    onBtnCashFilterClick(startDate, endDate){
+      this.startDate = startDate;
+      this.endDate = endDate;
+      this.filterData();
+    },
     /**
       * Lọc data bằng các tham số truyền vào
       * CreatedBy: NXCHIEN 06/06/2021

@@ -38,13 +38,16 @@ export default {
       if (this.type == 'dateOfBirth') {
         this.$emit('sendDateOfBirth', this.content);
       }
+      if (this.type == 'startDate') {
+        this.$emit('sendStartDate', this.content);
+      }
+      if (this.type == 'endDate') {
+        this.$emit('sendEndDate', this.content);
+      }
     }
   },
   mounted() {
-    clearTimeout(this.timeOut);
-    this.timeOut = setTimeout(() =>{
-      this.content = this.value;
-    }, 100)
+    this.content = this.value;
   },
   data() {
     return {
