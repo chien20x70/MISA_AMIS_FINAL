@@ -194,6 +194,24 @@ namespace MISA.AMIS.API.Controllers
             return Ok(_serviceResult);
         }
 
+        [HttpGet("FilteringDate")]
+        public IActionResult GetMISAEntitiesByDateNotNull([FromQuery] int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                if (filter == null)
+                {
+                    filter = "";
+                }
+                _serviceResult = _baseService.GetMISAEntitiesByDateNotNull(pageSize, pageIndex, filter, startDate, endDate);
+            }
+            catch (Exception ex)
+            {
+                OnServiceResultException(ex);
+            }
+            return Ok(_serviceResult);
+        }
+
         /// <summary>
         /// Bắt exception ServiceResult
         /// </summary>

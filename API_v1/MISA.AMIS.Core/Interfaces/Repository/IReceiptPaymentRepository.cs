@@ -13,5 +13,7 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         public string GetReceiptPaymentCodeMax();
 
         public bool CheckReceiptPaymentAttributeExist(string attribute, Guid? receiptPaymentId, HTTPType http, string attributeValue);
+
+
     }
 }

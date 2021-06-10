@@ -124,6 +124,48 @@ namespace MISA.AMIS.Infrastructure.Repository
         /// <param name="filter">chuỗi để lọc</param>
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (09/05/2021)
+        public Paging<MISAEntity> GetMISAEntitiesByDateNotNull(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
+        {
+            var res = new Paging<MISAEntity>()
+            {
+                Page = pageIndex,
+                PageSize = pageSize
+            };
+            using (dbConnection = new MySqlConnection(connectionDb))
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@filter", filter);
+                parameters.Add("@startDate", startDate);
+                parameters.Add("@endDate", endDate);
+                // Tính tổng nhân viên.
+                int? totalRecord = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotal{tableName}sByDateNotNull", parameters, commandType: CommandType.StoredProcedure);
+                if (totalRecord == null)
+                {
+                    return res;
+                }
+                res.TotalRecord = totalRecord;
+                // Lấy danh sách nhân viên.
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@pageIndex", pageIndex);
+                dynamicParameters.Add("@pageSize", pageSize);
+                dynamicParameters.Add("@filter", filter);
+                dynamicParameters.Add("@startDate", startDate);
+                dynamicParameters.Add("@endDate", endDate);
+                if (typeof(MISAEntity).Name.Equals("ReceiptPayment"))
+                {
+                    int? totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoneyByDateNotNull", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    if (totalMoney == null)
+                    {
+                        res.TotalMoney = 0;
+                        return res;
+                    }
+                    res.TotalMoney = totalMoney;
+                }
+                var entities = dbConnection.Query<MISAEntity>($"Proc_Get{tableName}FilterByDateNotNull", dynamicParameters, commandType: CommandType.StoredProcedure);
+                res.Data = entities;
+                return res;
+            }
+        }
         public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter)
         {
             var res = new Paging<MISAEntity>()
@@ -156,13 +198,13 @@ namespace MISA.AMIS.Infrastructure.Repository
                         return res;
                     }
                     res.TotalMoney = totalMoney;
-                }                
+                }
                 var entities = dbConnection.Query<MISAEntity>($"Proc_Get{tableName}Filter", dynamicParameters, commandType: CommandType.StoredProcedure);
                 res.Data = entities;
                 return res;
             }
         }
         #endregion
-    } 
+    }
     #endregion
 }

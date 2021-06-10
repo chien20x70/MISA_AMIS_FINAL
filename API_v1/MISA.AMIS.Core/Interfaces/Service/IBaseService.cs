@@ -55,5 +55,6 @@ namespace MISA.AMIS.Core.Interfaces.Service
         /// <returns>Danh sách nhân viên</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
         public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter);
+        public ServiceResult GetMISAEntitiesByDateNotNull(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate);
     }
 }

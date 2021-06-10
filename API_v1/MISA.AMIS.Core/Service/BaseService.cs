@@ -328,6 +328,33 @@ namespace MISA.AMIS.Core.Service
 
             return _serviceResult;
         }
+        public ServiceResult GetMISAEntitiesByDateNotNull(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
+        {
+            // Nếu nhập pageIndex <= 0 hoặc pageSize <= 0 thì trả về lỗi ServiceResult.
+            if (pageIndex <= 0 || pageSize <= 0)
+            {
+                return new ServiceResult()
+                {
+                    Status = StatusCode.Error,
+                    Code = MISACode.BadRequest,
+                    Data = Properties.Resources.Msg_Param_Error,
+                };
+            }
+
+            // Lấy ra danh sách đối tượng
+            var entities = _baseRepository.GetMISAEntitiesByDateNotNull(pageSize, pageIndex, filter, startDate, endDate);
+            // Kiểm tra đối tượng ko null thì trả về Success còn null thì Erorr (hoặc Success nhưng NOContent).
+            if (entities.Data.Any() && entities.TotalRecord != null)
+            {
+                OnStateServiceResult(entities, StatusCode.Success, MISACode.Success);
+            }
+            else
+            {
+                OnStateServiceResult("", StatusCode.Error, MISACode.NoContent);
+            }
+
+            return _serviceResult;
+        }
         #endregion
 
         public void OnStateServiceResult(object data, StatusCode status, MISACode code)
