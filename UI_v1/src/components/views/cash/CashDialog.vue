@@ -31,7 +31,7 @@
                       @keydown.up="up('object')"
                       @keydown.down="down('object')"
                       @keydown.enter="enter('object')"
-                      v-model="showObject"
+                      v-model="saveValueObject"
                       @focus="focusInputKey('object')"
                       @input="onChangeInputObject"
                     />
@@ -52,7 +52,7 @@
                     <div class="text phone--size text-hidden">Số điện thoại</div>
                   </div>
                   <div class="department-content" ref="positionDepartment" 
-                    v-for="(employee, index) in employees"
+                    v-for="(employee, index) in fakeObjects"
                     :key="index"
                     @click="onBtnEmployeeClick(employee ,index, 'object')"
                     :class="{ color: currentIndex == index}"
@@ -113,7 +113,7 @@
                     @keydown.up="up('employee')"
                     @keydown.down="down('employee')"
                     @keydown.enter="enter('employee')"
-                    v-model="showEmployeeName"
+                    v-model="saveValueEmployeeName"
                     @focus="focusInputKey('employee')"
                     @input="onChangeInputEmployee"
                   />
@@ -134,7 +134,7 @@
                   <div class="text phone--size text-hidden">Số điện thoại</div>
                 </div>
                 <div class="department-content" ref="positionDepartment" 
-                  v-for="(employee, index) in employees"
+                  v-for="(employee, index) in fakeEmployees"
                   :key="index"
                   @click="onBtnEmployeeClick(employee ,index, 'employee')"
                   :class="{ color: currentIndexE == index}"
@@ -301,7 +301,8 @@ export default {
       toggleEmployee: true,         // Hiển thị nhân viên
       employees: [],                // mảng nhân viên dùng chung cho cả đối tượng.
       //#endregion
-      
+      fakeObjects: [],
+      fakeEmployees: [],
       //#region message lỗi Validate
       messageCode: '',
       messageFullName: '',
@@ -333,14 +334,14 @@ export default {
       },
     };
   },
-  created(){
-    window.addEventListener("click", (e) => {
-      if (e.target.className != 'icon icon-30 arrow-dropdown tranform' && e.target.className != 'icon icon-30 arrow-dropdown') {
-        this.toggleObject = true;
-        this.toggleEmployee = true;
-      }
-    });
-  },
+  // created(){
+  //   window.addEventListener("click", (e) => {
+  //     if (e.target.className != 'icon icon-30 arrow-dropdown tranform' && e.target.className != 'icon icon-30 arrow-dropdown') {
+  //       this.toggleObject = true;
+  //       this.toggleEmployee = true;
+  //     }
+  //   });
+  // },
   
   methods: {
     /**
@@ -402,17 +403,21 @@ export default {
      * CreatedBY:NXCHIEN 09/06/2021
      */
     down(value) {
+      
       if (value === 'object') {
         if (this.toggleObject) {
+          // this.fakeObjects = [...this.employees];
           this.toggleObject = false;
+          this.currentIndex = 0;
         }
-        if (this.currentIndex < this.employees.length - 1) this.currentIndex++;
+        if (this.currentIndex < this.fakeEmployees.length - 1) this.currentIndex++;
+        
       }
       if (value === 'employee') {
         if (this.toggleEmployee) {
           this.toggleEmployee = false;
         }
-        if (this.currentIndexE < this.employees.length - 1) this.currentIndexE++;
+        if (this.currentIndexE < this.fakeEmployees.length - 1) this.currentIndexE++;
       }
     },
 
@@ -422,17 +427,17 @@ export default {
      */
     enter(value) {
       if (value === 'object') {
-        this.saveValueObject = this.employees[this.currentIndex].fullName;
+        this.saveValueObject = this.fakeEmployees[this.currentIndex].fullName;
         this.cash.receiver = this.saveValueObject;
-        this.cash.organizationUnitAddress = this.employees[this.currentIndex].address;
+        this.cash.organizationUnitAddress = this.fakeEmployees[this.currentIndex].address;
         this.cash.organizationUnitName = this.saveValueObject;
         this.toggleObject = true;
         this.messageObject = "";
         this.modeObject = false;
       }
       if (value === 'employee') {
-        this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
-        this.cash.employeeId = this.employees[this.currentIndex].employeeId;
+        this.saveValueEmployeeName = this.fakeEmployees[this.currentIndex].fullName;
+        this.cash.employeeId = this.fakeEmployees[this.currentIndex].employeeId;
         this.cash.fullName = this.saveValueEmployeeName;
         this.toggleEmployee = true;
         this.messageFullName = "";
@@ -488,6 +493,16 @@ export default {
      */
     onChangeInputObject(e){
       let val = e.target.value;
+      this.toggleObject = false;
+      this.cash.organizationUnitName = val;
+      // this.fakeObjects = [...this.employees];
+      this.currentIndex = 0;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.fakeObjects = this.employees.filter(item => {
+        return item.fullName.toLowerCase().indexOf(this.saveValueObject.toLowerCase()) !== -1;
+        })
+      }, 300);
       if (val !== "") {
         this.messageObject = "";       
       } else if (val == "") {
@@ -501,6 +516,14 @@ export default {
      */
     onChangeInputEmployee(e){
       let val = e.target.value;
+      this.toggleEmployee = false;
+      this.cash.fullName = val;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.fakeEmployees = this.employees.filter(item => {
+        return item.fullName.toLowerCase().indexOf(this.saveValueEmployeeName.toLowerCase()) !== -1;
+        })
+      }, 300);     
       if (val !== "") {
         this.messageFullName = "";       
       } else if (val == "") {
@@ -871,30 +894,6 @@ export default {
       }
       return total;    
     },
-    // Giá trị hiển thị Object
-    showObject:{
-      get(){
-        if(this.modeObject){
-          return this.cash.organizationUnitName;
-        }
-        return this.saveValueObject;
-      },
-      set(val) {
-        this.value = val;
-      },
-    },
-    // Giá trị hiên thị nhân viên
-    showEmployeeName: {
-      get(){
-        if(this.modeEmployee){
-          return this.cash.fullName;
-        }
-        return this.saveValueEmployeeName;
-      },
-      set(val) {
-        this.value = val;
-      },
-    },
   },
 
   mounted() {
@@ -902,11 +901,15 @@ export default {
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);     // Khởi tạo giá trị listDetail
     this.rowIndex = this.listDetail.length;                           // Khởi tạo rowIndex
     this.valueRefCode = this.cash.receiptPaymentCode;                 // Khởi tạo giá trị Phiếu chi góc trái trên màn hình
-
+    
+    this.saveValueObject = this.cash.organizationUnitName;
+    this.saveValueEmployeeName = this.cash.fullName;
     this.detectChangeCash = {...this.cash};                           // Sao chép object để so sánh
     this.detectChangeDetail = this.cash.receiptPaymentDetail;         // sao chép mảng để so sánh
     this.axios.get(`/Employees`).then((response) => {                 // Khởi tạo mảng nhân viên
       this.employees = response.data.data;
+      this.fakeEmployees = [...this.employees]
+      this.fakeObjects = [...this.employees]
     }).catch(() => {});
   },
 };
