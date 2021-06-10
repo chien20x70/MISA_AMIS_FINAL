@@ -9,7 +9,6 @@
       placeholder: '__/__/____',
       style: `margin-top: 4px; ${(type == 'startDate' || type == 'endDate') ? 'width: 120px;' : 'width: 167px;'} ${content == '' ? 'border-color: red' : ''}`,
       ref: `${type}`,
-      readonly: true
     }"
     :weekdays="localeDatePicker.weekdays"
     :months="localeDatePicker.months"

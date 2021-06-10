@@ -17,6 +17,9 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import 'vue-search-select/dist/VueSearchSelect.css'
 import money from 'v-money'
+const VueInputMask = require('vue-inputmask').default
+ 
+Vue.use(VueInputMask)
  
 // register directive v-money and component <money>
 Vue.use(money, {precision: 4})
