@@ -80,7 +80,7 @@
                       type="text"
                       ref="focusDepartment"
                       class="input-select"
-                      :value="showValueDepartment"
+                      v-model="saveValueDepartment"
                       @input="onChangeInputDepartment"
                       @keydown.up="up"
                       @keydown.down="down"
@@ -110,9 +110,8 @@
                   <div
                     class="department-content"
                     ref="positionDepartment"
-                    v-for="(department, index) in departments"
+                    v-for="(department, index) in fakeDepartments"
                     :key="index"
-                    :value="department.departmentId"
                     @click="onBtnDepartmentClick(department, index)"
                     :class="{ color: currentIndex == index }"
                   >
@@ -376,33 +375,34 @@ export default {
       messageDepartment: "",    // thông báo lỗi nhập liệu
       messagePhone: "",
       dateCheck: false,
+      fakeDepartments: [],
     };
   },
   //#endregion
   computed: {
-    /**
-     * Theo dõi giá trị departmentId
-     * CreatedBy: NXCHIEN 17/05/2021
-     */
-    showValueDepartment: {
-      get() {
-        for (let index = 0; index < this.departments.length; index++) {
-          if (
-            this.saveValueDepartment == this.departments[index].departmentId
-          ) {
-            return this.departments[index].departmentName;
-          } else if (
-            this.employee.departmentId == this.departments[index].departmentId
-          ) {
-            return this.departments[index].departmentName;
-          }
-        }
-        return "";
-      },
-      set(value) {
-        this.employee.departmentId = value;
-      },
-    },
+  //   /**
+  //    * Theo dõi giá trị departmentId
+  //    * CreatedBy: NXCHIEN 17/05/2021
+  //    */
+  //   showValueDepartment: {
+  //     get() {
+  //       for (let index = 0; index < this.departments.length; index++) {
+  //         if (
+  //           this.saveValueDepartment == this.departments[index].departmentId
+  //         ) {
+  //           return this.departments[index].departmentName;
+  //         } else if (
+  //           this.employee.departmentId == this.departments[index].departmentId
+  //         ) {
+  //           return this.departments[index].departmentName;
+  //         }
+  //       }
+  //       return "";
+  //     },
+  //     set(value) {
+  //       this.employee.departmentId = value;
+  //     },
+  //   },
     keymap() {
       return {
         esc: this.onBtnCloseClick,
@@ -491,14 +491,20 @@ export default {
     //Kiểm tra thay đổi Giá trị input
     onChangeInputDepartment(e) {
       let val = e.target.value;
+      this.showDepartment = false;
+      this.employee.departmentName = val;
+      this.currentIndex = 0;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
-        if (val !== "") {
-          this.messageDepartment = "";
-        } else if (val == "") {
-          this.messageDepartment = MES_REQUIRED_ATTRIBUTE;
-        }
-      }, 500);
+        this.fakeDepartments = this.departments.filter(item => {
+        return item.departmentName.toLowerCase().indexOf(this.saveValueDepartment.toLowerCase()) !== -1;
+        })
+      }, 300);
+      if (val !== "") {
+        this.messageDepartment = "";
+      } else if (val == "") {
+        this.messageDepartment = MES_REQUIRED_ATTRIBUTE;
+      }
     },
 
     onChangeInputPhone(e){
@@ -530,7 +536,7 @@ export default {
         } else {
           this.messageEmail = STR_ERROR_EMAIL;
         }
-        }, 500);
+      }, 500);
     },
     //#endregion
     /**
@@ -548,6 +554,7 @@ export default {
     down() {
       if (this.showDepartment) {
         this.showDepartment = false;
+        this.currentIndex = 0;
       }
       if (this.currentIndex < this.departments.length - 1) this.currentIndex++;
     },
@@ -557,16 +564,14 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter() {
-      this.saveValueDepartment = this.departments[
+      this.saveValueDepartment = this.fakeDepartments[
         this.currentIndex
-      ].departmentId;
-      this.employee.departmentId = this.departments[
+      ].departmentName;
+      this.employee.departmentId = this.fakeDepartments[
         this.currentIndex
       ].departmentId;
       this.showDepartment = true;
-      if (this.saveValueDepartment != null) {
-        this.messageDepartment = "";
-      }
+      this.messageDepartment = "";
     },
 
     /**
@@ -777,10 +782,10 @@ export default {
      * CreatedBy: NXCHIEN 17/05/2021
      */
     onBtnDepartmentClick(department, index) {
-      // Lưu giá trị ID lấy được
-      this.saveValueDepartment = department.departmentId;
       // Gán ID phòng ban của employee = id lấy được để theo dõi giá trị và bind lên form
       this.employee.departmentId = department.departmentId;
+      this.saveValueDepartment = department.departmentName;
+      this.employee.departmentName = department.departmentName;
       // Ẩn combobox Department phòng ban
       this.showDepartment = true;
       // Ẩn border error
@@ -797,10 +802,12 @@ export default {
      *CreatedBy: NXCHIEN 17/05/2021
      */
     this.$refs.focusCode.focus();
+    this.saveValueDepartment = this.employee.departmentName;
     this.axios
       .get("/Departments")
       .then((res) => {
         this.departments = res.data.data;
+        this.fakeDepartments = [...this.departments];
       })
       .catch((res) => {
         console.log(res);

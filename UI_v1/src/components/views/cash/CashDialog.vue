@@ -293,8 +293,6 @@ export default {
       //#region Dữ liệu thao tác với Object Đối tượng (Autocomplete)
       saveValueEmployeeName: null,  // Lưu tên nhân viên
       saveValueObject: null,        // Tên đối tượng
-      modeObject: true,             // ModeObject để check giá trị hiển thị trong computed
-      modeEmployee: true,           // ModeEmployee để check giá trị hiển thị trong computed
       currentIndex: 0,              // Vị trí khi click up down Object
       currentIndexE: 0,             // Vị trí khi click up down Employee
       toggleObject: true,           // Hiển thị đối tượng
@@ -334,14 +332,17 @@ export default {
       },
     };
   },
-  // created(){
-  //   window.addEventListener("click", (e) => {
-  //     if (e.target.className != 'icon icon-30 arrow-dropdown tranform' && e.target.className != 'icon icon-30 arrow-dropdown') {
-  //       this.toggleObject = true;
-  //       this.toggleEmployee = true;
-  //     }
-  //   });
-  // },
+  created(){
+    window.addEventListener("click", (e) => {
+      if (e.target.className != 'icon icon-30 arrow-dropdown tranform' && e.target.className != 'icon icon-30 arrow-dropdown' && e.target.className != 'input-select') {
+        this.toggleObject = true;
+        this.toggleEmployee = true;
+      }
+      // if (e.target.className == 'style-input-date-lib' && this.$refs.accountingDate.$refs.reference.$refs.accountingDate != undefined) {
+      //   this.$refs.accountingDate.$refs.reference.$refs.accountingDate.select();
+      // }
+    });
+  },
   
   methods: {
     /**
@@ -406,16 +407,15 @@ export default {
       
       if (value === 'object') {
         if (this.toggleObject) {
-          // this.fakeObjects = [...this.employees];
           this.toggleObject = false;
           this.currentIndex = 0;
         }
-        if (this.currentIndex < this.fakeEmployees.length - 1) this.currentIndex++;
-        
+        if (this.currentIndex < this.fakeEmployees.length - 1) this.currentIndex++;      
       }
       if (value === 'employee') {
         if (this.toggleEmployee) {
           this.toggleEmployee = false;
+          this.currentIndexE = 0;
         }
         if (this.currentIndexE < this.fakeEmployees.length - 1) this.currentIndexE++;
       }
@@ -427,13 +427,12 @@ export default {
      */
     enter(value) {
       if (value === 'object') {
-        this.saveValueObject = this.fakeEmployees[this.currentIndex].fullName;
+        this.saveValueObject = this.fakeObjects[this.currentIndex].fullName;
         this.cash.receiver = this.saveValueObject;
-        this.cash.organizationUnitAddress = this.fakeEmployees[this.currentIndex].address;
+        this.cash.organizationUnitAddress = this.fakeObjects[this.currentIndex].address;
         this.cash.organizationUnitName = this.saveValueObject;
         this.toggleObject = true;
         this.messageObject = "";
-        this.modeObject = false;
       }
       if (value === 'employee') {
         this.saveValueEmployeeName = this.fakeEmployees[this.currentIndex].fullName;
@@ -441,9 +440,7 @@ export default {
         this.cash.fullName = this.saveValueEmployeeName;
         this.toggleEmployee = true;
         this.messageFullName = "";
-        this.modeEmployee = false;
       }
-      
     },
     
     /**
@@ -459,7 +456,6 @@ export default {
         this.toggleObject = true;
         this.messageObject = "";
         this.currentIndex = index;
-        this.modeObject = false;
       }
       if (value === 'employee') {
         this.saveValueEmployeeName = employee.fullName;
@@ -468,7 +464,6 @@ export default {
         this.toggleEmployee = true;
         this.messageFullName = "";
         this.currentIndexE = index;
-        this.modeEmployee = false;
       }
     },
 
@@ -495,7 +490,6 @@ export default {
       let val = e.target.value;
       this.toggleObject = false;
       this.cash.organizationUnitName = val;
-      // this.fakeObjects = [...this.employees];
       this.currentIndex = 0;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
