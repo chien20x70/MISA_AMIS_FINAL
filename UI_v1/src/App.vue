@@ -74,8 +74,9 @@ export default {
 }
 .vdpHeader{
   padding: 0 1em 5em !important;
-  margin: -1em -1em -3.5em !important;
-  background-color: white;
+  /* margin: -1em -1em -3.5em !important; */
+  margin: -10px -10px -34px -10px !important;
+  background-color: #eceef1 !important;
 }
 .vdpHeadCell {
     padding: .3em .5em .3em !important;

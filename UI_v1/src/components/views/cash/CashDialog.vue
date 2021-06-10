@@ -22,7 +22,7 @@
             <div class="row__input__first">
               <div class="object">
                 <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
-                <div class="department-box" :class="{'input-focus': toggleObject == false, 'input-error': (messageObject != '')}">
+                <div ref="RefObject" class="department-box" :class="{'input-focus': toggleObject == false, 'input-error': (messageObject != '')}">
                   <div class="selected-option">
                     <input
                       type="text"
@@ -577,7 +577,7 @@ export default {
         }, 100)
       }
       
-      //TODO: lỗi xóa hết dòng tổng tiền thành NaN ----- validate Tài khoản nợ đã xong nhưng boder đỏ hết
+      //TODO:  ----- validate Tài khoản nợ đã xong nhưng boder đỏ hết--------- Xử lý input mask -----------
     },
     // Thêm 1 dòng trong bảng listDetail
     onBtnAddRowClick(){
@@ -719,10 +719,10 @@ export default {
       for (let i = 0; i < this.listDetail.length; i++) {
         if (this.listDetail[i].debtAccountDetail == '') {
           this.debtAccountError = true;
-          this.message = STR_EMPTY_DEBTACCOUNT;
+          this.message = STR_EMPTY_DEBTACCOUNT; //TODO: fix bấm cất trong khi dòng 2 có data, dòng 1 ko có thì focus vào dòng 1 chứ ko được xóa
           this.changeData = EMPTYDATA;
-          this.listDetail.length = i + 1;
-          this.rowIndex = i + 1; 
+          this.listDetail.length = this.listDetail.length - 1;
+          this.rowIndex = this.listDetail.length - 1;
           return true;
         }
       }
@@ -898,6 +898,7 @@ export default {
   },
 
   mounted() {
+    this.$refs.focusReceiver.focus();
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);     // Khởi tạo giá trị listDetail
     this.rowIndex = this.listDetail.length;                           // Khởi tạo rowIndex
     this.valueRefCode = this.cash.receiptPaymentCode;                 // Khởi tạo giá trị Phiếu chi góc trái trên màn hình
@@ -907,19 +908,6 @@ export default {
     this.axios.get(`/Employees`).then((response) => {                 // Khởi tạo mảng nhân viên
       this.employees = response.data.data;
     }).catch(() => {});
-
-    // $(document).click(function(e) {
-    //   // if(!$(e.target).closest(".select-custom").length && e.target.className != 'icon-selected'){
-    //   //   // this.toggleObject = true;
-    //   //   // // alert('clicked inside');
-    //   //   $('.select-custom').removeClass('invisible');
-    //   // } 
-    //   if( e.target.className != 'icon'){
-    //     this.onBtnDropdownClick('employee');
-    //     this.onBtnDropdownClick('object');
-    //   }
-    //   console.log(e.target.className);
-    // });
   },
 };
 </script>

@@ -18,9 +18,10 @@
             <div class="icon icon-24 mi-arrow-check-all"></div>
           </div>
           <button class="btn-btn" style="border: 2px solid #b1b2b3">
-            <div class="flex btn-btn-text">
+            <div class="flex btn-btn-text tooltip tooltip--position-10-0">
               <span class="pr-4" style="color: #afafaf">Thực hiện hàng loạt</span>
               <div class="icon icon-16 arrow-up--black" style="opacity: 0.5"></div>
+              <span class="tooltip__text">Chức năng đang phát triển</span>
             </div>
           </button>
           <CashFilter @onBtnCashFilterClick="onBtnCashFilterClick"/>

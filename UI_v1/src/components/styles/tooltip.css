@@ -8,10 +8,12 @@
     background-color: rgb(129, 129, 129);
     color: #fff;
     text-align: center;
-    padding: 5px 10px;
+    padding: 10px 10px;
     border-radius: 6px;
     font-weight: 400;
     position: absolute;
+    font-size: 13px;
+    box-sizing: border-box;
 }
 
 .tooltip:hover .tooltip__text{
@@ -27,6 +29,11 @@
 .tooltip--position30-30 .tooltip__text{
     top: 30px;
     right: 30px;
+}
+.tooltip--position-10-0 .tooltip__text{
+    top: 27px;
+    right: -100px;
+    z-index: 100;
 }
 .tooltip--position25-10 .tooltip__text{
     top: 25px;

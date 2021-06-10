@@ -8,14 +8,15 @@
       class: 'style-input-date-lib',
       placeholder: '__/__/____',
       style: `margin-top: 4px; ${(type == 'startDate' || type == 'endDate') ? 'width: 120px;' : 'width: 167px;'} ${content == '' ? 'border-color: red' : ''}`,
-      ref: `${type}`
+      ref: `${type}`,
+      readonly: true
     }"
     :weekdays="localeDatePicker.weekdays"
     :months="localeDatePicker.months"
   ></date-pick>
 </template>
 <script>
-import DatePick from "vue-date-pick";
+import DatePick from "vue-date-pick/src/vueDatePick.vue";
 import "vue-date-pick/dist/vueDatePick.css";
 export default {
   name: "DatePicker",
