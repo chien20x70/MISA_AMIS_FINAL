@@ -60,8 +60,12 @@ export default {
         if (this.changeData == EMPTYDATA || this.changeData == EXISTDATA) {
           this.$emit("hideCashPopupAndValidate");
         }
-        
       },
+
+      /**
+       * Click Có để xóa dòng trong CashDialog hoặc Xóa dữ liệu trong CashList
+       * CreatedBy: NXCHIEN 09/06/2021
+       */
       onBtnYesClick(){
         if (this.formMode == STR_CASHDIALOG) {
             this.$emit("hideCashPopupAndRemoveRow");
@@ -72,9 +76,11 @@ export default {
             }).catch(() =>{})
         }
       },
+      // Click hủy để đóng CashPopup được gọi từ CashDialog
       onBtnCancelClick(){
         this.$emit("hideCashPopupNotLoad");
       },
+      // Click có để lưu data khi có sự thay đổi gọi từ CashDialog
       onBtnChangeDataClick(){
         this.$emit("saveChangeData");
       }

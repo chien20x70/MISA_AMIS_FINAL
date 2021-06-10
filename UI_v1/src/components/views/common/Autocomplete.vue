@@ -77,7 +77,7 @@ export default {
     },
 
     /**
-     * Click nút up cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
+     * Click nút down cập nhật vị trí currentIndex
      * CreatedBY:NXCHIEN 19/05/2021
      */
     down() {
@@ -101,6 +101,10 @@ export default {
       }
     },
     
+    /**
+     * Click chọn nhân viên trong dropdown
+     * CreatedBY: NXCHIEN 09/06/2021
+     */
     onBtnEmployeeClick(employee, index) { 
       this.saveValueEmployeeName = employee.fullName;
       this.saveValueEmployeeCode = employee.employeeCode;
@@ -112,24 +116,26 @@ export default {
       }
     },
   },
+
   created(){
+    // Phát hiện click outside element
     window.addEventListener("click", (e) => {
       if (!this.$el.contains(e.target)) {
         this.toggleAutocomplete = true;
       }
     });
   },
+  
   mounted() {
-    this.axios
-      .get(
-        `/Employees/Filter?pageSize=20&pageIndex=2&filter=`
-      )
+    // Lấy dữ liệu nhân viên
+    this.axios.get(`/Employees`)
       .then((response) => {
-        this.employees = response.data.data.data;
+        this.employees = response.data.data;
       })
       .catch(() => {});
   },
   computed:{
+    // Theo dõi giá trị hiển thị mã code nhân viên trên autocomplete
     showEmployeeName: {
       get(){
         if(this.flag){
@@ -140,7 +146,6 @@ export default {
       set(val) {
         this.value = val;
       },
-      
     },
     // employeeFilter(){
     //   function compare(a, b) {

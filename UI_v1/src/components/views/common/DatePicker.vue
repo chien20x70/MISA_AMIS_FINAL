@@ -24,6 +24,7 @@ export default {
     DatePick,
   },
   methods: {
+    // Bindding dữ liệu, cập nhật khi có sự thay đổi
     handleInput (value) {
       this.content = value;
       if(this.type == 'accountingDate'){
@@ -46,6 +47,7 @@ export default {
       }
     }
   },
+  
   mounted() {
     this.content = this.value;
   },
