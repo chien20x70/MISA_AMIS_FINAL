@@ -18,6 +18,11 @@ namespace MISA.AMIS.Core.Service
             _receiptPaymentRepository = receiptPaymentRepository;
         }
 
+        /// <summary>
+        /// Lấy mã code lớn nhất trong DB
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public ServiceResult GetReceiptPaymentCodeMax()
         {
             string codeMax = _receiptPaymentRepository.GetReceiptPaymentCodeMax();
@@ -33,7 +38,6 @@ namespace MISA.AMIS.Core.Service
                     Data = Properties.Resources.Default_Value_EmployeeCode,
                 };
             }
-
             // Tách chữ và số ra hai mảng
             for (int i = 0; i < codeMax.Length; i++)
             {
@@ -46,7 +50,6 @@ namespace MISA.AMIS.Core.Service
                     keyChar += codeMax[i];
                 }
             }
-
             // Tăng code lên 1 đơn vị
             // NV-00001         valueCode = 2   l = 5-1=4   result = NV-00002
             // NV-09             valueCode = 10   l =2-2=0   result = NV-10
@@ -61,9 +64,7 @@ namespace MISA.AMIS.Core.Service
                     result += "0";
                 }
             }
-
             result += valueCode.ToString();
-
             return new ServiceResult()
             {
                 Status = StatusCode.Success,
@@ -72,6 +73,12 @@ namespace MISA.AMIS.Core.Service
             }; ;
         }
 
+        /// <summary>
+        /// Nhân bản đối tượng 
+        /// </summary>
+        /// <param name="id">Mã định danh đối tượng cần nhân bản</param>
+        /// <returns>Đối tượng chứa mã Code lớn nhất trong DB</returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public ServiceResult GetDuplicateReceiptPayment(Guid id)
         {
             var receiptPayment = _receiptPaymentRepository.GetById(id);

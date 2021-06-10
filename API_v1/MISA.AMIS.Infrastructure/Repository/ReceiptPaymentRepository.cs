@@ -20,6 +20,11 @@ namespace MISA.AMIS.Infrastructure.Repository
 
         }
 
+        /// <summary>
+        /// Lấy mã code lớn nhất trong DB
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public string GetReceiptPaymentCodeMax()
         {
             using (dbConnection = new MySqlConnection(connectionDb))
@@ -29,6 +34,16 @@ namespace MISA.AMIS.Infrastructure.Repository
                 return employeeCode;
             }
         }
+
+        /// <summary>
+        /// Kiểm tra trùng thuộc tính đối tượng
+        /// </summary>
+        /// <param name="attribute">thuộc tính cần check</param>
+        /// <param name="receiptPaymentId">Mã định danh đối tượng</param>
+        /// <param name="http">Phương thức gửi lên server</param>
+        /// <param name="attributeValue">Giá trị</param>
+        /// <returns></returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public bool CheckReceiptPaymentAttributeExist(string attribute, Guid? receiptPaymentId, HTTPType http, string attributeValue)
         {
             using (dbConnection = new MySqlConnection(connectionDb))

@@ -194,6 +194,15 @@ namespace MISA.AMIS.API.Controllers
             return Ok(_serviceResult);
         }
 
+        /// <summary>
+        /// Lọc đối tượng theo ngày
+        /// </summary>
+        /// <param name="pageSize">Số đối tượng / trang</param>
+        /// <param name="pageIndex">Trang số bao nhiêu</param>
+        /// <param name="filter">Chuỗi để lọc</param>
+        /// <param name="startDate">Ngày bắt đầu</param>
+        /// <param name="endDate">Ngày kết thúc</param>
+        /// <returns></returns>
         [HttpGet("FilteringDate")]
         public IActionResult GetMISAEntitiesByDateNotNull([FromQuery] int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
         {

@@ -9,10 +9,19 @@ namespace MISA.AMIS.Core.Interfaces.Service
 {
     public interface IReceiptPaymentService: IBaseService<ReceiptPayment>
     {
+        /// <summary>
+        /// Lấy mã code lớn nhất trong DB
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public ServiceResult GetReceiptPaymentCodeMax();
 
+        /// <summary>
+        /// Nhân bản đối tượng 
+        /// </summary>
+        /// <param name="id">Mã định danh đối tượng cần nhân bản</param>
+        /// <returns>Đối tượng chứa mã Code lớn nhất trong DB</returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public ServiceResult GetDuplicateReceiptPayment(Guid id);
-
-        //public ServiceResult GetAllReceiptPayment();
     }
 }

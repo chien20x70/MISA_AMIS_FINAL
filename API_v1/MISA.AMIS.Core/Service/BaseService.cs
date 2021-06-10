@@ -294,12 +294,12 @@ namespace MISA.AMIS.Core.Service
         }
 
         /// <summary>
-        /// Lấy danh sách nhân viên có lọc
+        /// Lấy danh sách đối tượng có lọc
         /// </summary>
-        /// <param name="pageSize">số lượng nhân viên / trang</param>
+        /// <param name="pageSize">số lượng đối tượng / trang</param>
         /// <param name="pageIndex">trang số bao nhiêu</param>
         /// <param name="filter">chuỗi để lọc</param>
-        /// <returns>Danh sách nhân viên</returns>
+        /// <returns>Danh sách đối tượng</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
         public ServiceResult GetMISAEntities(int pageSize, int pageIndex, string filter)
         {
@@ -328,6 +328,16 @@ namespace MISA.AMIS.Core.Service
 
             return _serviceResult;
         }
+        /// <summary>
+        /// Lọc đối tượng theo ngày
+        /// </summary>
+        /// <param name="pageSize">Số đối tượng / trang</param>
+        /// <param name="pageIndex">Trang số bao nhiêu</param>
+        /// <param name="filter">Chuỗi để lọc</param>
+        /// <param name="startDate">Ngày bắt đầu</param>
+        /// <param name="endDate">Ngày kết thúc</param>
+        /// <returns></returns>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public ServiceResult GetMISAEntitiesByDateNotNull(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
         {
             // Nếu nhập pageIndex <= 0 hoặc pageSize <= 0 thì trả về lỗi ServiceResult.
@@ -357,6 +367,13 @@ namespace MISA.AMIS.Core.Service
         }
         #endregion
 
+        /// <summary>
+        /// Gán dữ liệu serviceResult
+        /// </summary>
+        /// <param name="data">Đối tượng</param>
+        /// <param name="status">Trạng thái</param>
+        /// <param name="code">Mã code</param>
+        /// CreatedBY: NXCHIEN 09/06/2021
         public void OnStateServiceResult(object data, StatusCode status, MISACode code)
         {
             _serviceResult.Data = data;

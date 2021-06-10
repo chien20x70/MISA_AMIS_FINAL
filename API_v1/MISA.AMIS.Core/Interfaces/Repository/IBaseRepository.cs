@@ -49,14 +49,25 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         public int Delete(Guid entityId);
 
         /// <summary>
-        /// Lấy danh sách nhân viên có lọc
+        /// Lấy danh sách đối tượng có lọc
         /// </summary>
-        /// <param name="pageSize">số lượng nhân viên / trang</param>
+        /// <param name="pageSize">số lượng đối tượng / trang</param>
         /// <param name="pageIndex">trang số bao nhiêu</param>
         /// <param name="filter">chuỗi để lọc</param>
-        /// <returns>Danh sách nhân viên</returns>
+        /// <returns>Danh sách đối tượng</returns>
         /// CreatedBy: NXCHIEN (17/05/2021)
         public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter);
+
+        /// <summary>
+        /// Lấy danh sách đối tượng có lọc
+        /// </summary>
+        /// <param name="pageSize">số lượng đối tượng / trang</param>
+        /// <param name="pageIndex">trang số bao nhiêu</param>
+        /// <param name="filter">chuỗi để lọc</param>
+        /// <param name="startDate">Ngày bắt đầu</param>
+        /// <param name="endDate">Ngày kết thúc</param>
+        /// <returns>Danh sách đối tượng</returns>
+        /// CreatedBy: NXCHIEN (09/06/2021)
         public Paging<MISAEntity> GetMISAEntitiesByDateNotNull(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate);
     } 
 }

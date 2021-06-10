@@ -117,13 +117,15 @@ namespace MISA.AMIS.Infrastructure.Repository
         }
 
         /// <summary>
-        /// Lấy danh sách nhân viên có lọc
+        /// Lấy danh sách đối tượng có lọc
         /// </summary>
-        /// <param name="pageSize">số lượng nhân viên / trang</param>
+        /// <param name="pageSize">số lượng đối tượng / trang</param>
         /// <param name="pageIndex">trang số bao nhiêu</param>
         /// <param name="filter">chuỗi để lọc</param>
-        /// <returns>Danh sách nhân viên</returns>
-        /// CreatedBy: NXCHIEN (09/05/2021)
+        /// <param name="startDate">Ngày bắt đầu</param>
+        /// <param name="endDate">Ngày kết thúc</param>
+        /// <returns>Danh sách đối tượng</returns>
+        /// CreatedBy: NXCHIEN (09/06/2021)
         public Paging<MISAEntity> GetMISAEntitiesByDateNotNull(int pageSize, int pageIndex, string filter, DateTime startDate, DateTime endDate)
         {
             var res = new Paging<MISAEntity>()
@@ -166,6 +168,15 @@ namespace MISA.AMIS.Infrastructure.Repository
                 return res;
             }
         }
+
+        /// <summary>
+        /// Lấy danh sách đối tượng có lọc
+        /// </summary>
+        /// <param name="pageSize">số lượng đối tượng / trang</param>
+        /// <param name="pageIndex">trang số bao nhiêu</param>
+        /// <param name="filter">chuỗi để lọc</param>
+        /// <returns>Danh sách đối tượng</returns>
+        /// CreatedBy: NXCHIEN (09/05/2021)
         public Paging<MISAEntity> GetMISAEntities(int pageSize, int pageIndex, string filter)
         {
             var res = new Paging<MISAEntity>()
