@@ -22,7 +22,7 @@
             <div class="row__input__first">
               <div class="object">
                 <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
-                <div class="department-box" :class="{'input-focus': toggleObject == false,'input-error': (messageObject != '')}">
+                <div class="department-box" :class="{'input-focus': toggleObject == false, 'input-error': (messageObject != '')}">
                   <div class="selected-option">
                     <input
                       type="text"
@@ -44,7 +44,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="select-custom" :class="{ invisible: toggleObject }">
+                <div class="select-custom" :class="{ invisibleObject: toggleObject }">
                   <div class="header-select">
                     <div class="text code--size text-hidden">Đối tượng</div>
                     <div class="text name--size text-hidden">Tên đối tượng</div>
@@ -126,7 +126,7 @@
                   </div>
                 </div>
               </div>
-              <div class="select-custom" :class="{ invisible: toggleEmployee }">
+              <div class="select-custom" :class="{ invisibleEmployee: toggleEmployee }">
                 <div class="header-select">
                   <div class="text code--size text-hidden">Mã nhân viên</div>
                   <div class="text name--size text-hidden">Tên nhân viên</div>
@@ -225,7 +225,7 @@
           <button class="btn-add-row" @click="onBtnAddRowClick">Thêm dòng</button>
           <button class="btn-add-row" @click="onBtnDeleteAllRow">Xóa hết dòng</button>
         </div>
-        <div class="upload">
+        <div class="upload tooltip tooltip--position30-30">
           <div class="upload__flex">
             <div class="icon icon-18 mi-attach"></div>
             <div style="font-size: 12px; font-weight: 700; color: #111">
@@ -241,6 +241,7 @@
             placeholder="Kéo/thả tệp vào đây hoặc bấm vào đây"
             readonly
           />
+          <span class="tooltip__text">Chức năng đang phát triển</span>
         </div>
       </div>
     </div>
@@ -331,6 +332,14 @@ export default {
         masked: false /* doesn't work with directive */
       },
     };
+  },
+  created(){
+    window.addEventListener("click", (e) => {
+      if (e.target.className != 'icon icon-30 arrow-dropdown tranform' && e.target.className != 'icon icon-30 arrow-dropdown') {
+        this.toggleObject = true;
+        this.toggleEmployee = true;
+      }
+    });
   },
   
   methods: {
@@ -483,7 +492,7 @@ export default {
         this.messageObject = "";       
       } else if (val == "") {
         this.messageObject = MES_REQUIRED_ATTRIBUTE;
-      }
+      }  
     },
 
     /**
@@ -857,7 +866,7 @@ export default {
       for ( var i = 0, _len = this.listDetail.length; i < _len; i++ ) {
         total += this.listDetail[i].amountDetail;
       }
-      if (total == 0) {
+      if (!total) {
         return 0;
       }
       return total;    
@@ -900,11 +909,16 @@ export default {
     }).catch(() => {});
 
     // $(document).click(function(e) {
-    //   // if(!$(".object").contains(e.target)){
-    //   //   this.toggleObject = true;
-    //   //   // alert('clicked inside');
+    //   // if(!$(e.target).closest(".select-custom").length && e.target.className != 'icon-selected'){
+    //   //   // this.toggleObject = true;
+    //   //   // // alert('clicked inside');
+    //   //   $('.select-custom').removeClass('invisible');
     //   // } 
-    //     }
+    //   if( e.target.className != 'icon'){
+    //     this.onBtnDropdownClick('employee');
+    //     this.onBtnDropdownClick('object');
+    //   }
+    //   console.log(e.target.className);
     // });
   },
 };
@@ -1133,7 +1147,7 @@ table tfoot th {
 }
 .attach__file {
   margin-top: 4px;
-  width: 30%;
+  width: 170%;
   height: 50px;
   text-align: center;
   cursor: pointer;
@@ -1298,6 +1312,12 @@ table tfoot th {
 .invisible {
   display: none;
 }
+.invisibleObject {
+  display: none;
+}
+.invisibleEmployee {
+  display: none;
+}
 .color {
   background-color: #2ca01c;
   color: white;
@@ -1315,5 +1335,8 @@ table tfoot th {
 .tranform {
   transform: rotate(180deg);
   transition: transform 0.15s linear;
+}
+.input-error{
+  border: 1px solid red;
 }
 </style>

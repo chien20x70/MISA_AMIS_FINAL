@@ -24,6 +24,8 @@
             </div>
           </button>
           <CashFilter @onBtnCashFilterClick="onBtnCashFilterClick"/>
+          <div v-if="startDate != ''" class="dateFilter">{{startDate | dateFormatDDMMYY}} - {{endDate | dateFormatDDMMYY}}</div>
+          <div v-if="startDate != ''" class="dateFilter" @click="onBtnDeleteCondition">Xóa điều kiện lọc</div>
         </div>
         <div class="item-right">
           <input
@@ -43,9 +45,9 @@
           <thead>
             <tr>
               <th class="first__th"><input type="checkbox" class="check-box" /></th>
-              <th style="min-width: 147px; border-left: none; text-align: center;">NGÀY HẠCH TOÁN</th>
+              <th style="min-width: 150px; border-left: none; text-align: center;">NGÀY HẠCH TOÁN</th>
               <th style="min-width: 125px">SỐ CHỨNG TỪ</th>
-              <th style="min-width: 320px">DIỄN GIẢI</th>
+              <th style="min-width: 400px">DIỄN GIẢI</th>
               <th style="min-width: 150px; text-align: right;">SỐ TIỀN</th>
               <th style="min-width: 228px">ĐỐI TƯỢNG</th>
               <th style="min-width: 323px">LÝ DO THU/CHI</th>
@@ -61,7 +63,7 @@
               <td class="first__th" style="z-index: 2;"><input type="checkbox" class="check-box" /></td>
               <td style="border-left: none; text-align: center;">{{ cash.accountingDate | dateFormatDDMMYY}}</td>
               <td>{{ cash.receiptPaymentCode }}</td>
-              <td style="max-width: 320px">{{ cash.description }}</td>
+              <td style="max-width: 500px">{{ cash.description }}</td>
               <td style="text-align: right;">{{ cash.totalAmount | formatMoney}}</td>
               <td>{{ cash.organizationUnitName }}</td>
               <td>{{ cash.reasonName }}</td>
@@ -95,7 +97,7 @@
                   position: sticky;
                   left: 0px;
                   z-index: 2;"></th>
-                <th style="min-width: 147px; border-left: none; text-align: center;">Tổng</th>
+                <th style="min-width: 150px; border-left: none; text-align: center;">Tổng</th>
                 <th style="min-width: 125px"></th>
                 <th style="min-width: 320px"></th>
                 <th style="min-width: 150px; text-align: right;">{{totalMoney | formatMoney}}</th>
@@ -264,6 +266,11 @@ export default {
 
   //#region METHODS
   methods: {
+    onBtnDeleteCondition(){
+      this.startDate = '';
+      this.endDate = '';
+      this.filterData();
+    },
     //#region BtnAddClick
     /**
      * Gán selectedCash khi click BtnAdd.
@@ -429,6 +436,8 @@ export default {
       this.timeOut = setTimeout(() =>{
         this.totalPages = 1;
         this.pageIndex = 1;
+        this.startDate = '';
+        this.endDate = '';
         this.filterData();
       }, 500);
     },
@@ -439,8 +448,8 @@ export default {
      */
     onBtnCashFilterClick(startDate, endDate){
       this.startDate = startDate;
-      this.endDate = endDate;
-      this.filterData();
+      this.endDate = endDate;     
+      this.filterDataByDateNotNull();
     },
 
     //#region Lọc dữ liệu: ChangeInput + Phân trang và Export excel //TODO: Chưa hoàn thành ExportExcel
@@ -453,6 +462,31 @@ export default {
       this.axios
         .get(
           `/ReceiptPayments/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`
+        )
+        .then((response) => {
+          // Gán mảng ReceiptPayment ban đầu = data từ server trả về
+          this.cashs = response.data.data.data;
+          // tổng số bản ghi = tổng số bản ghi từ server trả về
+          this.totalRecord = response.data.data.totalRecord;
+          // tổng số trang.
+          this.totalPages = response.data.data.totalPages;
+          if (response.data.data.totalRecord == undefined) {
+            this.totalRecord = 0;
+          }
+          if (response.data.data.totalMoney != undefined) {
+            this.totalMoney = response.data.data.totalMoney;
+          }
+        })
+        .catch(() => {})
+        .then(() => {
+          this.isBusy = false;
+        });
+    },
+    filterDataByDateNotNull() {
+      this.isBusy = true;
+      this.axios
+        .get(
+          `/ReceiptPayments/FilteringDate?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&startDate=${this.startDate}&endDate=${this.endDate}&filter=${this.filter}`
         )
         .then((response) => {
           // Gán mảng ReceiptPayment ban đầu = data từ server trả về
@@ -486,9 +520,13 @@ export default {
         this.filter = val;
         // Gán trang về 1
         this.pageIndex = 1;
-        console.log(this.filter);
         // Gọi hàm lọc có delay 0.5s để không gửi quá nhiều request lên server
-        this.filterData();
+        if (this.startDate == '') {
+          this.filterData();
+        }else{
+          this.filterDataByDateNotNull();
+        }
+        
       }, 500);
     },
 
@@ -499,7 +537,11 @@ export default {
     onPageChange(page) {
       // Thay đổi trang khi click button phần phân trang
       this.pageIndex = page;
-      this.filterData();
+      if (this.startDate == '') {
+        this.filterData();
+      }else{
+        this.filterDataByDateNotNull();
+      }
     },
 
     /**
@@ -797,7 +839,16 @@ export default {
   .check--all{
     padding: 13px 12px;
   }
-  .filter:hover{
-    background-color: #d2d3d6;
+  .dateFilter{
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+    color: #0075c0;
+    padding-left: 20px;
+    white-space: nowrap;
+  }
+  .dateFilter:hover{
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>

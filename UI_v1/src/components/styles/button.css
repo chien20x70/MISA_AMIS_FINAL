@@ -120,3 +120,6 @@ button{
 .btn-close{
     margin-left: 145px;
 }
+.filter:hover{
+    background-color: #d2d3d6;
+  }

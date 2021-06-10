@@ -11,13 +11,15 @@
       </div>
     </button>
     <div class="filter__box" :class="{ visible: toggleFilter }">
-      <div class="row-input">
+      <div class="row-input tooltip tooltip--position30-30">
         <span class="text">Lý do thu, chi</span><br />
-        <input type="text" style="width: 414px; cursor: not-allowed; background: rgb(224 224 224);" placeholder="Tất cả" readonly/>
+        <input type="text" class="" style="width: 414px; cursor: not-allowed; background: rgb(224 224 224);" placeholder="Tất cả" readonly/>
+        <span class="tooltip__text">Chức năng đang phát triển</span>
       </div>
-      <div class="row-input">
+      <div class="row-input tooltip tooltip--position30-30">
         <span class="text">Trạng thái ghi sổ</span><br />
         <input type="text" style="width: 414px; cursor: not-allowed; background: rgb(224 224 224);" placeholder="Tất cả" readonly/>
+        <span class="tooltip__text">Chức năng đang phát triển</span>
       </div>
       <div class="btn-footer">
         <div class="reason">
@@ -118,6 +120,7 @@ export default {
 
     // Truyền giá trị cần lọc sang CashList để lọc
     onBtnCashFilterClick(){
+      this.toggleFilter = false;
       this.$emit("onBtnCashFilterClick", this.startDate, this.endDate);
     },
 
