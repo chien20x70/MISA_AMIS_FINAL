@@ -147,19 +147,6 @@ export default {
         this.value = val;
       },
     },
-    // employeeFilter(){
-    //   function compare(a, b) {
-    //     if (a.fullName < b.fullName) return -1;
-    //     if (a.fullName > b.fullName) return 1;
-    //     return 0;
-    //   }     
-    //   return this.employees.filter(employee => {
-    //     if (this.saveValueEmployeeName != '') {
-    //       return employee.fullName.toLowerCase().includes(this.saveValueEmployeeName.toLowerCase())
-    //     }
-    //     // return employee
-    //   }).sort(compare);
-    // }
   },
 };
 </script>

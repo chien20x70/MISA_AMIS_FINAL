@@ -76,8 +76,7 @@
                   >
                     <div class="flex btn-btn-text">
                       <span
-                        class="pr-4"
-                        style="color: #0075c0; font-weight: 600"
+                        class="pr-4 btn--edit"
                         >Sửa</span
                       >
                     </div>
@@ -215,7 +214,7 @@ import DropdownDuplicateAndDelete from "../common/DropdownDuplicateAndDelete.vue
 import CashPopup from "../common/CashPopup.vue";
 import ComboboxFilter from "../common/ComboboxFilter.vue";
 import CashFilter from "../common/CashFilter.vue";
-
+import moment from 'moment'
 import {arrDetailAdd, STR_DESCRIPTION_DETAIL, STR_DELETE_RP, STR_CONTINUE, STR_CASHLIST, FORMMODE_ADD, FORMMODE_EDIT} from "../../../lang/masterDetail.js"
 //#endregion
 export default {
@@ -298,12 +297,7 @@ export default {
     // Lấy ra ngày hiện tại
     getCurrentDate(){
       let currentDate = new Date();
-      var day = currentDate.getDate();
-      var month = currentDate.getMonth() + 1;
-      var year = currentDate.getFullYear();
-      day = day < 10 ? "0" + day : day;
-      month = month < 10 ? "0" + month : month;
-      return `${year}-${month}-${day}`;
+      return moment(currentDate).format("YYYY-MM-DD");
     },
     /**
      * Click thêm mới 1 ReceiptPayment
@@ -476,6 +470,8 @@ export default {
           }
           if (response.data.data.totalMoney != undefined) {
             this.totalMoney = response.data.data.totalMoney;
+          }else{
+            this.totalMoney = 0;
           }
         })
         .catch(() => {})
@@ -501,6 +497,8 @@ export default {
           }
           if (response.data.data.totalMoney != undefined) {
             this.totalMoney = response.data.data.totalMoney;
+          }else{
+            this.totalMoney = 0;
           }
         })
         .catch(() => {})
@@ -515,21 +513,22 @@ export default {
       */
     onChangeInputEmployeeFilter(e) {
       let val = e.target.value;
+      // Lấy chuỗi cần lọc rồi gán vào biến filter
+      this.filter = val;
+      // Gán trang về 1
+      this.pageIndex = 1;
       clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        // Lấy chuỗi cần lọc rồi gán vào biến filter
-        this.filter = val;
-        // Gán trang về 1
-        this.pageIndex = 1;
-        // Gọi hàm lọc có delay 0.5s để không gửi quá nhiều request lên server
-        if (this.startDate == '') {
+      // Gọi hàm lọc có delay 0.5s để không gửi quá nhiều request lên server
+      if (this.startDate == '') {
+        this.timeOut = setTimeout(() =>{
           this.filterData();
-        }else{
+        }, 500)
+      }else{
+        this.timeOut = setTimeout(() =>{
           this.filterDataByDateNotNull();
-        }
-        
-      }, 500);
-    },
+        }, 500)
+      }
+  },
 
     /**
       * Kiểm tra click thay đổi phân trang, Lọc lại mảng ReceiptPayment khi click.
@@ -714,7 +713,14 @@ export default {
   
   .hover {
     border: none;
-    padding: 6px 0px 6px 16px;
+    padding: 6px 0px 6px 6px;
+    box-sizing: border-box;
+    margin-left: 10px;
+    
+  }
+  .hover:hover{
+    border-radius: 2px;
+    border: 1px solid #0075c0;
   }
   
   .fa-3x {
@@ -757,6 +763,10 @@ export default {
   }
   .margin {
     margin-left: 10px;
+  }
+  .margin:hover{
+    font-weight: 800;
+    border: 1px solid #bbb;
   }
   .disable {
     cursor: not-allowed;
@@ -851,5 +861,9 @@ export default {
   .dateFilter:hover{
     text-decoration: underline;
     cursor: pointer;
+  }
+  .btn--edit{
+    color: #0075c0; 
+    font-weight: 600;
   }
 </style>

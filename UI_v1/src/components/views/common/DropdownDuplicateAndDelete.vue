@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="dropdown">
-      <button class="btn-btn hover padding" @click="btnDropdownClick($event)">
+      <button class="btn-btn hover padding" @click="btnDropdownClick($event)" :class="{'border': valueDrop}">
         <div class="flex btn-btn-text">
-          <div class="header-icon arrow-up--blue" :class="{'border': valueDrop}"></div>
+          <div class="icon icon-16 arrow-up--blue"></div>
         </div>
       </button>
       <div class="dropdown-content" :class="{ 'display': !valueDrop}" :style="{top: top + 'px', left: left + 'px'}" >
@@ -116,7 +116,14 @@ export default {
   padding: 6px 0px 6px 16px;
 }
 .padding {
-  padding: 0 0 0 10px;
+  /* padding: 0 0 0 10px; */
+  margin-left: 10px;
+  padding: 0;
+  border-radius: 0%;
+}
+.padding:hover{
+  border-radius: 2px;
+  border: 1px solid #0075c0;
 }
 .btn-btn-text {
   font-weight: 600;
@@ -130,18 +137,9 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.header-icon {
-  background: url("../../../assets/Sprites.5f05e81f.svg") no-repeat;
-  cursor: pointer;
-  min-width: 16px;
-  min-height: 16px;
-  height: 16px;
-  width: 16px;
-}
 .arrow-up--blue {
   background-position: -897px -359px;
 }
-
 .dropdown-row-1 {
   height: 29px;
   width: 119px;

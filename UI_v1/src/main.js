@@ -17,6 +17,7 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import 'vue-search-select/dist/VueSearchSelect.css'
 import money from 'v-money'
+import moment from 'moment'
 const VueInputMask = require('vue-inputmask').default
  
 Vue.use(VueInputMask)
@@ -43,14 +44,7 @@ Lọc giá trị ngày tháng năm để hiển thị lên client
 */
 Vue.filter('dateFormatDDMMYY', function (date) { 
   if(date == null) return ""
-  if(date == "0001-01-01T00:00:00") return ""
-  var newDate = new Date(date);
-  var day = newDate.getDate();
-  var month = newDate.getMonth() + 1;
-  var year = newDate.getFullYear();
-  day = day < 10 ? "0" + day : day;
-  month = month < 10 ? "0" + month : month;
-  return `${day}/${month}/${year}`;
+  return moment(date).format("DD/MM/YYYY");
 })
 
 Vue.filter('formatMoney', function (money) { 

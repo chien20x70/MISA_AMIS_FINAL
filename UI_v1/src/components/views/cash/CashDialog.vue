@@ -24,6 +24,7 @@
                 <span class="text">Đối tượng <p style="color: red; display: inline">*</p></span>             
                 <div ref="RefObject" class="department-box" :class="{'input-focus': toggleObject == false, 'input-error': (messageObject != '')}">
                   <div class="selected-option">
+                    <!-- <span tabindex="1" ></span> -->
                     <input
                       type="text"
                       ref="focusInputObject"
@@ -34,6 +35,7 @@
                       v-model="saveValueObject"
                       @focus="focusInputKey('object')"
                       @input="onChangeInputObject"
+                      tabindex="2"
                     />
                     <div class="icon-selected">
                       <div
@@ -69,7 +71,7 @@
               </div>
               <div class="receive">
                 <span class="text">Người nhận <p style="color: red; display: inline">*</p></span>
-                <input ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/><br/>
+                <input tabindex="3" ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/><br/>
                 <span class="span">{{messageReceiver}}</span>
               </div>
             </div>
@@ -82,7 +84,7 @@
           <div class="row__input">
             <div class="address">
               <span class="text">Địa chỉ</span>
-              <input type="text" class="input--size" v-model="cash.organizationUnitAddress"/>
+              <input tabindex="4" type="text" class="input--size" v-model="cash.organizationUnitAddress"/>
             </div>
             <div class="date__form">
               <span class="text">Ngày phiếu chi <p style="color: red; display: inline">*</p></span><br />
@@ -93,11 +95,15 @@
           <div class="row__input">
             <div class="address">
               <span class="text">Lý do chi</span>
-              <input type="text" class="input--size" v-model="cash.description"/>
+              <input tabindex="5" type="text" class="input--size" v-model="cash.description"/>
             </div>
             <div class="date__form">
               <span class="text">Số chứng từ <p style="color: red; display: inline">*</p></span><br />
-              <input maxlength="50" ref="focusRefCode" type="text" class="input--size" v-model="cash.receiptPaymentCode" @input="onChangeRefCode" :class="{ 'input-error': messageCode != ''}"><br/>
+              <input tabindex="10" maxlength="50" ref="focusRefCode" type="text" class="input--size" 
+                v-model="cash.receiptPaymentCode" 
+                @input="onChangeRefCode" 
+                @keyup.enter="focusDetail"
+                :class="{ 'input-error': messageCode != ''}"><br/>
               <span style="color: red; font-size: 12px">{{messageCode}}</span>
             </div>
           </div>
@@ -116,6 +122,7 @@
                     v-model="saveValueEmployeeName"
                     @focus="focusInputKey('employee')"
                     @input="onChangeInputEmployee"
+                    tabindex="5"
                   />
                   <div class="icon-selected">
                     <div
@@ -151,7 +158,7 @@
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
-              <input type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
+              <input tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
             </div>
             <div class="invoice">chứng từ gốc</div>
           </div>
@@ -185,7 +192,7 @@
             </thead>
             <tbody>
               <tr v-for="(list, index) in listDetail" :key="index">
-                <td class="first__th">{{index}}</td>
+                <td class="first__th">{{index + 1}}</td>
                 <td style="border-left: none">
                   <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.descriptionDetail"/>
                 </td>
@@ -197,7 +204,7 @@
                 <td>
                   <Autocomplete v-model="list.organizationUnitCodeDetail" :code="index" @sendIdToCashDialog="getDataId"/>
                 </td>
-                <td><input type="text" style="width: 100%; cursor: not-allowed; background: rgb(224 224 224);" v-model="list.organizationUnitNameDetail" readonly/></td>
+                <td><input type="text" class="out-of-range" v-model="list.organizationUnitNameDetail" readonly/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete" @click="onBtnDeleteRowClick(index)"></div>
                 </td>
@@ -222,7 +229,7 @@
       </div>
       <div class="grid__item">
         <div class="item__flex">
-          <button class="btn-add-row" @click="onBtnAddRowClick">Thêm dòng</button>
+          <button class="btn-add-row tooltip tooltip--position30-30" @click="onBtnAddRowClick" v-hotkey="keymap">Thêm dòng <span class="tooltip__text">Ctrl + Insert</span></button>
           <button class="btn-add-row" @click="onBtnDeleteAllRow">Xóa hết dòng</button>
         </div>
         <div class="upload tooltip tooltip--position30-30">
@@ -246,12 +253,13 @@
       </div>
     </div>
     <div class="cashbox__footer">
-      <button class="btn-common">Hủy</button>
+      <button class="btn-common" @click="onBtnCloseClick">Hủy</button>
       <div class="flex">
         <button class="btn-common" @click="onBtnSaveClick">Cất</button>
-        <button class="btn-common btn--success">Cất và In</button>
+        <button class="btn-common btn--success" @click="onBtnSaveClick">Cất và In</button>
       </div>
     </div>
+    <span tabindex="30"></span>
     <CashPopup
         v-if="valuePopup"
         @hideCashPopupNotLoad="hideCashPopupNotLoad"
@@ -345,6 +353,9 @@ export default {
   },
   
   methods: {
+    focusDetail(){
+      this.$refs.focusDescriptionDetail[0].focus();
+    },
     /**
      * Cập nhật dữ liệu Cash lấy từ Autocomplete dưới bảng detail
      * CreatedBY: NXCHIEN 09/06/2021
@@ -354,6 +365,7 @@ export default {
       this.listDetail[index].organizationUnitCodeDetail = code;
     },
 
+    //#region Dữ liệu thao tác với autocomplete
     /**
      * Dropdown Click của Nhân viên và Đối tượng
      * CreateBy: NXCHIEN 09/06/2021
@@ -403,8 +415,7 @@ export default {
      * Click nút down cập nhật vị trí currentIndex và kiểm tra trạng thái hiển thị phòng ban
      * CreatedBY:NXCHIEN 09/06/2021
      */
-    down(value) {
-      
+    down(value) {     
       if (value === 'object') {
         if (this.toggleObject) {
           this.toggleObject = false;
@@ -466,6 +477,7 @@ export default {
         this.currentIndexE = index;
       }
     },
+    //#endregion
 
     //#region Check OnchangeInput
     /**
@@ -584,35 +596,27 @@ export default {
       this.rowIndex = this.listDetail.length;
     },
     // Xóa 1 dòng trong bảng listDetail
-    onBtnDeleteRowClick(value){
-      this.listDetail.pop(this.listDetail[value]);
+    async onBtnDeleteRowClick(value){
+      await this.listDetail.pop(this.listDetail[value]);
       this.rowIndex = this.listDetail.length;
       if(this.rowIndex != 0){
-        clearTimeout(this.timeOut);
-        this.timeOut = setTimeout(() =>{
-          this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
-        }, 100)
+        this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
       }
       
-      //TODO:  ----- validate Tài khoản nợ đã xong nhưng boder đỏ hết--------- Xử lý input mask -----------
+      //TODO:  ----- validate Tài khoản nợ đã xong nhưng boder đỏ hết---------
     },
     // Thêm 1 dòng trong bảng listDetail
-    onBtnAddRowClick(){
+    async onBtnAddRowClick(){
       if (this.listDetail.length == 0) {
         let arrDetailAdd = [{"descriptionDetail": ""}];
         this.listDetail = arrDetailAdd;
-        clearTimeout(this.timeOut);
-        this.timeOut = setTimeout(() =>{
-          this.$refs.focusDescriptionDetail[0].focus();
-        }, 100)
+        await this.listDetail;
+        this.$refs.focusDescriptionDetail[0].focus();
         this.rowIndex = this.listDetail.length;
       }else{
         this.rowIndex += 1;
-        this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
-        clearTimeout(this.timeOut);
-        this.timeOut = setTimeout(() =>{
-          this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
-        }, 100)
+        await this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
+        this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
       }
       
     },
@@ -644,14 +648,6 @@ export default {
     hideCashPopupAndHideDialog(){
       this.$emit("hideCashDialogNotLoad");
     },
-    compareObjectCash(obj1, obj2) {
-      for (let key in obj2) {
-        if (obj2[key] !== obj1[key]) {
-          return true;
-        }
-      }
-      return false;
-    },
     //#endregion
 
     /**
@@ -665,6 +661,16 @@ export default {
           this.valuePopup = true;
         }
       }
+    },
+
+    //so sánh 2 object by object
+    compareObjectCash(obj1, obj2) {
+      for (let key in obj2) {
+        if (obj2[key] !== obj1[key]) {
+          return true;
+        }
+      }
+      return false;
     },
 
     convertListDetailtoJSON(){
@@ -738,8 +744,6 @@ export default {
           this.debtAccountError = true;
           this.message = STR_EMPTY_DEBTACCOUNT; //TODO: fix bấm cất trong khi dòng 2 có data, dòng 1 ko có thì focus vào dòng 1 chứ ko được xóa
           this.changeData = EMPTYDATA;
-          this.listDetail.length = this.listDetail.length - 1;
-          this.rowIndex = this.listDetail.length - 1;
           return true;
         }
       }
@@ -747,6 +751,11 @@ export default {
     },
     //#endregion
     
+    assignValueMessageError(res){
+      this.message = res.data.data;
+      this.valuePopup = true;
+      this.changeData = EXISTDATA;
+    },
     //#region Click Save and SaveAndAdd
     validAndSave() {
       // Kiểm tra attribute empty
@@ -761,11 +770,7 @@ export default {
               if (res.data.code == 200) {
                 return Promise.resolve();
               } else if (res.data.code == 400) {
-                // Lấy ra message lỗi
-                this.message = res.data.data;
-                // show popup
-                this.valuePopup = true;
-                this.changeData = EXISTDATA;
+                this.assignValueMessageError(res);
                 return Promise.reject();
               }
               return Promise.resolve();
@@ -781,12 +786,8 @@ export default {
             .then((res) => {
               if (res.data.code == 200) {
                 return Promise.resolve();
-              } else if (res.data.code == 400) {
-                // Lấy ra message lỗi
-                this.message = res.data.data;
-                // show popup
-                this.valuePopup = true;
-                this.changeData = EXISTDATA;
+              } else if (res.data.code == 400) { 
+                this.assignValueMessageError(res);
                 return Promise.reject();
               }
               return Promise.resolve();
@@ -813,26 +814,33 @@ export default {
         this.$emit("hideCashDialog");
       });
     },
-
-    /**
-     * Click nút Cất và Thêm cho phép lưu dữ liệu và reset form để người dùng có thể thêm tiếp mà ko cần click nút Thêm mới.
-     * CreatedBy: NXCHIEN 17/05/2021
-     */
-    onBtnSaveAndAddClick() {
-      this.validAndSave().then(() => {
-        if (this.flag == FORMMODE_ADD) {
-          this.showNotification(MES_ADD_SUCCESS);
-        } else {
-          this.showNotification(MES_EDIT_SUCCESS);
-        }
-        this.$emit("saveAndAdd");
-      });
-    },
     //#endregion
 
     // ĐÓng CashPopup và kiểm tra message lỗi để focus
     hideCashPopupAndValidate(){
       this.valuePopup = false;
+      this.checkRefCodeEmpty();
+      this.checkObjectEmpty();
+      this.checkReceiverEmpty();
+      this.checkAccountingDateEmpty();
+      this.checkRefDateEmpty();
+      this.checkEmployeeEmpty();
+      if(this.debtAccountError){
+        for (let i = 0; i < this.listDetail.length; i++) {
+          if (this.listDetail[i].debtAccountDetail == '') {
+            this.$refs.focusDebt[i].focus();
+            this.debtAccountError = false;
+            break;
+          }
+        }
+      }
+      if(this.message.includes(REF_CODE)){
+        this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
+        this.$refs.focusRefCode.focus();
+      }
+    },
+    //#region Validate Check Empty Attribute
+    checkRefCodeEmpty(){
       if (this.messageCode != '') {
         this.messageObject = '';
         this.messageReceiver = '';
@@ -840,40 +848,54 @@ export default {
         this.messageRefDate= '';
         this.messageFullName = '';     
         this.$refs.focusRefCode.focus();
-      }else if(this.messageObject != ''){
+      }
+    },
+    checkObjectEmpty(){
+      if(this.messageObject != ''){
         this.messageReceiver = '';
         this.messageAccountingDate = '';
         this.messageRefDate= '';
         this.messageFullName = '';
         this.$refs.focusInputObject.focus();
-      }else if(this.messageReceiver != ''){
+      }
+    },
+    checkReceiverEmpty(){
+      if(this.messageReceiver != ''){
         this.messageAccountingDate = '';
         this.messageRefDate= '';
         this.messageFullName = '';
         this.$refs.focusReceiver.focus();
-      }else if(this.messageAccountingDate != ''){
+      }
+    }, 
+    checkAccountingDateEmpty(){
+      if(this.messageAccountingDate != ''){
         this.messageRefDate= '';
         this.messageFullName = '';
         this.$refs.accountingDate.$refs.reference.$refs.accountingDate.focus();        
-      }else if(this.messageRefDate != ''){
-        this.messageFullName = '';
-        this.$refs.refDate.$refs.reference.$refs.refDate.focus();
-      }else if(this.messageFullName != ''){
-        this.$refs.focusInputEmployee.focus();
-      }
-
-      if(this.debtAccountError){
-        this.$refs.focusDebt[this.rowIndex - 1].focus();
-        this.debtAccountError = false;
-      }
-      if(this.message.includes(REF_CODE)){
-        this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
-        this.$refs.focusRefCode.focus();
       }
     },
-
+    checkRefDateEmpty(){
+      if(this.messageRefDate != ''){
+        this.messageFullName = '';
+        this.$refs.refDate.$refs.reference.$refs.refDate.focus();
+      }
+    },
+    checkEmployeeEmpty(){
+      if(this.messageFullName != ''){
+        this.$refs.focusInputEmployee.focus();
+      }
+    }
+    //#endregion
+  
   },
   computed:{
+    keymap() {
+      return {       
+        "Ctrl + Insert": this.onBtnAddRowClick,
+        "Ctrl + S": this.onBtnSaveClick,
+        esc: this.onBtnCloseClick,
+      };
+    },
     /**
      * Tính tổng tiền trong listDetail
      * CreatedBy: NXCHIEN 06/06/2021
@@ -895,12 +917,15 @@ export default {
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);     // Khởi tạo giá trị listDetail
     this.rowIndex = this.listDetail.length;                           // Khởi tạo rowIndex
     this.valueRefCode = this.cash.receiptPaymentCode;                 // Khởi tạo giá trị Phiếu chi góc trái trên màn hình
-    
+    // Giá trị autoComplete-----------
     this.saveValueObject = this.cash.organizationUnitName;
     this.saveValueEmployeeName = this.cash.fullName;
+    //---------------------------------
+    // Check thay đổi dữ liệu.
     this.detectChangeCash = {...this.cash};                           // Sao chép object để so sánh
     this.detectChangeDetail = this.cash.receiptPaymentDetail;         // sao chép mảng để so sánh
-    this.axios.get(`/Employees`).then((response) => {                 // Khởi tạo mảng nhân viên
+    //-----------------------------------
+    this.axios.get(`/Employees`).then((response) => {                 // Khởi tạo mảng nhân viên và fakeData dùng cho autocomplete
       this.employees = response.data.data;
       this.fakeEmployees = [...this.employees]
       this.fakeObjects = [...this.employees]
@@ -1323,5 +1348,13 @@ table tfoot th {
 }
 .input-error{
   border: 1px solid red;
+}
+.out-of-range{
+  width: 100%; 
+  cursor: not-allowed; 
+  background: rgb(224 224 224);
+}
+.out-of-range:focus{
+  border: 1px solid #babec5;
 }
 </style>
