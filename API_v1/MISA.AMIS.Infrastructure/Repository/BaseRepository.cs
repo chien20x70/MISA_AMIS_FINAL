@@ -155,11 +155,15 @@ namespace MISA.AMIS.Infrastructure.Repository
                 dynamicParameters.Add("@endDate", endDate);
                 if (typeof(MISAEntity).Name.Equals("ReceiptPayment"))
                 {
-                    int? totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoneyByDateNotNull", dynamicParameters, commandType: CommandType.StoredProcedure);
-                    if (totalMoney == null)
+                    int? totalMoney;
+                    try
                     {
-                        res.TotalMoney = 0;
-                        return res;
+                       totalMoney  = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoneyByDateNotNull", dynamicParameters, commandType: CommandType.StoredProcedure);
+
+                    }
+                    catch (Exception)
+                    {
+                        totalMoney = 0;
                     }
                     res.TotalMoney = totalMoney;
                 }
@@ -202,11 +206,15 @@ namespace MISA.AMIS.Infrastructure.Repository
                 dynamicParameters.Add("@filter", filter);
                 if (typeof(MISAEntity).Name.Equals("ReceiptPayment"))
                 {
-                    int? totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoney", dynamicParameters, commandType: CommandType.StoredProcedure);
-                    if (totalMoney == null)
+                    int? totalMoney;
+                    try
                     {
-                        res.TotalMoney = 0;
-                        return res;
+                        totalMoney = dbConnection.QueryFirstOrDefault<int>($"Proc_GetTotalMoney", dynamicParameters, commandType: CommandType.StoredProcedure);
+
+                    }
+                    catch (Exception)
+                    {
+                        totalMoney = 0;
                     }
                     res.TotalMoney = totalMoney;
                 }

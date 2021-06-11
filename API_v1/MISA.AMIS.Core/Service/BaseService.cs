@@ -323,7 +323,7 @@ namespace MISA.AMIS.Core.Service
             }
             else
             {
-                OnStateServiceResult("", StatusCode.Error, MISACode.NoContent);
+                OnStateServiceResult(entities, StatusCode.Error, MISACode.NoContent);
             }
 
             return _serviceResult;
@@ -360,7 +360,7 @@ namespace MISA.AMIS.Core.Service
             }
             else
             {
-                OnStateServiceResult("", StatusCode.Error, MISACode.NoContent);
+                OnStateServiceResult(entities, StatusCode.Error, MISACode.NoContent);
             }
 
             return _serviceResult;
