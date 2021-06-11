@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-import { CHANGEDATA, EMPTYDATA, EXISTDATA, STR_CASHDIALOG, STR_CASHLIST } from "../../../lang/masterDetail.js"
+import { CHANGEDATA, EMPTYDATA, EXISTDATA, MSG_DELETE_SUCCESS, STR_CASHDIALOG, STR_CASHLIST } from "../../../lang/masterDetail.js"
 export default {
   //#region Khai báo Props
     props:{
@@ -46,6 +46,12 @@ export default {
     
   //#region METHODS
     methods:{
+      showNotification(message) {
+        this.$notification["success"]({
+            message,
+            duration: 2,
+        });
+      },
       /* 
       Click button 'Không' thì đóng popup mà giữ lại form dialog
       CreatedBy: NXCHIEN 17/05/2021
@@ -72,7 +78,8 @@ export default {
         }
         if(this.formMode == STR_CASHLIST){
             this.axios.delete("/ReceiptPayments/"+ this.refId).then(() =>{
-                this.$emit("hideCashPopup");
+              this.showNotification(MSG_DELETE_SUCCESS);
+              this.$emit("hideCashPopup");
             }).catch(() =>{})
         }
       },

@@ -470,8 +470,6 @@ export default {
           }
           if (response.data.data.totalMoney != undefined) {
             this.totalMoney = response.data.data.totalMoney;
-          }else{
-            this.totalMoney = 0;
           }
         })
         .catch(() => {})

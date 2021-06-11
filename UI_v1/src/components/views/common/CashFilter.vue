@@ -38,10 +38,11 @@
         </div>
         <div class="reason--time" style="padding-right: 0;">
           <span class="text">Đến ngày</span><br />
-          <DatePicker v-if="toggleFilter == true" v-model="endDate" :type="'endDate'" @sendEndDate="getEndDate"/>
+          <DatePicker v-if="toggleFilter == true" v-model="endDate" :type="'endDate'" @sendEndDate="getEndDate" :startDate="startDate"/>
         </div>
       </div>
-      <div class="btn-footer" style="margin-top: 20px">
+      <!-- <span class="errorDate" :class="{'visible-span': errorData}">&lt;Đến ngày&gt; phải lớn hơn hoặc bằng &lt;Từ ngày&gt;</span> -->
+      <div class="btn-footer-filter">
         <button class="btn-padding reset">Đặt lại</button>
         <button class="btn-padding success" @click="onBtnCashFilterClick">Lọc</button>
       </div>
@@ -49,6 +50,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import DatePicker from './DatePicker.vue'
 import { ModelSelect } from "vue-search-select";
 export default {
@@ -58,6 +60,7 @@ export default {
   },
   data() {
     return {
+      errorData: false,
       firstDateOfYear: '2021/01/01',      // Ngày đầu tiên của năm
       startDate: null,                    // Ngày bắt đầu để lọc
       endDate: null,                      // Ngày kết thúc
@@ -87,25 +90,15 @@ export default {
      * Lấy ngày đầu tiên của năm
      */
     getFisrtDateOfYear(){
-      let currentDate = new Date(this.firstDateOfYear);
-      var day = currentDate.getDate();
-      var month = currentDate.getMonth() + 1;
-      var year = currentDate.getFullYear();
-      day = day < 10 ? "0" + day : day;
-      month = month < 10 ? "0" + month : month;
-      return `${year}-${month}-${day}`;
+      let fisrtDateOfYear = new Date(this.firstDateOfYear);
+      return moment(fisrtDateOfYear).format("YYYY-MM-DD");
     },
     /**
      * Lấy ngày hiện tại
      */
     getCurrentDate(){
       let currentDate = new Date();
-      var day = currentDate.getDate();
-      var month = currentDate.getMonth() + 1;
-      var year = currentDate.getFullYear();
-      day = day < 10 ? "0" + day : day;
-      month = month < 10 ? "0" + month : month;
-      return `${year}-${month}-${day}`;
+      return moment(currentDate).format("YYYY-MM-DD");
     },
     //#endregion
 
@@ -120,12 +113,16 @@ export default {
 
     // Truyền giá trị cần lọc sang CashList để lọc
     onBtnCashFilterClick(){
-      this.toggleFilter = false;
-      this.$emit("onBtnCashFilterClick", this.startDate, this.endDate);
+      var startDate = new Date(this.startDate);
+      var endDate = new Date(this.endDate);
+      if (endDate < startDate) {
+        this.errorData = true;
+      }else{
+        this.toggleFilter = false;
+        this.errorData = false;
+        this.$emit("onBtnCashFilterClick", this.startDate, this.endDate);
+      }
     },
-
-    
-  
   },
   created() {
     window.addEventListener("click", (e) => {
@@ -171,6 +168,14 @@ export default {
   justify-content: space-between;
   width: calc(100% + 3px);
 }
+.btn-footer-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(91% + 4px);
+  position: absolute;
+  bottom: 15px;
+}
 .reason {
   width: calc(42% + 2px);
   padding-right: 10px;
@@ -200,5 +205,14 @@ export default {
 }
 .visible {
   display: block;
+}
+.errorDate{
+  color: red; 
+  font-size: 11px; 
+  margin-left: 40px;
+  display: none;
+}
+.visible-span{
+  display: inline-block;
 }
 </style>

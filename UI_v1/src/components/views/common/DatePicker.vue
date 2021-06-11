@@ -7,20 +7,22 @@
     :inputAttributes="{
       class: 'style-input-date-lib',
       placeholder: '__/__/____',
-      style: `margin-top: 4px; ${(type == 'startDate' || type == 'endDate') ? 'width: 120px;' : 'width: 167px;'} ${content == '' ? 'border-color: red' : ''}`,
+      style: `margin-top: 4px; ${(type == 'startDate' || type == 'endDate') ? 'width: 120px;' : 'width: 167px;'} ${content == '' ? 'border-color: red' : ''} 
+      ${(type == 'endDate' && errorDate) ? 'border-color: red' : ''}`,
       ref: `${type}`,
       tabindex: `${type == 'accountingDate' ? '8': '9'} `
     }"
     :weekdays="localeDatePicker.weekdays"
     :months="localeDatePicker.months"
   ></date-pick>
+  <!-- ${(type == 'endDate' && errorDate) ? 'border-color: red' : ''} -->
 </template>
 <script>
 import DatePick from "vue-date-pick/src/vueDatePick.vue";
 import "vue-date-pick/dist/vueDatePick.css";
 export default {
   name: "DatePicker",
-  props: ['value', 'type'],
+  props: ['value', 'type', "startDate"],
   components: {
     DatePick,
   },
@@ -45,6 +47,15 @@ export default {
       }
       if (this.type == 'endDate') {
         this.$emit('sendEndDate', this.content);
+        if (this.startDate) {
+          var startDate = new Date(this.startDate);
+          var endDate = new Date(this.content);
+          if (endDate < startDate) {
+            this.errorDate = true;
+          }else{
+            this.errorDate = false;
+          }
+        }
       }
     }
   },
@@ -54,6 +65,7 @@ export default {
   },
   data() {
     return {
+      errorDate: false,
       content: null,
       displayFormat: "DD/MM/YYYY",
       localeDatePicker: {

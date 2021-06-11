@@ -21,6 +21,9 @@ export const EMPTYDATA = "empty";
 export const EXISTDATA = "dataExist";
 export const FORMMODE_ADD = "add";
 export const FORMMODE_EDIT = "edit";
+export const MSG_DELETE_SUCCESS = "Xóa thành công";
+
+
 
 
 

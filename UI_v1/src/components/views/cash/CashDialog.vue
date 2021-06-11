@@ -196,7 +196,15 @@
                 <td style="border-left: none">
                   <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.descriptionDetail"/>
                 </td>
-                <td><input ref="focusDebt" type="text" :class="{'input-error': debtAccountError == true}" style="width: 100%" v-model="list.debtAccountDetail"/></td>
+                <!-- debtAccountError == true -->
+                <!-- :class="{'input-error': debtAccountError == true}" -->
+                <td>
+                  <input class="debtAccount--Detail" ref="focusDebt" type="text" 
+                    @blur="onBlurInputListDetail(list.debtAccountDetail, index)"  
+                    style="width: 100%"
+                    @input="onInputChangeListDetail(list.debtAccountDetail, index)" 
+                    v-model="list.debtAccountDetail"/>
+                </td>
                 <td><input type="text" style="width: 100%" v-model="list.creditAccountDetail"/></td>
                 <td style="text-align: right">
                   <money style="width: 100%; text-align: right;" v-model="list.amountDetail" v-bind="money"/>
@@ -274,7 +282,7 @@
   </div>
 </template>
 <script>
-// import $ from 'jquery'
+import $ from 'jquery'
 import Autocomplete from "../common/Autocomplete.vue";
 import {Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
@@ -351,8 +359,30 @@ export default {
       // }
     });
   },
-  
+  //TODO: bổ sung message thành công khi xóa ------- chọn dòng rồi tích vào check-box
   methods: {
+    //#region validate nhập Tài khoản nợ
+    checkValueEmptyDebtAccount(value, index){
+      if (!value) {
+        document.getElementsByClassName("debtAccount--Detail")[index].classList.add('input-error');
+      }else{
+        document.getElementsByClassName("debtAccount--Detail")[index].classList.remove('input-error');
+      }
+    },
+    onInputChangeListDetail(value, index){
+      this.checkValueEmptyDebtAccount(value, index);
+    },
+    onBlurInputListDetail(value, index){
+      this.checkValueEmptyDebtAccount(value, index);
+    },
+    //#endregion
+
+    showNotification(message) {
+      this.$notification["success"]({
+          message,
+          duration: 2,
+      });
+    },
     focusDetail(){
       this.$refs.focusDescriptionDetail[0].focus();
     },
@@ -421,7 +451,9 @@ export default {
           this.toggleObject = false;
           this.currentIndex = 0;
         }
-        if (this.currentIndex < this.fakeEmployees.length - 1) this.currentIndex++;      
+        if (this.currentIndex < this.fakeEmployees.length - 1) {
+          this.currentIndex++;
+        }   
       }
       if (value === 'employee') {
         if (this.toggleEmployee) {
@@ -602,8 +634,6 @@ export default {
       if(this.rowIndex != 0){
         this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
       }
-      
-      //TODO:  ----- validate Tài khoản nợ đã xong nhưng boder đỏ hết---------
     },
     // Thêm 1 dòng trong bảng listDetail
     async onBtnAddRowClick(){
@@ -621,14 +651,6 @@ export default {
       
     },
     //#endregion
-
-    // Hiển thị thông báo.
-    showNotification(message) {
-      this.$notification["success"]({
-        message,
-        duration: 2,
-      });
-    },
     
     //#region Đóng Cashdialog
     /**
@@ -705,7 +727,7 @@ export default {
       }    
     },
     /**
-     * Kiểm tra các trường bắt buộc nhập
+     * Kiểm tra các trường bắt buộc nhập có check listDetail
      * CreatedBy: NXCHIEN 19/05/2021
      */
     isCheckValidate() {
@@ -741,8 +763,8 @@ export default {
       }
       for (let i = 0; i < this.listDetail.length; i++) {
         if (this.listDetail[i].debtAccountDetail == '') {
-          this.debtAccountError = true;
-          this.message = STR_EMPTY_DEBTACCOUNT; //TODO: fix bấm cất trong khi dòng 2 có data, dòng 1 ko có thì focus vào dòng 1 chứ ko được xóa
+          document.getElementsByClassName("debtAccount--Detail")[i].classList.add('input-error');
+          this.message = STR_EMPTY_DEBTACCOUNT; 
           this.changeData = EMPTYDATA;
           return true;
         }
@@ -750,7 +772,7 @@ export default {
       return false;
     },
     //#endregion
-    
+ 
     assignValueMessageError(res){
       this.message = res.data.data;
       this.valuePopup = true;
@@ -810,13 +832,17 @@ export default {
           this.showNotification(MES_ADD_SUCCESS);
         } else {
           this.showNotification(MES_EDIT_SUCCESS);
+
         }
         this.$emit("hideCashDialog");
       });
     },
     //#endregion
 
-    // ĐÓng CashPopup và kiểm tra message lỗi để focus
+    /**
+     * ĐÓng CashPopup và kiểm tra message lỗi để focus
+     * CreatedBy: NXCHIEN 10/06/2021
+     */
     hideCashPopupAndValidate(){
       this.valuePopup = false;
       this.checkRefCodeEmpty();
@@ -825,15 +851,15 @@ export default {
       this.checkAccountingDateEmpty();
       this.checkRefDateEmpty();
       this.checkEmployeeEmpty();
-      if(this.debtAccountError){
-        for (let i = 0; i < this.listDetail.length; i++) {
-          if (this.listDetail[i].debtAccountDetail == '') {
-            this.$refs.focusDebt[i].focus();
-            this.debtAccountError = false;
-            break;
-          }
+      
+      for (let i = 0; i < this.listDetail.length; i++) {
+        if (this.listDetail[i].debtAccountDetail == '') {
+          this.$refs.focusDebt[i].focus();
+          document.getElementsByClassName("debtAccount--Detail")[i].classList.remove('input-error');
+          break;
         }
       }
+      
       if(this.message.includes(REF_CODE)){
         this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
         this.$refs.focusRefCode.focus();
@@ -913,6 +939,11 @@ export default {
   },
 
   mounted() {
+    clearTimeout(this.timeOut);
+    this.timeOut = setTimeout(() => {
+      $('.v-money').attr("maxlength", 15);
+    }, 100)
+
     this.$refs.focusReceiver.focus();
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);     // Khởi tạo giá trị listDetail
     this.rowIndex = this.listDetail.length;                           // Khởi tạo rowIndex
