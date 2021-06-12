@@ -11,9 +11,10 @@
       <div class="cashbox__icon icon icon-24 mi-setting__detail"></div>
       <div class="cashbox__icon icon icon-24 mi-help"></div>
       <div
-        class="cashbox__icon icon icon-24 mi-close"
+        class="cashbox__icon icon icon-24 mi-close tooltip tooltip--position"
         @click="onBtnCloseClick"
-      ></div>
+      >
+      <span class="tooltip__text">ESC</span></div>
     </div>
     <div class="cashbox__content">
       <div class="content__information">
@@ -71,7 +72,7 @@
               </div>
               <div class="receive">
                 <span class="text">Người nhận <p style="color: red; display: inline">*</p></span>
-                <input tabindex="3" ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/><br/>
+                <input maxlength="100" tabindex="3" ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/><br/>
                 <span class="span">{{messageReceiver}}</span>
               </div>
             </div>
@@ -123,6 +124,7 @@
                     @focus="focusInputKey('employee')"
                     @input="onChangeInputEmployee"
                     tabindex="5"
+                    maxlength="100"
                   />
                   <div class="icon-selected">
                     <div
@@ -158,7 +160,7 @@
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
-              <input tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
+              <input maxlength="10" tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
             </div>
             <div class="invoice">chứng từ gốc</div>
           </div>
@@ -203,9 +205,9 @@
                     @blur="onBlurInputListDetail(list.debtAccountDetail, index)"  
                     style="width: 100%"
                     @input="onInputChangeListDetail(list.debtAccountDetail, index)" 
-                    v-model="list.debtAccountDetail"/>
+                    v-model="list.debtAccountDetail" maxlength="20"/>
                 </td>
-                <td><input type="text" style="width: 100%" v-model="list.creditAccountDetail"/></td>
+                <td><input maxlength="20" type="text" style="width: 100%" v-model="list.creditAccountDetail"/></td>
                 <td style="text-align: right">
                   <money style="width: 100%; text-align: right;" v-model="list.amountDetail" v-bind="money"/>
                 </td>
@@ -237,7 +239,7 @@
       </div>
       <div class="grid__item">
         <div class="item__flex">
-          <button class="btn-add-row tooltip tooltip--position30-30" @click="onBtnAddRowClick" v-hotkey="keymap">Thêm dòng <span class="tooltip__text">Ctrl + Insert</span></button>
+          <button class="btn-add-row tooltip tooltip--100" @click="onBtnAddRowClick" v-hotkey="keymap">Thêm dòng <span class="tooltip__text">Ctrl + Insert</span></button>
           <button class="btn-add-row" @click="onBtnDeleteAllRow">Xóa hết dòng</button>
         </div>
         <div class="upload tooltip tooltip--position30-30">
@@ -478,8 +480,8 @@ export default {
         this.messageObject = "";
       }
       if (value === 'employee') {
-        this.saveValueEmployeeName = this.fakeEmployees[this.currentIndex].fullName;
-        this.cash.employeeId = this.fakeEmployees[this.currentIndex].employeeId;
+        this.saveValueEmployeeName = this.fakeEmployees[this.currentIndexE].fullName;
+        this.cash.employeeId = this.fakeEmployees[this.currentIndexE].employeeId;
         this.cash.fullName = this.saveValueEmployeeName;
         this.toggleEmployee = true;
         this.messageFullName = "";
@@ -851,15 +853,17 @@ export default {
       this.checkAccountingDateEmpty();
       this.checkRefDateEmpty();
       this.checkEmployeeEmpty();
-      
-      for (let i = 0; i < this.listDetail.length; i++) {
-        if (this.listDetail[i].debtAccountDetail == '') {
-          this.$refs.focusDebt[i].focus();
-          document.getElementsByClassName("debtAccount--Detail")[i].classList.remove('input-error');
-          break;
+      if (!this.messageCode && !this.messageObject && !this.messageReceiver && 
+      !this.messageAccountingDate && !this.messageRefDate && !this.messageFullName) {
+        for (let i = 0; i < this.listDetail.length; i++) {
+          if (this.listDetail[i].debtAccountDetail == '') {
+            this.$refs.focusDebt[i].focus();
+            document.getElementsByClassName("debtAccount--Detail")[i].classList.remove('input-error');
+            break;
+          }
         }
       }
-      
+
       if(this.message.includes(REF_CODE)){
         this.messageCode = RECEIPTPAYMENT_CODE_EXIST;
         this.$refs.focusRefCode.focus();
@@ -909,6 +913,7 @@ export default {
     checkEmployeeEmpty(){
       if(this.messageFullName != ''){
         this.$refs.focusInputEmployee.focus();
+        return;
       }
     }
     //#endregion
@@ -941,7 +946,7 @@ export default {
   mounted() {
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      $('.v-money').attr("maxlength", 15);
+      $('.v-money').attr("maxlength", 15);        /// Add maxlength cho 
     }, 100)
 
     this.$refs.focusReceiver.focus();

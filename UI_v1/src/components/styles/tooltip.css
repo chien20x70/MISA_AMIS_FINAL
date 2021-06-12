@@ -23,6 +23,9 @@
 .tooltip--70 .tooltip__text{
     width: 70px;
 }
+.tooltip--100 .tooltip__text{
+    width: 100px;
+}
 .tooltip--200 .tooltip__text{
     width: 200px;
 }
@@ -38,4 +41,8 @@
 .tooltip--position25-10 .tooltip__text{
     top: 25px;
     right: 10px;
+}
+.tooltip--position .tooltip__text{
+    top: 4px;
+    right: 20px;
 }
