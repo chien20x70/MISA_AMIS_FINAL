@@ -105,7 +105,7 @@
                 <th style="min-width: 150px; text-align: right;">{{totalMoney | formatMoney}}</th>
                 <th style="min-width: 228px"></th>
                 <th style="min-width: 323px"></th>
-                <th style="min-width: 120px; z-index: 100;"></th>
+                <th style="min-width: 120px; z-index: 92;"></th>
               </tr>
           </tfoot>
         </table>        
@@ -720,7 +720,7 @@ export default {
   }
   
   .hover {
-    border: none;
+    border: 1px solid transparent;
     padding: 6px 0px 6px 6px;
     box-sizing: border-box;
     margin-left: 10px;
@@ -771,6 +771,7 @@ export default {
   }
   .margin {
     margin-left: 10px;
+    border: 1px solid transparent;
   }
   .margin:hover{
     font-weight: 800;

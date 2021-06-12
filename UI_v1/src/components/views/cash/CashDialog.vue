@@ -5,13 +5,13 @@
       <div class="cashbox__title">Phiếu chi {{valueRefCode}}</div>
       <div class="cashbox__input">
         <div class="cashbox__input--size">
-          <!-- <Autocomplete/> -->
+          <Autocomplete/>
         </div>
       </div>
       <div class="cashbox__icon icon icon-24 mi-setting__detail"></div>
       <div class="cashbox__icon icon icon-24 mi-help"></div>
       <div
-        class="cashbox__icon icon icon-24 mi-close tooltip tooltip--position"
+        class="cashbox__icon icon icon-24 mi-close tooltip tooltip--position close--hover"
         @click="onBtnCloseClick"
       >
       <span class="tooltip__text">ESC</span></div>
@@ -325,7 +325,7 @@ export default {
       messageAccountingDate: '',
       messageRefDate: '',
       //#endregion
-
+      firstFocus: false,
       //#region Phát hiện sự thay đối dữ liệu khi click đóng form CashDialog
       changeData: '',           // Biến check changeData: trống, trùng, tồn tại
       detectChangeCash: {},     // Mảng sao chép Object Cash
@@ -354,7 +354,7 @@ export default {
       }
     });
   },
-  
+
   methods: {
     // Show thông báo
     showNotification(message) {
@@ -924,7 +924,9 @@ export default {
       $('.v-money').attr("maxlength", 15);        /// Add maxlength cho số tiền trong detail
     }, 100)
 
-    this.$refs.focusReceiver.focus();
+    this.$refs.focusInputObject.focus();
+    this.toggleObject = true;
+
     this.listDetail = JSON.parse(this.cash.receiptPaymentDetail);     // Khởi tạo giá trị listDetail
     this.rowIndex = this.listDetail.length;                           // Khởi tạo rowIndex
     this.valueRefCode = this.cash.receiptPaymentCode;                 // Khởi tạo giá trị Phiếu chi góc trái trên màn hình
@@ -1367,5 +1369,8 @@ table tfoot th {
 }
 .out-of-range:focus{
   border: 1px solid #babec5;
+}
+.close--hover:hover{
+  background-position: -146px -145px;
 }
 </style>

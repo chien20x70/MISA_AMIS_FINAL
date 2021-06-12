@@ -9,7 +9,7 @@
       <div class="dropdown-content" :class="{ 'display': !valueDrop}" :style="{top: top + 'px', left: left + 'px'}" >
         <div class="dropdown-row-1" @click="btnDuplicateClick">Nhân bản</div>
         <div class="dropdown-row-1" @click="btnDelete">Xóa</div>
-        <div class="dropdown-row-1">Ngưng sử dụng</div>
+        <!-- <div class="dropdown-row-1">Ngưng sử dụng</div> -->
       </div>
     </div>
   </div>
@@ -84,7 +84,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  height: 91px;
+  height: 63px;
   width: 123px;
   background-color: white;
   z-index: 100;
@@ -116,7 +116,7 @@ export default {
   padding: 6px 0px 6px 16px;
 }
 .padding {
-  /* padding: 0 0 0 10px; */
+  border: 1px solid transparent;
   margin-left: 10px;
   padding: 0;
   border-radius: 0%;
@@ -138,7 +138,7 @@ export default {
   align-items: center;
 }
 .arrow-up--blue {
-  background-position: -897px -359px;
+  background-position: -895px -359px;
 }
 .dropdown-row-1 {
   height: 29px;
