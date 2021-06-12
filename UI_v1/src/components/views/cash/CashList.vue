@@ -45,7 +45,7 @@
         <table class="tblListEmployee" border="0" width="100%">
           <thead>
             <tr>
-              <th class="first__th"><input type="checkbox" class="check-box" /></th>
+              <th class="first__th"><input type="checkbox" class="check-box" @click="onBtnCheckedClick"/></th>
               <th style="min-width: 150px; border-left: none; text-align: center;">NGÀY HẠCH TOÁN</th>
               <th style="min-width: 125px">SỐ CHỨNG TỪ</th>
               <th style="min-width: 400px">DIỄN GIẢI</th>
@@ -60,6 +60,8 @@
               v-for="(cash, index) in cashs"
               :key="index"
               @dblclick="onRowTableDblClick(cash.receiptPaymentId)"
+              @click="onRowTableClick(cash.receiptPaymentId, index)"
+              :class="{'row-color': cash.receiptPaymentId == recordId}"
             >
               <td class="first__th" style="z-index: 2;"><input type="checkbox" class="check-box" /></td>
               <td style="border-left: none; text-align: center;">{{ cash.accountingDate | dateFormatDDMMYY}}</td>
@@ -252,6 +254,10 @@ export default {
       startDate: "",
       endDate: "",
       //#endregion
+
+      checkedAll: false,
+      checked: false,
+      listChecked: [],
     };
   },
   //#endregion
@@ -266,6 +272,27 @@ export default {
 
   //#region METHODS
   methods: {
+    onBtnCheckedClick(){
+      this.checkedAll = !this.checkedAll;
+      for (let i = 0; i < this.cashs.length; i++) {
+        document.getElementsByClassName('check-box')[i + 1].checked = this.checkedAll;
+        this.listChecked.push(this.cashs[i].receiptPaymentId);
+      }
+      if (this.checkedAll == false) {
+        this.listChecked = [];
+      }
+    },
+    onRowTableClick(id, index){
+      this.recordId = id;
+      this.checked = !this.checked;
+      document.getElementsByClassName('check-box')[index + 1].checked = this.checked;
+      if (this.checked == true) {
+        this.listChecked.push(id);
+      }else if(this.checked == false){
+        this.listChecked.pop(id);
+      }
+      
+    },
     onBtnDeleteCondition(){
       this.startDate = '';
       this.endDate = '';
@@ -863,5 +890,11 @@ export default {
   .btn--edit{
     color: #0075c0; 
     font-weight: 600;
+  }
+  .row-color{
+    background-color: #f3f8f8;
+  }
+  .row-color td{
+    background-color: #f3f8f8;
   }
 </style>

@@ -198,8 +198,6 @@
                 <td style="border-left: none">
                   <input ref="focusDescriptionDetail" type="text" style="width: 100%" v-model="list.descriptionDetail"/>
                 </td>
-                <!-- debtAccountError == true -->
-                <!-- :class="{'input-error': debtAccountError == true}" -->
                 <td>
                   <input class="debtAccount--Detail" ref="focusDebt" type="text" 
                     @blur="onBlurInputListDetail(list.debtAccountDetail, index)"  
@@ -212,7 +210,7 @@
                   <money style="width: 100%; text-align: right;" v-model="list.amountDetail" v-bind="money"/>
                 </td>
                 <td>
-                  <Autocomplete v-model="list.organizationUnitCodeDetail" :code="index" @sendIdToCashDialog="getDataId"/>
+                  <Autocomplete v-model="list.organizationUnitCodeDetail" :code="index" @sendIdToCashDialog="getDataId" @updateData="updateData"/>
                 </td>
                 <td><input type="text" class="out-of-range" v-model="list.organizationUnitNameDetail" readonly/></td>
                 <td class="editclass">
@@ -327,8 +325,6 @@ export default {
       messageAccountingDate: '',
       messageRefDate: '',
       //#endregion
-      
-      debtAccountError: false,      // check trống khi không nhập Tài khoản nợ
 
       //#region Phát hiện sự thay đối dữ liệu khi click đóng form CashDialog
       changeData: '',           // Biến check changeData: trống, trùng, tồn tại
@@ -346,7 +342,7 @@ export default {
         decimal: ',',
         thousands: '.',
         precision: 0,
-        masked: false /* doesn't work with directive */
+        masked: false
       },
     };
   },
@@ -356,35 +352,19 @@ export default {
         this.toggleObject = true;
         this.toggleEmployee = true;
       }
-      // if (e.target.className == 'style-input-date-lib' && this.$refs.accountingDate.$refs.reference.$refs.accountingDate != undefined) {
-      //   this.$refs.accountingDate.$refs.reference.$refs.accountingDate.select();
-      // }
     });
   },
   //TODO: bổ sung message thành công khi xóa ------- chọn dòng rồi tích vào check-box
   methods: {
-    //#region validate nhập Tài khoản nợ
-    checkValueEmptyDebtAccount(value, index){
-      if (!value) {
-        document.getElementsByClassName("debtAccount--Detail")[index].classList.add('input-error');
-      }else{
-        document.getElementsByClassName("debtAccount--Detail")[index].classList.remove('input-error');
-      }
-    },
-    onInputChangeListDetail(value, index){
-      this.checkValueEmptyDebtAccount(value, index);
-    },
-    onBlurInputListDetail(value, index){
-      this.checkValueEmptyDebtAccount(value, index);
-    },
-    //#endregion
-
+    // Show thông báo
     showNotification(message) {
       this.$notification["success"]({
           message,
           duration: 2,
       });
     },
+
+    // Nhập xong số chứng từ nhấn enter focus vào ô đầu của listDetail
     focusDetail(){
       this.$refs.focusDescriptionDetail[0].focus();
     },
@@ -396,8 +376,11 @@ export default {
       this.listDetail[index].organizationUnitNameDetail = name;
       this.listDetail[index].organizationUnitCodeDetail = code;
     },
+    updateData(value, index){
+      this.listDetail[index].organizationUnitCodeDetail = value;
+    },
 
-    //#region Dữ liệu thao tác với autocomplete
+    //#region Dữ liệu thao tác với Autocomplete Object và employee
     /**
      * Dropdown Click của Nhân viên và Đối tượng
      * CreateBy: NXCHIEN 09/06/2021
@@ -513,7 +496,7 @@ export default {
     },
     //#endregion
 
-    //#region Check OnchangeInput
+    //#region Check OnchangeInput hiển thị lỗi khi nhập sai
     /**
      * Cập nhật giá trị refCode khi thay đổi input refCode
      * CreatedBY: NXCHIEN 06/06/2021
@@ -581,6 +564,20 @@ export default {
       } else if (val === "") {
         this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
       }
+    },
+    //validate nhập Tài khoản nợ
+    checkValueEmptyDebtAccount(value, index){
+      if (!value.trim()) {
+        document.getElementsByClassName("debtAccount--Detail")[index].classList.add('input-error');
+      }else{
+        document.getElementsByClassName("debtAccount--Detail")[index].classList.remove('input-error');
+      }
+    },
+    onInputChangeListDetail(value, index){
+      this.checkValueEmptyDebtAccount(value, index);
+    },
+    onBlurInputListDetail(value, index){
+      this.checkValueEmptyDebtAccount(value, index);
     },
     //#endregion
 
@@ -650,8 +647,8 @@ export default {
         await this.listDetail.push(JSON.parse(JSON.stringify(this.listDetail[this.rowIndex - 2])));
         this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
       }
-      
     },
+
     //#endregion
     
     //#region Đóng Cashdialog
@@ -674,19 +671,6 @@ export default {
     },
     //#endregion
 
-    /**
-     * Lấy data lỗi trả về từ server
-     * CreatedBY: NXCHIEN 30/05/2021
-     */
-    getResponseError(res){
-      if(res != undefined){
-        if(res.data.code == 500){
-          this.message = MES_ERROR_SERVER;
-          this.valuePopup = true;
-        }
-      }
-    },
-
     //so sánh 2 object by object
     compareObjectCash(obj1, obj2) {
       for (let key in obj2) {
@@ -695,12 +679,6 @@ export default {
         }
       }
       return false;
-    },
-
-    convertListDetailtoJSON(){
-      this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
-      this.cash.totalAmount = this.totalMoney;
-      this.cash.reasonName = STR_REASONNAME;
     },
 
     //#region Validate Click Save
@@ -764,7 +742,7 @@ export default {
         return true;
       }
       for (let i = 0; i < this.listDetail.length; i++) {
-        if (this.listDetail[i].debtAccountDetail == '') {
+        if (this.listDetail[i].debtAccountDetail.trim() == '') {
           document.getElementsByClassName("debtAccount--Detail")[i].classList.add('input-error');
           this.message = STR_EMPTY_DEBTACCOUNT; 
           this.changeData = EMPTYDATA;
@@ -775,70 +753,67 @@ export default {
     },
     //#endregion
  
-    assignValueMessageError(res){
-      this.message = res.data.data;
-      this.valuePopup = true;
-      this.changeData = EXISTDATA;
+    //#region Click nút Cất và 'Cất và in'
+    // chuyển mảng sang JSON
+    convertListDetailtoJSON(){
+      this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
+      this.cash.totalAmount = this.totalMoney;
+      this.cash.reasonName = STR_REASONNAME;
     },
-    //#region Click Save and SaveAndAdd
-    validAndSave() {
+    onBtnSaveClick() {
       // Kiểm tra attribute empty
       this.checkEmptyAttribute();
       // Kiểm tra validate attribute
       this.valuePopup = this.isCheckValidate();
       if (!this.valuePopup)
-        if (this.flag == FORMMODE_ADD) {
-          this.convertListDetailtoJSON();
-          return this.axios.post("/ReceiptPayments", this.cash)
-            .then((res) => {            
-              if (res.data.code == 200) {
-                return Promise.resolve();
-              } else if (res.data.code == 400) {
-                this.assignValueMessageError(res);
-                return Promise.reject();
-              }
-              return Promise.resolve();
-            })
-            .catch((res) => {
-              this.getResponseError(res);
-              return Promise.reject();
-            });
-        }// Kiểm tra nút Thêm hay Sửa       
-        else if (this.flag == FORMMODE_EDIT) {
-          this.convertListDetailtoJSON();
-          return this.axios.put("/ReceiptPayments/" + this.cash.receiptPaymentId, this.cash)
-            .then((res) => {
-              if (res.data.code == 200) {
-                return Promise.resolve();
-              } else if (res.data.code == 400) { 
-                this.assignValueMessageError(res);
-                return Promise.reject();
-              }
-              return Promise.resolve();
-            })
-            .catch((res) => {
-              this.getResponseError(res);
-              return Promise.reject();
-            });
-        }
-      return Promise.reject();
+        this.onFormModeAddSave();
+        this.onFormModeEditSave();
     },
-
-    /**
-     * Lưu thông tin ReceiptPayment
-     * CreatedBy: NXCHIEN 06/06/2021
-     */
-    onBtnSaveClick() {
-      this.validAndSave().then(() => {
-        if (this.flag == FORMMODE_ADD) {
-          this.showNotification(MES_ADD_SUCCESS);
-        } else {
-          this.showNotification(MES_EDIT_SUCCESS);
-
-        }
+    // Check formMode Add
+    onFormModeAddSave(){
+      if (this.flag == FORMMODE_ADD) {
+        this.convertListDetailtoJSON();
+        this.axios.post("/ReceiptPayments", this.cash).then((res) => {            
+          this.isCheckCodeResponse(res, MES_ADD_SUCCESS);
+        })
+        .catch((res) => {
+            this.getResponseError(res);
+        });
+      }
+    },
+    // Check formMode Edit
+    onFormModeEditSave(){
+      if (this.flag == FORMMODE_EDIT) {
+        this.convertListDetailtoJSON();
+        this.axios.put("/ReceiptPayments/" + this.cash.receiptPaymentId, this.cash).then((res) => {
+          this.isCheckCodeResponse(res, MES_EDIT_SUCCESS);
+        })
+        .catch((res) => {
+          this.getResponseError(res);
+        });
+      }
+    },
+    // Check response trả về
+    isCheckCodeResponse(res, message){
+      if (res.data.code == 200) {
+        this.showNotification(message);
         this.$emit("hideCashDialog");
-      });
+      } else if (res.data.code == 400) { 
+        this.message = res.data.data;
+        this.valuePopup = true;
+        this.changeData = EXISTDATA;
+      }
     },
+    // Lấy responseError từ server
+    getResponseError(res){
+      if(res != undefined){
+        if(res.data.code == 500){
+          this.message = MES_ERROR_SERVER;
+          this.valuePopup = true;
+        }
+      }
+    },
+    
     //#endregion
 
     /**
@@ -858,7 +833,6 @@ export default {
         for (let i = 0; i < this.listDetail.length; i++) {
           if (this.listDetail[i].debtAccountDetail == '') {
             this.$refs.focusDebt[i].focus();
-            document.getElementsByClassName("debtAccount--Detail")[i].classList.remove('input-error');
             break;
           }
         }
@@ -920,6 +894,7 @@ export default {
   
   },
   computed:{
+    // Phím tắt
     keymap() {
       return {       
         "Ctrl + Insert": this.onBtnAddRowClick,
@@ -946,7 +921,7 @@ export default {
   mounted() {
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {
-      $('.v-money').attr("maxlength", 15);        /// Add maxlength cho 
+      $('.v-money').attr("maxlength", 15);        /// Add maxlength cho số tiền trong detail
     }, 100)
 
     this.$refs.focusReceiver.focus();

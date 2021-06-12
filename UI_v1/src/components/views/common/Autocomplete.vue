@@ -4,13 +4,14 @@
       <div class="selected-option">
         <input
           type="text"
-          ref="focusInputAutocomplete"
+          ref="Autocomplete"
           class="input-select"
           @keydown.up="up"
           @keydown.down="down"
           @keydown.enter="enter"
-          v-model="showEmployeeName"
+          v-model="saveValueEmployeeCode"
           @focus="focusInputKey"
+          @input="handleInput"
         />
         <div class="icon-selected">
           <div
@@ -29,7 +30,7 @@
         <div class="text phone--size text-hidden">Số điện thoại</div>
       </div>
       <div class="department-content" ref="positionDepartment" 
-        v-for="(employee, index) in employees"
+        v-for="(employee, index) in fakeEmployees"
         :key="index"
         @click="onBtnEmployeeClick(employee ,index)"
         :class="{ color: currentIndex == index}"
@@ -50,18 +51,31 @@ export default {
   data() {
     return {
       employees: [],
+      fakeEmployees: [],
       toggleAutocomplete: true,
       currentIndex: 0,
-      saveValueEmployeeName: null,
+      saveValueEmployeeName: '',
       saveValueEmployeeCode: null,
-      flag: true,
     };
   },
   methods: {
+    handleInput(e){
+      let val = e.target.value;
+      this.toggleAutocomplete = false;
+      this.$emit('updateData', val, this.code);
+      this.currentIndex = 0;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.fakeEmployees = this.employees.filter(item => {
+        return item.fullName.toLowerCase().indexOf(this.saveValueEmployeeCode.toLowerCase()) !== -1;
+        })
+      }, 300);
+    },
+    
     onBtnDropdownClick() {
       this.toggleAutocomplete = !this.toggleAutocomplete;
       if (!this.toggleAutocomplete) {
-        this.$refs.focusInputAutocomplete.focus();
+        this.$refs.Autocomplete.focus();
       }
     },
 
@@ -83,8 +97,9 @@ export default {
     down() {
       if (this.toggleAutocomplete) {
         this.toggleAutocomplete = false;
+        this.currentIndex = 0;
       }
-      if (this.currentIndex < this.employees.length - 1) this.currentIndex++;
+      if (this.currentIndex < this.fakeEmployees.length - 1) this.currentIndex++;
     },
 
     /**
@@ -92,10 +107,9 @@ export default {
      * CreatedBy: NXCHIEN 19/05/2021
      */
     enter() {
-      this.saveValueEmployeeName = this.employees[this.currentIndex].fullName;
-      this.saveValueEmployeeCode = this.employees[this.currentIndex].employeeCode;
+      this.saveValueEmployeeName = this.fakeEmployees[this.currentIndex].fullName;
+      this.saveValueEmployeeCode = this.fakeEmployees[this.currentIndex].employeeCode;
       this.toggleAutocomplete = true;
-      this.flag = false;
       if (this.code != undefined) {
         this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);
       }
@@ -110,7 +124,6 @@ export default {
       this.saveValueEmployeeCode = employee.employeeCode;
       this.toggleAutocomplete = true;
       this.currentIndex = index;
-      this.flag = false;
       if (this.code != undefined) {
         this.$emit("sendIdToCashDialog", this.saveValueEmployeeCode, this.code, this.saveValueEmployeeName);       
       }
@@ -127,26 +140,14 @@ export default {
   },
   
   mounted() {
+    this.saveValueEmployeeCode = this.value;
     // Lấy dữ liệu nhân viên
     this.axios.get(`/Employees`)
       .then((response) => {
         this.employees = response.data.data;
+        this.fakeEmployees = [...this.employees];
       })
       .catch(() => {});
-  },
-  computed:{
-    // Theo dõi giá trị hiển thị mã code nhân viên trên autocomplete
-    showEmployeeName: {
-      get(){
-        if(this.flag){
-          return this.value;
-        }
-        return this.saveValueEmployeeCode; 
-      },
-      set(val) {
-        this.value = val;
-      },
-    },
   },
 };
 </script>

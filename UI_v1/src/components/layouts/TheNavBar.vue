@@ -25,7 +25,7 @@
         v-on:click="selectItem(0)"
       >
         <div class="menu-item-icon">
-          <div class="icon icon-24 mi-sidebar-dashboard"></div>
+          <div class="icon icon-24 mi-sidebar-sale"></div>
         </div>
         <div class="menu-item-title">Danh mục</div>
       </router-link>
