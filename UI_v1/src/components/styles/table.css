@@ -20,14 +20,10 @@ table thead th{
 table th, td {
     height: 34px;
     padding: 5px 10px;
-    /* border-bottom: 1px solid #c7c7c7; */
-    /* border-left: 1px solid #c7c7c7; */
-    background-color: white;   
-    /* box-shadow: inset 0px 0px #c7c7c7, 0 1px #c7c7c7; */  
+    background-color: white;    
 }
 tbody tr td{
     height: 46px;
-    /* border-left: 1px dotted #bbb; */
     font-size: 13px !important;
 }
 thead tr th:nth-child(5){
@@ -52,9 +48,6 @@ tbody tr td:last-child{
     min-width: 225px;
   }
   th .resize {
-    /* border: 0;
-    width: auto;
-    float: right; */
     cursor: col-resize;
   }
 table tfoot th{

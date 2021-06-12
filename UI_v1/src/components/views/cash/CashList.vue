@@ -60,7 +60,7 @@
               v-for="(cash, index) in cashs"
               :key="index"
               @dblclick="onRowTableDblClick(cash.receiptPaymentId)"
-              @click="onRowTableClick(cash.receiptPaymentId, index)"
+              @click="onRowTableClick(cash.receiptPaymentId)"
               :class="{'row-color': cash.receiptPaymentId == recordId}"
             >
               <td class="first__th" style="z-index: 2;"><input type="checkbox" class="check-box" /></td>
@@ -246,7 +246,6 @@ export default {
       msgSelect: " bản ghi trên 1 trang", // message default
       msgSelected: "20 bản ghi trên 1 trang", // message hiển thị khi phân trang.
 
-      //TODO: Validate --------------- and ChangeData.
       //#region data cho CashDialog
       totalMoney: 0,
       formMode: "",
@@ -263,6 +262,11 @@ export default {
   //#endregion
   
   created() {
+    window.addEventListener('click', (e) => {
+      if (!this.$el.contains(e.target)){
+        this.recordId = null;  // Xoa class onColor sau khi click ra ngoài phạm vi content
+      }
+    })
     /**
      * Lọc dữ liệu hiển thì mặc định 20 bản ghi/ trang
      * CreatedBy: NXCHIEN 17/05/2021
@@ -276,22 +280,10 @@ export default {
       this.checkedAll = !this.checkedAll;
       for (let i = 0; i < this.cashs.length; i++) {
         document.getElementsByClassName('check-box')[i + 1].checked = this.checkedAll;
-        this.listChecked.push(this.cashs[i].receiptPaymentId);
-      }
-      if (this.checkedAll == false) {
-        this.listChecked = [];
       }
     },
-    onRowTableClick(id, index){
+    onRowTableClick(id){
       this.recordId = id;
-      this.checked = !this.checked;
-      document.getElementsByClassName('check-box')[index + 1].checked = this.checked;
-      if (this.checked == true) {
-        this.listChecked.push(id);
-      }else if(this.checked == false){
-        this.listChecked.pop(id);
-      }
-      
     },
     onBtnDeleteCondition(){
       this.startDate = '';
@@ -303,7 +295,8 @@ export default {
      * Gán selectedCash khi click BtnAdd.
      * CreatedBY: NXCHIEN 30/05/2021
      */
-    onBtnAddAssignSelectedCash(response){
+    onBtnAddAssignSelectedCash(response, formMode){
+      this.status = formMode;
       // Hiển thị dialog
       this.show = true;
       // Gán tất cả các ô data của dialog rỗng
@@ -335,11 +328,7 @@ export default {
       this.axios
         .get("/ReceiptPayments/ReceiptPaymentCode")
         .then((response) => {
-         
-          // Gán giá trị là nút Thêm mới
-          this.status = FORMMODE_ADD;
-          // Gán tất cả các ô data của dialog rỗng
-          this.onBtnAddAssignSelectedCash(response);
+          this.onBtnAddAssignSelectedCash(response, FORMMODE_ADD);
         })
         .catch(() => {});
     },
@@ -405,8 +394,8 @@ export default {
      * Hàm dùng chung khi click nhân bản và dblClick 1 dòng trong bảng
      * CreatedBy: NXCHIEN 17/05/2021
      */
-    onShowDialogAndAssignSelectedCash(response){
-      //show Dialog
+    onShowDialogAndAssignSelectedCash(response, formMode){
+      this.status = formMode;
       this.show = true;
       //Fill employee vào dialog
       this.selectedCash = response.data.data;      
@@ -421,9 +410,7 @@ export default {
       this.axios
         .get("/ReceiptPayments/" + eId)
         .then((response) => {
-          // gán cờ thành nút sửa
-          this.status = FORMMODE_EDIT;
-          this.onShowDialogAndAssignSelectedCash(response);
+          this.onShowDialogAndAssignSelectedCash(response, FORMMODE_EDIT);
         })
         .catch(() => {});
     },
@@ -432,9 +419,7 @@ export default {
       this.axios
         .get("/ReceiptPayments/ReceiptPaymentCopy?id=" + value)
         .then((response) => {
-          // gán cờ thành nút thêm mới
-          this.status = FORMMODE_ADD;
-          this.onShowDialogAndAssignSelectedCash(response);
+          this.onShowDialogAndAssignSelectedCash(response, FORMMODE_ADD);
         })
         .catch(() => {});
     },
@@ -446,8 +431,6 @@ export default {
       this.onRowTableDblClick(receiptPaymentId);
     },
     //#endregion
-
-    
 
     /**
       * Load lại dữ liệu khi click vào nút refresh
@@ -465,7 +448,7 @@ export default {
     },
 
     /**
-     * Lọc theo ngày hạch toán //TODO: chưa hoàn thành-------Cần thêm API
+     * Lọc theo ngày hạch toán 
      * CreatedBY: NXCHIEN 09/06/2021
      */
     onBtnCashFilterClick(startDate, endDate){
@@ -474,7 +457,7 @@ export default {
       this.filterDataByDateNotNull();
     },
 
-    //#region Lọc dữ liệu: ChangeInput + Phân trang và Export excel //TODO: Chưa hoàn thành ExportExcel
+    //#region Lọc dữ liệu: ChangeInput + Phân trang và Export excel
     /**
       * Lọc data bằng các tham số truyền vào
       * CreatedBy: NXCHIEN 06/06/2021
@@ -570,7 +553,7 @@ export default {
     },
 
     /**
-      * Export data ra file excel. //TODO: Chưa sửa export bên API.
+      * Export data ra file excel. 
       * CreatedBy: NXCHIEN 06/06/2021
       */
     onBtnExportClick() {  

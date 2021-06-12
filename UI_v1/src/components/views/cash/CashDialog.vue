@@ -354,7 +354,7 @@ export default {
       }
     });
   },
-  //TODO: bổ sung message thành công khi xóa ------- chọn dòng rồi tích vào check-box
+  
   methods: {
     // Show thông báo
     showNotification(message) {
