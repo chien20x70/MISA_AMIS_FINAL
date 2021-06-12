@@ -36,9 +36,6 @@ namespace MISA.AMIS.Core.Service
         /// <summary>
         /// Export file excel xuất khẩu toàn bộ nhân viên
         /// </summary>
-        /// <param name="pageSize">số nhân viên / trang</param>
-        /// <param name="pageIndex">Trang số bao nhiêu</param>
-        /// <param name="filter">lọc bằng chuỗi string</param>
         /// <returns>Stream</returns>
         /// CreatedBy: NXCHIEN 17/05/2021
         public Stream ExportExcel()

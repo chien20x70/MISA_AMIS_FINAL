@@ -17,6 +17,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AttributeResource.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\ExcelReceiptPaymentResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExcelReceiptPaymentResource.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\ExcelResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -38,6 +43,10 @@
     <EmbeddedResource Update="Properties\AttributeResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AttributeResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\ExcelReceiptPaymentResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExcelReceiptPaymentResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\ExcelResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>

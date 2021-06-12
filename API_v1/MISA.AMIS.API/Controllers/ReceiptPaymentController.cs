@@ -60,5 +60,22 @@ namespace MISA.AMIS.API.Controllers
             }
             return Ok(_serviceResult);
         }
+
+        /// <summary>
+        /// Export file excel
+        /// </summary>
+        /// <returns>
+        ///     - Thành công: 200
+        ///     - Lỗi server: 500
+        /// </returns>
+        /// CreatedBy: NXCHIEN (17/05/2021)
+        [HttpGet("ExportingExcel")]
+        public IActionResult ExportingExcel()
+        {
+            var stream = _receiptPaymentService.ExportExcel();
+            string excelName = $"Danh-sach-phieu-chi-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
     }
 }

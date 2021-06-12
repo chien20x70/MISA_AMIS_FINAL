@@ -2,8 +2,12 @@
 using MISA.AMIS.Core.Enums;
 using MISA.AMIS.Core.Interfaces.Repository;
 using MISA.AMIS.Core.Interfaces.Service;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -116,6 +120,109 @@ namespace MISA.AMIS.Core.Service
                 };
             }
             return null;
+        }
+
+        /// <summary>
+        /// Export file excel xuất khẩu toàn bộ nhân viên
+        /// </summary>
+        /// <returns>Stream</returns>
+        /// CreatedBy: NXCHIEN 17/05/2021
+        public Stream ExportExcel()
+        {
+            // Lấy ra danh sách tất cả nhân viên
+            var res = _receiptPaymentRepository.GetMISAEntities(300, 1, "");
+            var list = res.Data.ToList();
+            var stream = new MemoryStream();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using var package = new ExcelPackage(stream);
+            var workSheet = package.Workbook.Worksheets.Add(Properties.ExcelResource.ExcelName);
+
+            // set độ rộng col
+            workSheet.Column(1).Width = 5;
+            workSheet.Column(2).Width = 15;
+            workSheet.Column(3).Width = 15;
+            workSheet.Column(4).Width = 40;
+            workSheet.Column(5).Width = 15;
+            workSheet.Column(6).Width = 30;
+            workSheet.Column(7).Width = 40;
+            workSheet.Column(8).Width = 15;
+            workSheet.Column(9).Width = 20;
+
+            // Format hiển thị dòng A1
+            using (var range = workSheet.Cells["A1:I1"])
+            {
+                range.Merge = true;
+                range.Value = Properties.ExcelResource.ExcelName;
+                range.Style.Font.Bold = true;
+                range.Style.Font.Size = 16;
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            }
+
+            // style cho excel.
+            workSheet.Cells[3, 1].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnSTT;
+            workSheet.Cells[3, 2].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnNHT;
+            workSheet.Cells[3, 3].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnSCT;
+            workSheet.Cells[3, 4].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnDG;
+            workSheet.Cells[3, 5].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnST;
+            workSheet.Cells[3, 6].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnDT;
+            workSheet.Cells[3, 7].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnDC;
+            workSheet.Cells[3, 8].Value = Properties.ExcelReceiptPaymentResource.ExcelColumnLD;
+            workSheet.Cells[3, 9].Value = Properties.ExcelReceiptPaymentResource.ExcelColumTNV;
+
+            //Format hiển thị row title
+            using (var range = workSheet.Cells["A3:I3"])
+            {
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                range.Style.Font.Bold = true;
+                range.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                workSheet.Cells["A3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["B3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["E3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            }
+
+            int i = 0;
+            // đổ dữ liệu từ list vào.
+            foreach (var item in list)
+            {
+                workSheet.Cells[i + 4, 1].Value = i + 1;
+                workSheet.Cells[i + 4, 2].Value = item.AccountingDate.ToString(Properties.ExcelResource.ExcelFormatDate);
+                workSheet.Cells[i + 4, 3].Value = item.ReceiptPaymentCode;
+                workSheet.Cells[i + 4, 4].Value = item.Description;
+                workSheet.Cells[i + 4, 5].Value = item.TotalAmount;
+                workSheet.Cells[i + 4, 6].Value = item.OrganizationUnitName;
+                workSheet.Cells[i + 4, 7].Value = item.OrganizationUnitAddress;
+                workSheet.Cells[i + 4, 8].Value = item.ReasonName;
+                workSheet.Cells[i + 4, 9].Value = item.FullName;
+
+                using (var range = workSheet.Cells[i + 4, 1, i + 4, 9])
+                {
+                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    workSheet.Cells[i + 4 , 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    workSheet.Cells[i + 4, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    workSheet.Cells[i + 4, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                }
+                i++;
+            }
+
+            using (var range = workSheet.Cells[list.Count() + 4, 1, list.Count() + 4, 9])
+            {
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                range.Style.Font.Bold = true;
+                range.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                workSheet.Cells[list.Count() + 4, 2].Value = Properties.ExcelReceiptPaymentResource.ExcelColumSUM;
+                workSheet.Cells[list.Count() + 4, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[list.Count() + 4, 5].Value = res.TotalMoney;
+                workSheet.Cells[list.Count() + 4, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            }
+            
+            package.Save();
+            stream.Position = 0;
+            return package.Stream;
         }
     }
 }
