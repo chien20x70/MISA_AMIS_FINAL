@@ -26,7 +26,7 @@
           </button>
           <CashFilter @onBtnCashFilterClick="onBtnCashFilterClick"/>
           <div v-if="startDate != ''" class="dateFilter">{{startDate | dateFormatDDMMYY}} - {{endDate | dateFormatDDMMYY}}</div>
-          <div v-if="startDate != ''" class="dateFilter" @click="onBtnDeleteCondition">Xóa điều kiện lọc</div>
+          <div v-if="startDate != ''" class="icon icon-16 mi-close--small" @click="onBtnDeleteCondition"></div>
         </div>
         <div class="item-right">
           <input
@@ -311,7 +311,7 @@ export default {
       this.selectedCash.fullName = "";
       this.selectedCash.receiver = "";
       this.selectedCash.refDate = this.getCurrentDate();
-      this.selectedCash.refAttach = 0;
+      this.selectedCash.refAttach = '';
       this.selectedCash.receiptPaymentDetail = JSON.stringify(arrDetailAdd);
     },
     // Lấy ra ngày hiện tại
@@ -645,6 +645,9 @@ export default {
   
   .pr-4 {
     padding-right: 4px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   
   .flex {

@@ -36,6 +36,7 @@
                       v-model="saveValueObject"
                       @focus="focusInputKey('object')"
                       @input="onChangeInputObject"
+                      @blur="onBlurObject"
                       tabindex="2"
                     />
                     <div class="icon-selected">
@@ -72,11 +73,16 @@
               </div>
               <div class="receive">
                 <span class="text">Người nhận <p style="color: red; display: inline">*</p></span>
-                <input maxlength="100" tabindex="3" ref="focusReceiver" type="text" class="input--size" v-model="cash.receiver" @input="onChangeInputReceiver" :class="{'input-error': messageReceiver != ''}"/><br/>
+                <input maxlength="100" tabindex="3" ref="focusReceiver" type="text" class="input--size" 
+                  v-model="cash.receiver" 
+                  @input="onChangeInputReceiver" 
+                  @blur="onBlurReceiver"
+                  :class="{'input-error': messageReceiver != ''}"/><br/>
                 <span class="span">{{messageReceiver}}</span>
               </div>
             </div>
             <div class="date__form">
+              <!-- Ngày hạch toán là ngày nhập liệu trên phần mềm -->
               <span class="text">Ngày hạch toán <p style="color: red; display: inline">*</p></span><br />
               <DatePicker ref="accountingDate" v-model="cash.accountingDate" :type="'accountingDate'" @sendAccountingDate="getAccountingDate"/><br/>
               <span class="span">{{messageAccountingDate}}</span>
@@ -88,6 +94,7 @@
               <input tabindex="4" type="text" class="input--size" v-model="cash.organizationUnitAddress"/>
             </div>
             <div class="date__form">
+              <!-- Ngày phiếu chi là ngày trên hóa đơn chi -->
               <span class="text">Ngày phiếu chi <p style="color: red; display: inline">*</p></span><br />
               <DatePicker ref="refDate" v-model="cash.refDate" :type="'refDate'" @sendRefDate="getRefDate"/>
               <span class="span">{{messageRefDate}}</span>
@@ -160,7 +167,7 @@
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
-              <input maxlength="10" tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
+              <input maxlength="10" tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach" v-money="money"/>
             </div>
             <div class="invoice">chứng từ gốc</div>
           </div>
@@ -284,7 +291,7 @@
 <script>
 import $ from 'jquery'
 import Autocomplete from "../common/Autocomplete.vue";
-import {Money} from 'v-money'
+import {VMoney,   Money} from 'v-money'
 import CashPopup from '../common/CashPopup.vue'
 import DatePicker from '../common/DatePicker.vue'
 
@@ -294,6 +301,7 @@ import { MES_ADD_SUCCESS, MES_EDIT_SUCCESS, STR_DATA_CHANGE, MES_ERROR_SERVER, M
 import {STR_CASHDIALOG, DELETEALLROW, STR_REASONNAME, CHANGEDATA, EMPTYDATA, EXISTDATA, FORMMODE_EDIT, FORMMODE_ADD} from "../../../lang/masterDetail.js"
 
 export default {
+  directives: {money: VMoney},
   components: {
     Autocomplete,
     Money, 
@@ -461,6 +469,7 @@ export default {
         this.cash.organizationUnitName = this.saveValueObject;
         this.toggleObject = true;
         this.messageObject = "";
+        this.messageReceiver = "";
       }
       if (value === 'employee') {
         this.saveValueEmployeeName = this.fakeEmployees[this.currentIndexE].fullName;
@@ -484,6 +493,7 @@ export default {
         this.toggleObject = true;
         this.messageObject = "";
         this.currentIndex = index;
+        this.messageReceiver = "";
       }
       if (value === 'employee') {
         this.saveValueEmployeeName = employee.fullName;
@@ -526,11 +536,20 @@ export default {
         return item.fullName.toLowerCase().indexOf(this.saveValueObject.toLowerCase()) !== -1;
         })
       }, 300);
+      // if (val !== "") {
+      //   this.messageObject = "";       
+      // } else if (val == "") {
+      //   this.messageObject = MES_REQUIRED_ATTRIBUTE;
+      // }  
+      this.onBlurObject(e);
+    },
+    onBlurObject(e){
+      let val = e.target.value;
       if (val !== "") {
         this.messageObject = "";       
       } else if (val == "") {
         this.messageObject = MES_REQUIRED_ATTRIBUTE;
-      }  
+      } 
     },
 
     /**
@@ -564,6 +583,9 @@ export default {
       } else if (val === "") {
         this.messageReceiver = MES_REQUIRED_ATTRIBUTE;
       }
+    },
+    onBlurReceiver(e){
+      this.onChangeInputReceiver(e);
     },
     //validate nhập Tài khoản nợ
     checkValueEmptyDebtAccount(value, index){
@@ -628,7 +650,7 @@ export default {
     },
     // Xóa 1 dòng trong bảng listDetail
     async onBtnDeleteRowClick(value){
-      await this.listDetail.pop(this.listDetail[value]);
+      await this.listDetail.splice(value, value + 1);
       this.rowIndex = this.listDetail.length;
       if(this.rowIndex != 0){
         this.$refs.focusDescriptionDetail[this.rowIndex - 1].select();
@@ -1350,7 +1372,7 @@ table tfoot th {
 }
 .span{
   color: red; 
-  font-size: 12px;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
