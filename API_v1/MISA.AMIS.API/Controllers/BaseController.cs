@@ -118,7 +118,7 @@ namespace MISA.AMIS.API.Controllers
         {
             try
             {
-                AssignEntityIdInEntity(id, entity);
+                //AssignEntityIdInEntity(id, entity);
                 _serviceResult = _baseService.Update(entity);
             }
             catch (Exception ex)
