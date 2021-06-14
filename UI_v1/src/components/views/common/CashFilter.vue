@@ -7,7 +7,7 @@
     >
       <div class="btn-btn-text" style="display: flex">
         <span class="pr-4">Lọc</span>
-        <div class="icon icon-16 arrow-up--black"></div>
+        <div class="icon icon-16 arrow-up--black" style="margin-left: 3px;"></div>
       </div>
     </button>
     <div class="filter__box" :class="{ visible: toggleFilter }">
