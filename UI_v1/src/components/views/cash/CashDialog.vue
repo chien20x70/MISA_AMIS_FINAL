@@ -14,7 +14,7 @@
         class="cashbox__icon icon icon-24 mi-close tooltip tooltip--position close--hover"
         @click="onBtnCloseClick"
       >
-      <span class="tooltip__text">ESC</span></div>
+      <span class="tooltip__text">Đóng (ESC)</span></div>
     </div>
     <div class="cashbox__content">
       <div class="content__information">
@@ -167,7 +167,7 @@
             </div>
             <div class="attach">
               <span class="text">Kèm theo</span>
-              <input maxlength="10" tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach" v-money="money"/>
+              <input maxlength="10" tabindex="7" type="text" class="input--size" placeholder="Số lượng" v-model="cash.refAttach"/>
             </div>
             <div class="invoice">chứng từ gốc</div>
           </div>

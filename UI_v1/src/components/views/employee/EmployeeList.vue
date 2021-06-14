@@ -87,7 +87,7 @@
           </tbody>
         </table>
       </div>
-      <div class="message" v-if="employees == undefined">
+      <div class="message" v-if="!employees || employees.length <= 0">
           <div class="img-report">
             <img
               src="https://actappg2.misacdn.net/img/bg_report_nodata.76e50bd8.svg"
@@ -119,55 +119,58 @@
               </div>
             </div>
           </div>
-          <button
-            class="style margin"
-            :class="{ disable: pageIndex == 1 }"
-            @click="onPageChange(pageIndex - 1)"
-          >
-            Trước
-          </button>
-          <button
-            class="btn-filter margin"
-            :class="{ active: pageIndex == 1 }"
-            @click="onPageChange(1)"
-          >
-            1
-          </button>
-          <button v-if="pageIndex > 3" class="btn-filter style margin disable">
-            ...
-          </button>
-          <button
-            v-for="p in pageIndexs"
-            :key="p"
-            class="btn-filter margin"
-            :class="{ active: pageIndex == p }"
-            @click="onPageChange(p)"
-          >
-            {{ p }}
-          </button>
-          <button
-            v-if="pageIndex < totalPages - 3"
-            class="btn-filter style margin disable"
-          >
-            ...
-          </button>
-          <button
-            class="btn-filter margin"
-            :class="{
-              display: totalPages == 1,
-              active: pageIndex == totalPages,
-            }"
-            @click="onPageChange(totalPages)"
-          >
-            {{ totalPages }}
-          </button>
-          <button
-            class="style margin"
-            :class="{ disable: pageIndex == totalPages }"
-            @click="onPageChange(pageIndex + 1)"
-          >
-            Sau
-          </button>
+          <div v-if="totalPages > 1">
+            <button
+              class="style margin"
+              :class="{ disable: pageIndex == 1 }"
+              @click="onPageChange(pageIndex - 1)"
+            >
+              Trước
+            </button>
+            <button
+              class="btn-filter margin"
+              :class="{ active: pageIndex == 1 }"
+              @click="onPageChange(1)"
+            >
+              1
+            </button>
+            <button v-if="pageIndex > 3" class="btn-filter style margin disable">
+              ...
+            </button>
+            <button
+              v-for="p in pageIndexs"
+              :key="p"
+              class="btn-filter margin"
+              :class="{ active: pageIndex == p }"
+              @click="onPageChange(p)"
+            >
+              {{ p }}
+            </button>
+            <button
+              v-if="pageIndex < totalPages - 3"
+              class="btn-filter style margin disable"
+            >
+              ...
+            </button>
+            <button
+              class="btn-filter margin"
+              :class="{
+                display: totalPages == 1,
+                active: pageIndex == totalPages,
+              }"
+              @click="onPageChange(totalPages)"
+            >
+              {{ totalPages }}
+            </button>
+            <button
+              class="style margin"
+              :class="{ disable: pageIndex == totalPages }"
+              @click="onPageChange(pageIndex + 1)"
+            >
+              Sau
+            </button>
+          </div>
+          
         </div>
       </div>
     </div>

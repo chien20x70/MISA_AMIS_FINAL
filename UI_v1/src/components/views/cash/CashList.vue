@@ -110,7 +110,7 @@
           </tfoot>
         </table>        
       </div>
-      <div class="message" v-if="cashs == undefined">
+      <div class="message" v-if="!cashs || cashs.length <= 0">
           <div class="img-report">
             <img
               src="https://actappg2.misacdn.net/img/bg_report_nodata.76e50bd8.svg"
@@ -142,55 +142,58 @@
               </div>
             </div>
           </div>
-          <button
-            class="style margin"
-            :class="{ disable: pageIndex == 1 }"
-            @click="onPageChange(pageIndex - 1)"
-          >
-            Trước
-          </button>
-          <button
-            class="btn-filter margin"
-            :class="{ active: pageIndex == 1 }"
-            @click="onPageChange(1)"
-          >
-            1
-          </button>
-          <button v-if="pageIndex > 3" class="btn-filter style margin disable">
-            ...
-          </button>
-          <button
-            v-for="p in pageIndexs"
-            :key="p"
-            class="btn-filter margin"
-            :class="{ active: pageIndex == p }"
-            @click="onPageChange(p)"
-          >
-            {{ p }}
-          </button>
-          <button
-            v-if="pageIndex < totalPages - 3"
-            class="btn-filter style margin disable"
-          >
-            ...
-          </button>
-          <button
-            class="btn-filter margin"
-            :class="{
-              display: totalPages == 1,
-              active: pageIndex == totalPages,
-            }"
-            @click="onPageChange(totalPages)"
-          >
-            {{ totalPages }}
-          </button>
-          <button
-            class="style margin"
-            :class="{ disable: pageIndex == totalPages }"
-            @click="onPageChange(pageIndex + 1)"
-          >
-            Sau
-          </button>
+          <div v-if="totalPages > 1">
+            <button
+              class="style margin"
+              :class="{ disable: pageIndex == 1 }"
+              @click="onPageChange(pageIndex - 1)"
+            >
+              Trước
+            </button>
+            <button
+              class="btn-filter margin"
+              :class="{ active: pageIndex == 1 }"
+              @click="onPageChange(1)"
+            >
+              1
+            </button>
+            <button v-if="pageIndex > 3" class="btn-filter style margin disable">
+              ...
+            </button>
+            <button
+              v-for="p in pageIndexs"
+              :key="p"
+              class="btn-filter margin"
+              :class="{ active: pageIndex == p }"
+              @click="onPageChange(p)"
+            >
+              {{ p }}
+            </button>
+            <button
+              v-if="pageIndex < totalPages - 3"
+              class="btn-filter style margin disable"
+            >
+              ...
+            </button>
+            <button
+              class="btn-filter margin"
+              :class="{
+                display: totalPages == 1,
+                active: pageIndex == totalPages,
+              }"
+              @click="onPageChange(totalPages)"
+            >
+              {{ totalPages }}
+            </button>
+            <button
+              class="style margin"
+              :class="{ disable: pageIndex == totalPages }"
+              @click="onPageChange(pageIndex + 1)"
+            >
+              Sau
+            </button>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -469,24 +472,14 @@ export default {
           `/ReceiptPayments/Filter?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&filter=${this.filter}`
         )
         .then((response) => {
-          // Gán mảng ReceiptPayment ban đầu = data từ server trả về
-          this.cashs = response.data.data.data;
-          // tổng số bản ghi = tổng số bản ghi từ server trả về
-          this.totalRecord = response.data.data.totalRecord;
-          // tổng số trang.
-          this.totalPages = response.data.data.totalPages;
-          if (response.data.data.totalRecord == undefined) {
-            this.totalRecord = 0;
-          }
-          if (response.data.data.totalMoney != undefined) {
-            this.totalMoney = response.data.data.totalMoney;
-          }
+          this.assignValueCashArr(response);
         })
         .catch(() => {})
         .then(() => {
           this.isBusy = false;
         });
     },
+    // Lọc dữ liệu từ ngày
     filterDataByDateNotNull() {
       this.isBusy = true;
       this.axios
@@ -494,25 +487,28 @@ export default {
           `/ReceiptPayments/FilteringDate?pageSize=${this.pageSize}&pageIndex=${this.pageIndex}&startDate=${this.startDate}&endDate=${this.endDate}&filter=${this.filter}`
         )
         .then((response) => {
-          // Gán mảng ReceiptPayment ban đầu = data từ server trả về
-          this.cashs = response.data.data.data;
-          // tổng số bản ghi = tổng số bản ghi từ server trả về
-          this.totalRecord = response.data.data.totalRecord;
-          // tổng số trang.
-          this.totalPages = response.data.data.totalPages;
-          if (response.data.data.totalRecord == undefined) {
-            this.totalRecord = 0;
-          }
-          if (response.data.data.totalMoney != undefined) {
-            this.totalMoney = response.data.data.totalMoney;
-          }else{
-            this.totalMoney = 0;
-          }
+          this.assignValueCashArr(response);
         })
         .catch(() => {})
         .then(() => {
           this.isBusy = false;
         });
+    },
+    assignValueCashArr(response){
+      // Gán mảng ReceiptPayment ban đầu = data từ server trả về
+      this.cashs = response.data.data.data;
+      // tổng số bản ghi = tổng số bản ghi từ server trả về
+      this.totalRecord = response.data.data.totalRecord;
+      // tổng số trang.
+      this.totalPages = response.data.data.totalPages;
+      if (response.data.data.totalRecord == undefined) {
+        this.totalRecord = 0;
+      }
+      if (response.data.data.totalMoney != undefined) {
+        this.totalMoney = response.data.data.totalMoney;
+      }else{
+        this.totalMoney = 0;
+      }
     },
 
     /**
@@ -525,17 +521,8 @@ export default {
       this.filter = val;
       // Gán trang về 1
       this.pageIndex = 1;
-      clearTimeout(this.timeOut);
-      // Gọi hàm lọc có delay 0.5s để không gửi quá nhiều request lên server
-      if (this.startDate == '') {
-        this.timeOut = setTimeout(() =>{
-          this.filterData();
-        }, 500)
-      }else{
-        this.timeOut = setTimeout(() =>{
-          this.filterDataByDateNotNull();
-        }, 500)
-      }
+      // Lọc data
+      this.clearTimeOutFn();
   },
 
     /**
@@ -545,11 +532,8 @@ export default {
     onPageChange(page) {
       // Thay đổi trang khi click button phần phân trang
       this.pageIndex = page;
-      if (this.startDate == '') {
-        this.filterData();
-      }else{
-        this.filterDataByDateNotNull();
-      }
+
+      this.clearTimeOutFn();
     },
 
     /**
@@ -579,8 +563,21 @@ export default {
       // trang số 1
       this.pageIndex = 1;
       // Lọc ReceiptPayment
-      this.filterData();
+      this.clearTimeOutFn();
       this.valueSelect = true;
+    },
+    clearTimeOutFn(){
+      clearTimeout(this.timeOut);
+      // Gọi hàm lọc có delay 0.5s để không gửi quá nhiều request lên server
+      if (this.startDate == '') {
+        this.timeOut = setTimeout(() =>{
+          this.filterData();
+        }, 500)
+      }else{
+        this.timeOut = setTimeout(() =>{
+          this.filterDataByDateNotNull();
+        }, 500)
+      }
     },
 
     showSelected() {
