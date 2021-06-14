@@ -190,7 +190,7 @@
             <thead>
               <tr>
                 <th class="first__th">#</th>
-                <th style="min-width: 315px; border-left: none">DIỄN GIẢI</th>
+                <th style="min-width: 330px; border-left: none">DIỄN GIẢI</th>
                 <th style="min-width: 152px">TK NỢ</th>
                 <th style="min-width: 146px">TK CÓ</th>
                 <th style="min-width: 213px; text-align: right">SỐ TIỀN</th>
@@ -219,7 +219,7 @@
                 <td>
                   <Autocomplete v-model="list.organizationUnitCodeDetail" :code="index" @sendIdToCashDialog="getDataId" @updateData="updateData"/>
                 </td>
-                <td><input type="text" class="out-of-range" v-model="list.organizationUnitNameDetail" readonly/></td>
+                <td><input type="text" class="out-of-range" v-model="list.organizationUnitNameDetail" readonly disabled/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete" @click="onBtnDeleteRowClick(index)"></div>
                 </td>
@@ -230,12 +230,12 @@
                 <th
                   style="width: 40px; position: sticky; left: 0px; z-index: 2"
                 ></th>
-                <th style="min-width: 187px; border-left: none"></th>
-                <th style="min-width: 100px"></th>
-                <th style="min-width: 100px"></th>
-                <th style="min-width: 150px; text-align: right">{{totalMoney | formatMoney}}</th>
-                <th style="min-width: 150px"></th>
-                <th style="min-width: 250px"></th>
+                <th style="min-width: 330px; border-left: none"></th>
+                <th style="min-width: 152px"></th>
+                <th style="min-width: 146px"></th>
+                <th style="min-width: 213px; text-align: right">{{totalMoney | formatMoney}}</th>
+                <th style="min-width: 204px"></th>
+                <th style="min-width: 327px"></th>
                 <th style="min-width: 40px; z-index: 101"></th>
               </tr>
             </tfoot>

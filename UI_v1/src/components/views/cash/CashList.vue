@@ -868,7 +868,11 @@ export default {
     margin-right: 10px;
     color: #0075c0;
     padding-left: 20px;
+    font-size: 12px;
+    width: 33%;
+    text-overflow: ellipsis;
     white-space: nowrap;
+    overflow: hidden;
   }
   .dateFilter:hover{
     text-decoration: underline;
