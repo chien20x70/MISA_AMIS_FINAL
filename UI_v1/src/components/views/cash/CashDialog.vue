@@ -212,7 +212,7 @@
                 <td>
                   <Autocomplete v-model="list.organizationUnitCodeDetail" :code="index" @sendIdToCashDialog="getDataId" @updateData="updateData"/>
                 </td>
-                <td><input type="text" class="out-of-range" v-model="list.organizationUnitNameDetail" readonly/></td>
+                <td><input type="text" class="out-of-range" v-model="list.organizationUnitNameDetail" readonly disabled/></td>
                 <td class="editclass">
                   <div class="icon icon-16 mi-delete" @click="onBtnDeleteRowClick(index)"></div>
                 </td>
