@@ -309,7 +309,7 @@ export default {
     DatePicker
   },
   props:{
-    cash: {type: Object, default: null},
+    cashData: {type: Object, default: null},
     flag: {type: String, default: ''},
   },
   data() {
@@ -352,6 +352,7 @@ export default {
         precision: 0,
         masked: false
       },
+      cash: []
     };
   },
   created(){
@@ -464,17 +465,17 @@ export default {
     enter(value) {
       if (value === 'object') {
         this.saveValueObject = this.fakeObjects[this.currentIndex].fullName;
-        this.cash.receiver = this.saveValueObject;
-        this.cash.organizationUnitAddress = this.fakeObjects[this.currentIndex].address;
-        this.cash.organizationUnitName = this.saveValueObject;
+        // this.cash.receiver = this.saveValueObject;
+        // this.cash.organizationUnitAddress = this.fakeObjects[this.currentIndex].address;
+        // this.cash.organizationUnitName = this.saveValueObject;
         this.toggleObject = true;
         this.messageObject = "";
         this.messageReceiver = "";
       }
       if (value === 'employee') {
         this.saveValueEmployeeName = this.fakeEmployees[this.currentIndexE].fullName;
-        this.cash.employeeId = this.fakeEmployees[this.currentIndexE].employeeId;
-        this.cash.fullName = this.saveValueEmployeeName;
+        //this.cash.employeeId = this.fakeEmployees[this.currentIndexE].employeeId;
+        //this.cash.fullName = this.saveValueEmployeeName;
         this.toggleEmployee = true;
         this.messageFullName = "";
       }
@@ -487,9 +488,9 @@ export default {
     onBtnEmployeeClick(employee, index, value) {
       if (value === 'object') {
         this.saveValueObject = employee.fullName;
-        this.cash.receiver = this.saveValueObject;
-        this.cash.organizationUnitAddress = employee.address;
-        this.cash.organizationUnitName = this.saveValueObject;
+        // this.cash.receiver = this.saveValueObject;
+        // this.cash.organizationUnitAddress = employee.address;
+        // this.cash.organizationUnitName = this.saveValueObject;
         this.toggleObject = true;
         this.messageObject = "";
         this.currentIndex = index;
@@ -497,8 +498,8 @@ export default {
       }
       if (value === 'employee') {
         this.saveValueEmployeeName = employee.fullName;
-        this.cash.employeeId = employee.employeeId;
-        this.cash.fullName = this.saveValueEmployeeName;
+        // this.cash.employeeId = employee.employeeId;
+        // this.cash.fullName = this.saveValueEmployeeName;
         this.toggleEmployee = true;
         this.messageFullName = "";
         this.currentIndexE = index;
@@ -526,9 +527,8 @@ export default {
      * CreateBy: NXCHIEN 09/06/2021
      */
     onChangeInputObject(e){
-      let val = e.target.value;
       this.toggleObject = false;
-      this.cash.organizationUnitName = val;
+      // this.cash.organizationUnitName = val;
       this.currentIndex = 0;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
@@ -559,7 +559,7 @@ export default {
     onChangeInputEmployee(e){
       let val = e.target.value;
       this.toggleEmployee = false;
-      this.cash.fullName = val;
+      // this.cash.fullName = val;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.fakeEmployees = this.employees.filter(item => {
@@ -609,7 +609,7 @@ export default {
      * CreatedBY: NXCHIEN 06/06/2021
      */
     getAccountingDate(value){
-      this.cash.accountingDate = value;
+      // this.cash.accountingDate = value;
       if (value == '') {
         this.messageAccountingDate = MES_REQUIRED_ATTRIBUTE;
       }else{
@@ -617,7 +617,7 @@ export default {
       }
     },
     getRefDate(value){
-      this.cash.refDate = value;
+      // this.cash.refDate = value;
       if (value == '') {
         this.messageRefDate = MES_REQUIRED_ATTRIBUTE;
       }else{
@@ -778,7 +778,7 @@ export default {
     //#region Click nút Cất và 'Cất và in'
     // chuyển mảng sang JSON
     convertListDetailtoJSON(){
-      this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
+      // this.cash.receiptPaymentDetail = JSON.stringify(this.listDetail);
       this.cash.totalAmount = this.totalMoney;
       this.cash.reasonName = STR_REASONNAME;
     },

@@ -355,7 +355,7 @@ export default {
   },
   props: {
     state: { type: Boolean, selector: false }, // Trạng thái hiển thị Dialog
-    employee: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
+    employeeData: { type: Object, default: null }, // Đối tượng nhân viên được truyền từ EmployeeList sang
     flag: { type: String, selector: null }, // Cờ để check giá trị nút Thêm mới hay Sửa
   },
   data() {
@@ -376,6 +376,7 @@ export default {
       messagePhone: "",
       dateCheck: false,
       fakeDepartments: [],
+      employee: []
     };
   },
   //#endregion

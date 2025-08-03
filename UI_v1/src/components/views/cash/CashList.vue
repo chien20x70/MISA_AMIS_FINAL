@@ -197,7 +197,7 @@
         </div>
       </div>
     </div>
-    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cash="selectedCash" :flag="status"/>
+    <CashDialog v-if="show" @hideCashDialogNotLoad="hideCashDialogNotLoad" @hideCashDialog="hideCashDialog" :cashData="selectedCash" :flag="status"/>
     <CashPopup     
       v-if="valuePopup"
       @hideCashPopupNotLoad="hideCashPopupNotLoad"
